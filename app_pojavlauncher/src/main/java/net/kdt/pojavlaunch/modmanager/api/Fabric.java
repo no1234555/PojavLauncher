@@ -1,6 +1,7 @@
 package net.kdt.pojavlaunch.modmanager.api;
 
 import android.util.Log;
+import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;
 import net.kdt.pojavlaunch.Tools;
 import okhttp3.ResponseBody;
@@ -38,7 +39,7 @@ public class Fabric {
 
     public interface FabricLoaderJsonInf {
         @GET("versions/loader/{gameVersion}/{loaderVersion}/profile/json")
-        Call<ResponseBody> getJson(@Path("gameVersion") String gameVersion, @Path("loaderVersion") String loaderVersion);
+        Call<JsonObject> getJson(@Path("gameVersion") String gameVersion, @Path("loaderVersion") String loaderVersion);
     }
 
     public static class Version {
@@ -66,12 +67,13 @@ public class Fabric {
 
         try {
             FabricLoaderJsonInf jsonInf = getClient().create(FabricLoaderJsonInf.class);
-            ResponseBody json = jsonInf.getJson(gameVersion, loaderVersion).execute().body();
-
+            JsonObject json = jsonInf.getJson(gameVersion, loaderVersion).execute().body();
             if (json != null) {
                 File path = new File(Tools.DIR_HOME_VERSION + "/" + profileName);
                 if (!path.exists()) path.mkdirs();
-                Tools.write(path.getPath() + "/" + profileName + ".json", json.string());
+
+                json.addProperty("type", "fabric");
+                Tools.write(path.getPath() + "/" + profileName + ".json", json.toString());
             }
         } catch (IOException e) {
             e.printStackTrace();

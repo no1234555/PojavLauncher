@@ -28,8 +28,8 @@ public class MinecraftDownloaderTask extends AsyncTask<String, String, Throwable
  {
     private final BaseLauncherActivity mActivity;
     private boolean launchWithError = false;
-    MinecraftDownloaderTask thiz = this;
-    public MinecraftDownloaderTask(BaseLauncherActivity activity) {
+
+     public MinecraftDownloaderTask(BaseLauncherActivity activity) {
         mActivity = activity;
     }
     
@@ -45,13 +45,8 @@ public class MinecraftDownloaderTask extends AsyncTask<String, String, Throwable
     protected Throwable doInBackground(final String[] p1) {
         Throwable throwable = null;
         try {
-            verInfo = findVersion(p1[0]);
-
-            if (verInfo == null) {
-                return new Throwable("No version found");
-            }
-
-            Log.d("HELP", verInfo.id);
+            verInfo = findVersion(verInfo.inheritsFrom);
+            //if (verInfo == null) return new Throwable("No version found");
 
             final String downVName = "/" + verInfo.id + "/" + verInfo.id;
             //Downloading libraries
@@ -511,7 +506,7 @@ public class MinecraftDownloaderTask extends AsyncTask<String, String, Throwable
         }
 
         // Custom version, inherits from base.
-        //return Tools.getVersionInfo(mActivity, version);
-        return null;
+        return Tools.getVersionInfo(mActivity, version);
+        //return null;
     }
 }

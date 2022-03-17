@@ -642,7 +642,6 @@ public final class Tools {
                     customVer.optifineLib = lib;
                 }
             }
-            //if (customVer != null) return customVer;
 
             if (customVer.inheritsFrom == null || customVer.inheritsFrom.equals(customVer.id)) {
                 return customVer;

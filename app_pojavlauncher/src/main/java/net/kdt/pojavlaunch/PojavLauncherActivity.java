@@ -97,8 +97,8 @@ public class PojavLauncherActivity extends BaseLauncherActivity
         mAddInstanceButton = findViewById(R.id.add_instance_button);
         Tabs[0] = findViewById(R.id.btnTab1);
         Tabs[1] = findViewById(R.id.btnTab2);
-        Tabs[4] = findViewById(R.id.btnTab4);
-        Tabs[5] = findViewById(R.id.btnTab5);
+        Tabs[2] = findViewById(R.id.btnTab4);
+        Tabs[3] = findViewById(R.id.btnTab5);
 
         if (BuildConfig.DEBUG) {
             Toast.makeText(this, "Launcher process id: " + android.os.Process.myPid(), Toast.LENGTH_LONG).show();
