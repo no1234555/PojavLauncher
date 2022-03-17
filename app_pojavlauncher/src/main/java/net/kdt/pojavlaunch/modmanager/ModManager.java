@@ -1,5 +1,6 @@
 package net.kdt.pojavlaunch.modmanager;
 
+import android.util.Log;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.kdt.pojavlaunch.BaseLauncherActivity;
@@ -176,16 +177,16 @@ public class ModManager {
         thread.start();
     }
 
-    public static void removeMod(ModsFragment.InstalledModAdapter adapter, String instanceName, String fileName) {
+    public static void removeMod(ModsFragment.InstalledModAdapter adapter, String instanceName, String slug) {
         Thread thread = new Thread() {
             public void run() {
                 Instance instance = state.getInstance(instanceName);
                 for (ModData mod : instance.getMods()) {
-                    if (mod.getFilename().equals(fileName)) {
-                        File modJar = new File(workDir + "/" + instanceName + "/" + mod.getFilename());
+                    if (mod.getSlug().equals(slug)) {
+                        File modJar = new File(workDir + "/instances/" + instanceName + "/" + mod.getFilename());
                         if (modJar.delete()) {
                             instance.getMods().remove(mod);
-                            UiUitls.runOnUI(() -> adapter.removeMod(mod));
+                            UiUitls.runOnUI(() -> adapter.removeMod(slug));
                             saveState();
                         }
                         break;
@@ -193,7 +194,7 @@ public class ModManager {
                 }
             }
         };
-        thread.start();
+        if (!isDownloading(slug)) thread.start();
     }
 
     public static void setModActive(String instanceName, String slug, boolean active) {

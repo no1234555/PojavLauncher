@@ -17,6 +17,7 @@
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginTop="4dp"
             tools:ignore="ImageContrastCheck"/>
+
     <TextView
             android:id="@+id/installedModTitle"
             android:layout_width="wrap_content"
@@ -28,7 +29,8 @@
             app:layout_constraintStart_toEndOf="@+id/installedModIcon"
             android:layout_marginStart="8dp"
             android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/installedModDescription"/>
+            app:layout_constraintBottom_toTopOf="@+id/installedModDescription"
+            app:layout_constraintVertical_bias="0.0"/>
 
     <TextView
             android:id="@+id/installedModDescription"
@@ -40,7 +42,10 @@
             android:layout_marginStart="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="8dp"
-            app:layout_constraintHorizontal_bias="0.0"/>
+            app:layout_constraintHorizontal_bias="0.0"
+            android:maxLines="1"
+            android:maxLength="37"
+            android:layout_marginBottom="4dp"/>
 
     <Switch
             android:id="@+id/active_switch"
@@ -50,8 +55,7 @@
             app:layout_constraintTop_toTopOf="@+id/installedModIcon"
             app:layout_constraintEnd_toStartOf="@+id/deleteModButton"
             tools:ignore="UseSwitchCompatOrMaterialXml"
-            android:layout_marginTop="12dp"
-            android:layout_marginEnd="4dp"/>
+            android:layout_marginTop="10dp"/>
 
     <ImageView
             android:id="@+id/deleteModButton"
@@ -59,9 +63,9 @@
             android:layout_height="27dp"
             app:srcCompat="@drawable/ic_remove"
             app:layout_constraintTop_toTopOf="@+id/installedModIcon"
-            android:layout_marginStart="860dp"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="12dp"
             tools:ignore="ImageContrastCheck"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,5 +1,6 @@
 package net.kdt.pojavlaunch.fragments;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -108,7 +109,7 @@ public class ModsFragment extends Fragment {
             icon = itemView.findViewById(R.id.installedModIcon);
             title = itemView.findViewById(R.id.installedModTitle);
             filename = itemView.findViewById(R.id.installedModDescription);
-            Button deleteModButton = itemView.findViewById(R.id.deleteModButton);
+            ImageView deleteModButton = itemView.findViewById(R.id.deleteModButton);
             deleteModButton.setOnClickListener(this);
             activeSwitch = itemView.findViewById(R.id.active_switch);
             activeSwitch.setOnCheckedChangeListener((button, value) -> {
@@ -126,7 +127,7 @@ public class ModsFragment extends Fragment {
         @Override
         public void onClick(View view) {
             State.Instance selectedInstance = ModManager.state.getInstance(activity.mProfile.selectedVersion);
-            ModManager.removeMod(this.adapter, selectedInstance.getName(), filename.toString());
+            ModManager.removeMod(this.adapter, selectedInstance.getName(), slug);
         }
     }
 
@@ -199,10 +200,16 @@ public class ModsFragment extends Fragment {
             this.notifyItemRangeChanged(posStart, mods.size());
         }
 
-        public void removeMod(ModData modData) {
-            int posStart = mods.size();
-            mods.remove(modData);
-            this.notifyItemRangeChanged(posStart, mods.size());
+        public void removeMod(String slug) {
+            int index = -1;
+            for (int i = 0; i < mods.size(); i++) {
+                if (mods.get(i).getSlug().equals(slug)) index = i;
+            }
+
+            if (index != -1) {
+                mods.remove(index);
+                this.notifyItemRemoved(index);
+            }
         }
 
         @Override
