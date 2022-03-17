@@ -99,8 +99,6 @@ public class ModManager {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                //fabric-loader-0.13.3-1.18.2/fabric-loader-0.13.3-1.18.2.json
-                //fabric-loader-0.13.3-1.18.2/fabric-loader-0.13.3-1.18.2.json
             }
         };
         if (!saveStateCalled) {
@@ -172,6 +170,26 @@ public class ModManager {
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
+                }
+            }
+        };
+        thread.start();
+    }
+
+    public static void removeMod(ModsFragment.InstalledModAdapter adapter, String instanceName, String fileName) {
+        Thread thread = new Thread() {
+            public void run() {
+                Instance instance = state.getInstance(instanceName);
+                for (ModData mod : instance.getMods()) {
+                    if (mod.getFilename().equals(fileName)) {
+                        File modJar = new File(workDir + "/" + instanceName + "/" + mod.getFilename());
+                        if (modJar.delete()) {
+                            instance.getMods().remove(mod);
+                            UiUitls.runOnUI(() -> adapter.removeMod(mod));
+                            saveState();
+                        }
+                        break;
+                    }
                 }
             }
         };

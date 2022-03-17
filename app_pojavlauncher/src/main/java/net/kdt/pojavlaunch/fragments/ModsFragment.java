@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -92,28 +93,40 @@ public class ModsFragment extends Fragment {
         }
     }
 
-    public static class InstalledModViewHolder extends RecyclerView.ViewHolder {
+    public static class InstalledModViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private final ImageView icon;
         private final TextView title;
         private final TextView filename;
         private final Switch activeSwitch;
+        private final PojavLauncherActivity activity;
+        private final InstalledModAdapter adapter;
         private String slug;
 
-        public InstalledModViewHolder(PojavLauncherActivity activity, View itemView) {
+        public InstalledModViewHolder(PojavLauncherActivity activity, View itemView, InstalledModAdapter adapter) {
             super(itemView);
             icon = itemView.findViewById(R.id.installedModIcon);
             title = itemView.findViewById(R.id.installedModTitle);
             filename = itemView.findViewById(R.id.installedModDescription);
+            Button deleteModButton = itemView.findViewById(R.id.deleteModButton);
+            deleteModButton.setOnClickListener(this);
             activeSwitch = itemView.findViewById(R.id.active_switch);
             activeSwitch.setOnCheckedChangeListener((button, value) -> {
                 State.Instance selectedInstance = ModManager.state.getInstance(activity.mProfile.selectedVersion);
                 ModManager.setModActive(selectedInstance.getName(), slug, value);
             });
+            this.activity = activity;
+            this.adapter = adapter;
         }
 
         public void setSlug(String slug) {
             this.slug = slug;
+        }
+
+        @Override
+        public void onClick(View view) {
+            State.Instance selectedInstance = ModManager.state.getInstance(activity.mProfile.selectedVersion);
+            ModManager.removeMod(this.adapter, selectedInstance.getName(), filename.toString());
         }
     }
 
@@ -186,6 +199,12 @@ public class ModsFragment extends Fragment {
             this.notifyItemRangeChanged(posStart, mods.size());
         }
 
+        public void removeMod(ModData modData) {
+            int posStart = mods.size();
+            mods.remove(modData);
+            this.notifyItemRangeChanged(posStart, mods.size());
+        }
+
         @Override
         public int getItemViewType(final int position) {
             return R.layout.item_installed_mod;
@@ -195,7 +214,7 @@ public class ModsFragment extends Fragment {
         @Override
         public InstalledModViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext()).inflate(viewType, parent, false);
-            return new InstalledModViewHolder(activity, view);
+            return new InstalledModViewHolder(activity, view, this);
         }
 
         @Override
