@@ -1,10 +1,5 @@
 package net.kdt.pojavlaunch;
 
-import static android.os.Build.VERSION_CODES.P;
-import static net.kdt.pojavlaunch.Tools.ignoreNotch;
-import static net.kdt.pojavlaunch.prefs.LauncherPreferences.PREF_HIDE_SIDEBAR;
-import static net.kdt.pojavlaunch.prefs.LauncherPreferences.PREF_NOTCH_SIZE;
-
 import android.animation.ValueAnimator;
 import android.content.res.Configuration;
 import android.graphics.Color;
@@ -15,33 +10,31 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
-
+import android.widget.*;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.Guideline;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
-
 import net.kdt.pojavlaunch.extra.ExtraCore;
 import net.kdt.pojavlaunch.extra.ExtraListener;
-import net.kdt.pojavlaunch.fragments.*;
+import net.kdt.pojavlaunch.fragments.ConsoleFragment;
+import net.kdt.pojavlaunch.fragments.CreateInstancePopupFragment;
+import net.kdt.pojavlaunch.fragments.LauncherFragment;
+import net.kdt.pojavlaunch.fragments.ModsFragment;
 import net.kdt.pojavlaunch.modmanager.ModManager;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.prefs.screens.LauncherPreferenceFragment;
 import net.kdt.pojavlaunch.value.MinecraftAccount;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.os.Build.VERSION_CODES.P;
+import static net.kdt.pojavlaunch.Tools.ignoreNotch;
+import static net.kdt.pojavlaunch.prefs.LauncherPreferences.PREF_HIDE_SIDEBAR;
+import static net.kdt.pojavlaunch.prefs.LauncherPreferences.PREF_NOTCH_SIZE;
 
 public class PojavLauncherActivity extends BaseLauncherActivity
 {
@@ -60,15 +53,14 @@ public class PojavLauncherActivity extends BaseLauncherActivity
         public Fragment createFragment(int position) {
             if (position == 0) return new LauncherFragment();
             if (position == 1) return new ConsoleFragment();
-            if (position == 2) return new CrashFragment();
-            if (position == 3) return new ModsFragment(fa);
-            if (position == 4) return new LauncherPreferenceFragment();
+            if (position == 2) return new ModsFragment(fa);
+            if (position == 3) return new LauncherPreferenceFragment();
             return null;
         }
 
         @Override
         public int getItemCount() {
-            return 5;
+            return 4;
         }
     }
 
@@ -76,7 +68,7 @@ public class PojavLauncherActivity extends BaseLauncherActivity
     private TextView tvConnectStatus;
     private Spinner accountSelector;
     private ViewPager2 viewPager;
-    private final Button[] Tabs = new Button[5];
+    private final Button[] Tabs = new Button[4];
     private View selectedTab;
     private ImageView accountFaceImageView;
 
@@ -105,9 +97,8 @@ public class PojavLauncherActivity extends BaseLauncherActivity
         mAddInstanceButton = findViewById(R.id.add_instance_button);
         Tabs[0] = findViewById(R.id.btnTab1);
         Tabs[1] = findViewById(R.id.btnTab2);
-        Tabs[2] = findViewById(R.id.btnTab3);
-        Tabs[3] = findViewById(R.id.btnTab4);
-        Tabs[4] = findViewById(R.id.btnTab5);
+        Tabs[4] = findViewById(R.id.btnTab4);
+        Tabs[5] = findViewById(R.id.btnTab5);
 
         if (BuildConfig.DEBUG) {
             Toast.makeText(this, "Launcher process id: " + android.os.Process.myPid(), Toast.LENGTH_LONG).show();
