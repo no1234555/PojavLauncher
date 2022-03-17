@@ -634,6 +634,16 @@ public final class Tools {
         return libDir.toArray(new String[0]);
     }
 
+    public static String getVersionId(BaseLauncherActivity bla, String versionName) {
+        for (JMinecraftVersionList.Version valueVer: bla.mVersionList.versions) {
+            if (valueVer.name != null && valueVer.name.equals(versionName)) {
+                Log.d("VERSION", valueVer.name);
+                return valueVer.id;
+            }
+        }
+        return null;
+    }
+
     public static JMinecraftVersionList.Version getVersionInfo(BaseLauncherActivity bla, String versionName) {
         try {
             JMinecraftVersionList.Version customVer = Tools.GLOBAL_GSON.fromJson(read(DIR_HOME_VERSION + "/" + versionName + "/" + versionName + ".json"), JMinecraftVersionList.Version.class);
@@ -642,29 +652,28 @@ public final class Tools {
                     customVer.optifineLib = lib;
                 }
             }
-
             if (customVer.inheritsFrom == null || customVer.inheritsFrom.equals(customVer.id)) {
                 return customVer;
             } else {
-                JMinecraftVersionList.Version inheritsVer;
-                if(bla != null && bla.mVersionList != null) {
+                JMinecraftVersionList.Version inheritsVer = null;
+                if(bla != null) if (bla.mVersionList != null) {
                     for (JMinecraftVersionList.Version valueVer : bla.mVersionList.versions) {
                         if (valueVer.id.equals(customVer.inheritsFrom) && (!new File(DIR_HOME_VERSION + "/" + customVer.inheritsFrom + "/" + customVer.inheritsFrom + ".json").exists()) && (valueVer.url != null)) {
                             Tools.downloadFile(valueVer.url,DIR_HOME_VERSION + "/" + customVer.inheritsFrom + "/" + customVer.inheritsFrom + ".json");
                         }
                     }
                 }//If it won't download, just search for it
-                   try{
-                      inheritsVer = Tools.GLOBAL_GSON.fromJson(read(DIR_HOME_VERSION + "/" + customVer.inheritsFrom + "/" + customVer.inheritsFrom + ".json"), JMinecraftVersionList.Version.class);
-                   }catch(IOException e) {
-                       throw new RuntimeException("Can't find the source version for "+ versionName +" (req version="+customVer.inheritsFrom+")");
-                   }
+                try{
+                    inheritsVer = Tools.GLOBAL_GSON.fromJson(read(DIR_HOME_VERSION + "/" + customVer.inheritsFrom + "/" + customVer.inheritsFrom + ".json"), JMinecraftVersionList.Version.class);
+                }catch(IOException e) {
+                    throw new RuntimeException("Can't find the source version for "+ versionName +" (req version="+customVer.inheritsFrom+")");
+                }
                 //inheritsVer.inheritsFrom = inheritsVer.id;
                 insertSafety(inheritsVer, customVer,
-                             "assetIndex", "assets", "id",
-                             "mainClass", "minecraftArguments",
-                             "optifineLib", "releaseTime", "time", "type"
-                             );
+                        "assetIndex", "assets", "id",
+                        "mainClass", "minecraftArguments",
+                        "optifineLib", "releaseTime", "time", "type"
+                );
 
                 List<DependentLibrary> libList = new ArrayList<DependentLibrary>(Arrays.asList(inheritsVer.libraries));
                 try {
@@ -674,11 +683,11 @@ public final class Tools {
                         for (int i = 0; i < libList.size(); i++) {
                             DependentLibrary libAdded = libList.get(i);
                             String libAddedName = libAdded.name.substring(0, libAdded.name.lastIndexOf(":"));
-                            
+
                             if (libAddedName.equals(libName)) {
-                                Log.d(APP_NAME, "Library " + libName + ": Replaced version " + 
-                                    libName.substring(libName.lastIndexOf(":") + 1) + " with " +
-                                    libAddedName.substring(libAddedName.lastIndexOf(":") + 1));
+                                Log.d(APP_NAME, "Library " + libName + ": Replaced version " +
+                                        libName.substring(libName.lastIndexOf(":") + 1) + " with " +
+                                        libAddedName.substring(libAddedName.lastIndexOf(":") + 1));
                                 libList.set(i, lib);
                                 continue loop_1;
                             }
@@ -692,23 +701,23 @@ public final class Tools {
 
                 // Inheriting Minecraft 1.13+ with append custom args
                 if (inheritsVer.arguments != null && customVer.arguments != null) {
-                    List<String> totalArgList = new ArrayList();
-                    totalArgList.addAll(inheritsVer.arguments.game);
-                    
+                    List totalArgList = new ArrayList();
+                    totalArgList.addAll(Arrays.asList(inheritsVer.arguments.game));
+
                     int nskip = 0;
-                    for (int i = 0; i < customVer.arguments.game.size(); i++) {
+                    for (int i = 0; i < customVer.arguments.game.length; i++) {
                         if (nskip > 0) {
                             nskip--;
                             continue;
                         }
-                        
-                        Object perCustomArg = customVer.arguments.game.get(i);
-                        if (perCustomArg != null) {
+
+                        Object perCustomArg = customVer.arguments.game[i];
+                        if (perCustomArg instanceof String) {
                             String perCustomArgStr = (String) perCustomArg;
                             // Check if there is a duplicate argument on combine
                             if (perCustomArgStr.startsWith("--") && totalArgList.contains(perCustomArgStr)) {
-                                perCustomArg = customVer.arguments.game.get(i + 1);
-                                if (perCustomArg != null) {
+                                perCustomArg = customVer.arguments.game[i + 1];
+                                if (perCustomArg instanceof String) {
                                     perCustomArgStr = (String) perCustomArg;
                                     // If the next is argument value, skip it
                                     if (!perCustomArgStr.startsWith("--")) {
@@ -719,11 +728,11 @@ public final class Tools {
                                 totalArgList.add(perCustomArgStr);
                             }
                         } else if (!totalArgList.contains(perCustomArg)) {
-                            totalArgList.add((String) perCustomArg);
+                            totalArgList.add(perCustomArg);
                         }
                     }
 
-                    inheritsVer.arguments.game = totalArgList;
+                    inheritsVer.arguments.game = totalArgList.toArray(new Object[0]);
                 }
 
                 return inheritsVer;
@@ -732,6 +741,7 @@ public final class Tools {
             throw new RuntimeException(e);
         }
     }
+
 
     // Prevent NullPointerException
     private static void insertSafety(JMinecraftVersionList.Version targetVer, JMinecraftVersionList.Version fromVer, String... keyArr) {

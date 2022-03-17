@@ -45,15 +45,14 @@ public class MinecraftDownloaderTask extends AsyncTask<String, String, Throwable
     protected Throwable doInBackground(final String[] p1) {
         Throwable throwable = null;
         try {
-            verInfo = findVersion(verInfo.inheritsFrom);
-            //if (verInfo == null) return new Throwable("No version found");
-
-            final String downVName = "/" + verInfo.id + "/" + verInfo.id;
+            final String downVName = "/" + p1[0] + "/" + p1[0];
             //Downloading libraries
             String minecraftMainJar = Tools.DIR_HOME_VERSION + downVName + ".jar";
             JAssets assets = null;
             try {
                 File verJsonDir = new File(Tools.DIR_HOME_VERSION + downVName + ".json");
+
+                verInfo = findVersion(p1[0]);
 
                 if (verInfo.url != null) {
                     boolean isManifestGood = true; // assume it is dy default
@@ -91,7 +90,7 @@ public class MinecraftDownloaderTask extends AsyncTask<String, String, Throwable
                     }
                 }
 
-                verInfo = Tools.getVersionInfo(mActivity, verInfo.id);
+                verInfo = Tools.getVersionInfo(mActivity,p1[0]);
 
                 //Now we have the reliable information to check if our runtime settings are good enough
                 if(verInfo.javaVersion != null) { //1.17+
@@ -497,16 +496,16 @@ public class MinecraftDownloaderTask extends AsyncTask<String, String, Throwable
         }
     }
 
-    private JMinecraftVersionList.Version findVersion(String version) {
-        for (JMinecraftVersionList.Version valueVer: mActivity.mVersionList.versions) {
-            if (valueVer.name.equals(version)) {
-                Log.d("VERSION", valueVer.name);
-                return valueVer;
-            }
-        }
+     private JMinecraftVersionList.Version findVersion(String version) {
+         if (mActivity.mVersionList != null) {
+             for (JMinecraftVersionList.Version valueVer: mActivity.mVersionList.versions) {
+                 if (valueVer.id.equals(version)) {
+                     return valueVer;
+                 }
+             }
+         }
 
-        // Custom version, inherits from base.
-        return Tools.getVersionInfo(mActivity, version);
-        //return null;
-    }
+         // Custom version, inherits from base.
+         return Tools.getVersionInfo(mActivity,version);
+     }
 }

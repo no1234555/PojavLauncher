@@ -59,8 +59,15 @@ public class JMinecraftVersionList {
     // Since 1.13
     @Keep
     public static class Arguments {
-        public List<String> game = new ArrayList<>();
-        public List<String> jvm = new ArrayList<>();
+        public Object[] game;
+        public Object[] jvm;
+
+        public void addJvm(String arg) {
+            Object[] newJvm = new Object[jvm.length + 1];
+            System.arraycopy(jvm, 0, newJvm, 0, jvm.length);
+            newJvm[jvm.length] = arg;
+            jvm = newJvm;
+        }
 
         @Keep
         public static class ArgValue {
