@@ -350,6 +350,23 @@ public final class Tools {
         return argsFromJson;
     }
 
+    //Returns a list of minecraft versions that are compatible with quest craft
+    //Tag must be either "releases" or "snapshots"
+    public static ArrayList<String> getCompatibleVersions(String tag) {
+        ArrayList<String> versions = new ArrayList<>();
+        try {
+            InputStream stream = PojavApplication.assetManager.open("jsons/version-compat.json");
+            JsonObject versionsJson = GLOBAL_GSON.fromJson(read(stream), JsonObject.class);
+
+            for (JsonElement version : versionsJson.getAsJsonArray(tag)) {
+                versions.add(version.getAsString());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return versions;
+    }
+
     public static String fromStringArray(String[] strArr) {
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < strArr.length; i++) {
@@ -625,11 +642,13 @@ public final class Tools {
                     customVer.optifineLib = lib;
                 }
             }
+            //if (customVer != null) return customVer;
+
             if (customVer.inheritsFrom == null || customVer.inheritsFrom.equals(customVer.id)) {
                 return customVer;
             } else {
-                JMinecraftVersionList.Version inheritsVer = null;
-                if(bla != null) if (bla.mVersionList != null) {
+                JMinecraftVersionList.Version inheritsVer;
+                if(bla != null && bla.mVersionList != null) {
                     for (JMinecraftVersionList.Version valueVer : bla.mVersionList.versions) {
                         if (valueVer.id.equals(customVer.inheritsFrom) && (!new File(DIR_HOME_VERSION + "/" + customVer.inheritsFrom + "/" + customVer.inheritsFrom + ".json").exists()) && (valueVer.url != null)) {
                             Tools.downloadFile(valueVer.url,DIR_HOME_VERSION + "/" + customVer.inheritsFrom + "/" + customVer.inheritsFrom + ".json");
@@ -674,23 +693,23 @@ public final class Tools {
 
                 // Inheriting Minecraft 1.13+ with append custom args
                 if (inheritsVer.arguments != null && customVer.arguments != null) {
-                    List totalArgList = new ArrayList();
-                    totalArgList.addAll(Arrays.asList(inheritsVer.arguments.game));
+                    List<String> totalArgList = new ArrayList();
+                    totalArgList.addAll(inheritsVer.arguments.game);
                     
                     int nskip = 0;
-                    for (int i = 0; i < customVer.arguments.game.length; i++) {
+                    for (int i = 0; i < customVer.arguments.game.size(); i++) {
                         if (nskip > 0) {
                             nskip--;
                             continue;
                         }
                         
-                        Object perCustomArg = customVer.arguments.game[i];
-                        if (perCustomArg instanceof String) {
+                        Object perCustomArg = customVer.arguments.game.get(i);
+                        if (perCustomArg != null) {
                             String perCustomArgStr = (String) perCustomArg;
                             // Check if there is a duplicate argument on combine
                             if (perCustomArgStr.startsWith("--") && totalArgList.contains(perCustomArgStr)) {
-                                perCustomArg = customVer.arguments.game[i + 1];
-                                if (perCustomArg instanceof String) {
+                                perCustomArg = customVer.arguments.game.get(i + 1);
+                                if (perCustomArg != null) {
                                     perCustomArgStr = (String) perCustomArg;
                                     // If the next is argument value, skip it
                                     if (!perCustomArgStr.startsWith("--")) {
@@ -701,11 +720,11 @@ public final class Tools {
                                 totalArgList.add(perCustomArgStr);
                             }
                         } else if (!totalArgList.contains(perCustomArg)) {
-                            totalArgList.add(perCustomArg);
+                            totalArgList.add((String) perCustomArg);
                         }
                     }
 
-                    inheritsVer.arguments.game = totalArgList.toArray(new Object[0]);
+                    inheritsVer.arguments.game = totalArgList;
                 }
 
                 return inheritsVer;

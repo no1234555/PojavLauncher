@@ -32,13 +32,14 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import net.kdt.pojavlaunch.extra.ExtraCore;
 import net.kdt.pojavlaunch.extra.ExtraListener;
-import net.kdt.pojavlaunch.fragments.ConsoleFragment;
-import net.kdt.pojavlaunch.fragments.LauncherFragment;
+import net.kdt.pojavlaunch.fragments.*;
+import net.kdt.pojavlaunch.modmanager.ModManager;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.prefs.screens.LauncherPreferenceFragment;
 import net.kdt.pojavlaunch.value.MinecraftAccount;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,21 +48,27 @@ public class PojavLauncherActivity extends BaseLauncherActivity
 
     // An equivalent ViewPager2 adapter class
     private static class ScreenSlidePagerAdapter extends FragmentStateAdapter {
-        public ScreenSlidePagerAdapter(FragmentActivity fa) {
+
+        private final PojavLauncherActivity fa;
+
+        public ScreenSlidePagerAdapter(PojavLauncherActivity fa) {
             super(fa);
+            this.fa = fa;
         }
 
         @Override
         public Fragment createFragment(int position) {
             if (position == 0) return new LauncherFragment();
             if (position == 1) return new ConsoleFragment();
-            if (position == 2) return new LauncherPreferenceFragment();
+            if (position == 2) return new CrashFragment();
+            if (position == 3) return new ModsFragment(fa);
+            if (position == 4) return new LauncherPreferenceFragment();
             return null;
         }
 
         @Override
         public int getItemCount() {
-            return 3;
+            return 5;
         }
     }
 
@@ -69,7 +76,7 @@ public class PojavLauncherActivity extends BaseLauncherActivity
     private TextView tvConnectStatus;
     private Spinner accountSelector;
     private ViewPager2 viewPager;
-    private final Button[] Tabs = new Button[3];
+    private final Button[] Tabs = new Button[5];
     private View selectedTab;
     private ImageView accountFaceImageView;
 
@@ -95,10 +102,12 @@ public class PojavLauncherActivity extends BaseLauncherActivity
         mLaunchTextStatus = findViewById(R.id.progressDownloadText);
         logoutBtn = findViewById(R.id.installJarButton);
         mPlayButton = findViewById(R.id.launchermainPlayButton);
+        mAddInstanceButton = findViewById(R.id.add_instance_button);
         Tabs[0] = findViewById(R.id.btnTab1);
         Tabs[1] = findViewById(R.id.btnTab2);
-        Tabs[2] = findViewById(R.id.btnTab4);
-
+        Tabs[2] = findViewById(R.id.btnTab3);
+        Tabs[3] = findViewById(R.id.btnTab4);
+        Tabs[4] = findViewById(R.id.btnTab5);
 
         if (BuildConfig.DEBUG) {
             Toast.makeText(this, "Launcher process id: " + android.os.Process.myPid(), Toast.LENGTH_LONG).show();
@@ -171,7 +180,7 @@ public class PojavLauncherActivity extends BaseLauncherActivity
         });
 
         // Setup the minecraft version list
-        List<String> versions = new ArrayList<>();
+        /*List<String> versions = new ArrayList<>();
         final File fVers = new File(Tools.DIR_HOME_VERSION);
 
         try {
@@ -189,14 +198,19 @@ public class PojavLauncherActivity extends BaseLauncherActivity
 
         } finally {
             mAvailableVersions = versions.toArray(new String[0]);
-        }
+        }*/
 
         //mAvailableVersions;
-        ArrayAdapter<String> adapterVer = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, mAvailableVersions);
-        adapterVer.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
-        mVersionSelector.setAdapter(adapterVer);
+        //ArrayAdapter<String> adapterVer = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
+        //adapterVer.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
+        //mVersionSelector.setAdapter(adapterVer);
+
+
+        ModManager.init(this);
+
 
         statusIsLaunching(false);
+
 
 
         //Add the preference changed listener
@@ -214,7 +228,7 @@ public class PojavLauncherActivity extends BaseLauncherActivity
         changeLookAndFeel(PREF_HIDE_SIDEBAR);
     }
 
-    private void selectTabPage(int pageIndex){
+    public void selectTabPage(int pageIndex){
         viewPager.setCurrentItem(pageIndex);
         setTabActive(pageIndex);
     }
@@ -237,7 +251,6 @@ public class PojavLauncherActivity extends BaseLauncherActivity
         mLaunchProgress.setVisibility(launchVisibility);
         mLaunchTextStatus.setVisibility(launchVisibility);
 
-
         logoutBtn.setEnabled(!isLaunching);
         mVersionSelector.setEnabled(!isLaunching);
         canBack = !isLaunching;
@@ -250,6 +263,11 @@ public class PojavLauncherActivity extends BaseLauncherActivity
                 return;
             }
         }
+    }
+
+    public void showAddInstancePopup(View view) {
+        CreateInstancePopupFragment popup = new CreateInstancePopupFragment(this);
+        popup.show(this.getSupportFragmentManager(), "");
     }
 
     private void setTabActive(int index){

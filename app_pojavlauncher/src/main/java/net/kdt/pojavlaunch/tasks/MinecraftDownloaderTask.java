@@ -1,5 +1,6 @@
 package net.kdt.pojavlaunch.tasks;
 
+import android.annotation.SuppressLint;
 import android.app.*;
 import android.content.*;
 import android.os.*;
@@ -25,7 +26,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class MinecraftDownloaderTask extends AsyncTask<String, String, Throwable>
  {
-    private BaseLauncherActivity mActivity;
+    private final BaseLauncherActivity mActivity;
     private boolean launchWithError = false;
     MinecraftDownloaderTask thiz = this;
     public MinecraftDownloaderTask(BaseLauncherActivity activity) {
@@ -39,18 +40,25 @@ public class MinecraftDownloaderTask extends AsyncTask<String, String, Throwable
     }
 
     private JMinecraftVersionList.Version verInfo;
+    @SuppressLint("StringFormatInvalid")
     @Override
     protected Throwable doInBackground(final String[] p1) {
         Throwable throwable = null;
         try {
-            final String downVName = "/" + p1[0] + "/" + p1[0];
+            verInfo = findVersion(p1[0]);
+
+            if (verInfo == null) {
+                return new Throwable("No version found");
+            }
+
+            Log.d("HELP", verInfo.id);
+
+            final String downVName = "/" + verInfo.id + "/" + verInfo.id;
             //Downloading libraries
             String minecraftMainJar = Tools.DIR_HOME_VERSION + downVName + ".jar";
             JAssets assets = null;
             try {
                 File verJsonDir = new File(Tools.DIR_HOME_VERSION + downVName + ".json");
-
-                verInfo = findVersion(p1[0]);
 
                 if (verInfo.url != null) {
                     boolean isManifestGood = true; // assume it is dy default
@@ -88,7 +96,7 @@ public class MinecraftDownloaderTask extends AsyncTask<String, String, Throwable
                     }
                 }
 
-                verInfo = Tools.getVersionInfo(mActivity,p1[0]);
+                verInfo = Tools.getVersionInfo(mActivity, verInfo.id);
 
                 //Now we have the reliable information to check if our runtime settings are good enough
                 if(verInfo.javaVersion != null) { //1.17+
@@ -339,6 +347,7 @@ public class MinecraftDownloaderTask extends AsyncTask<String, String, Throwable
             });
     }
     
+    @SuppressLint("StringFormatMatches")
     private void publishDownloadProgress(String target, int curr, int max) {
         // array length > 2 ignores append log on dev console
         publishProgress("0", mActivity.getString(R.string.mcl_launch_downloading_progress, target,
@@ -494,15 +503,15 @@ public class MinecraftDownloaderTask extends AsyncTask<String, String, Throwable
     }
 
     private JMinecraftVersionList.Version findVersion(String version) {
-        if (mActivity.mVersionList != null) {
-            for (JMinecraftVersionList.Version valueVer: mActivity.mVersionList.versions) {
-                if (valueVer.id.equals(version)) {
-                    return valueVer;
-                }
+        for (JMinecraftVersionList.Version valueVer: mActivity.mVersionList.versions) {
+            if (valueVer.name.equals(version)) {
+                Log.d("VERSION", valueVer.name);
+                return valueVer;
             }
         }
 
         // Custom version, inherits from base.
-        return Tools.getVersionInfo(mActivity,version);
+        //return Tools.getVersionInfo(mActivity, version);
+        return null;
     }
 }
