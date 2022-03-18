@@ -1,7 +1,6 @@
 package net.kdt.pojavlaunch.modmanager.api;
 
 import android.util.Log;
-import androidx.annotation.Keep;
 import com.google.gson.annotations.SerializedName;
 import net.kdt.pojavlaunch.fragments.ModsFragment;
 import retrofit2.Call;
@@ -14,6 +13,7 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Modrinth {
@@ -75,14 +75,10 @@ public class Modrinth {
 
     public static class ModrinthSearchResult {
         @SerializedName("hits")
-        private List<ModResult> hits;
-
-        public List<ModResult> getHits() {
-            return hits;
-        }
+        public List<ModData> hits;
     }
 
-    public static ModData getModData(String slug, String gameVersion) throws IOException {
+    public static ModData getModFileData(String slug, String gameVersion) throws IOException {
         ModrinthProjectInf projectInf = getClient().create(ModrinthProjectInf.class);
         ModrinthProject project = projectInf.getProject(slug).execute().body();
 
@@ -99,14 +95,16 @@ public class Modrinth {
                     for (String modGameVersion : modVersion.gameVersions) {
                         if (modGameVersion.equals(gameVersion)) {
                             ModrinthVersion.ModrinthFile file = modVersion.files.get(0);
-                            return new ModData("modrinth",
-                                    project.title,
-                                    project.slug,
-                                    project.iconUrl,
-                                    modVersion.id,
-                                    file.url,
-                                    file.filename
-                                    );
+
+                            ModData modData = new ModData();
+                            modData.platform = "modrinth";
+                            modData.title = project.title;
+                            modData.slug = project.slug;
+                            modData.iconUrl = project.iconUrl;
+                            modData.fileData.id = modVersion.id;
+                            modData.fileData.url = file.url;
+                            modData.fileData.filename = file.filename;
+                            return modData;
                         }
                     }
                 }
@@ -115,13 +113,13 @@ public class Modrinth {
         return null;
     }
 
-    public static void addProjectsToRecycler(ModsFragment.APIModAdapter adapter, String version, int offset, String query) {
+    public static void addProjectsToRecycler(ModsFragment.ModAdapter adapter, String version, int offset, String query) {
         ModrinthSearchInf searchInf = getClient().create(ModrinthSearchInf.class);
         searchInf.searchMods(50).enqueue(new Callback<ModrinthSearchResult>() {
             @Override
             public void onResponse(Call<ModrinthSearchResult> call, Response<ModrinthSearchResult> response) {
-                ModrinthSearchResult mods = response.body();
-                if (mods != null) adapter.addMods(mods);
+                ModrinthSearchResult result = response.body();
+                if (result != null) adapter.addMods((ArrayList<ModData>) result.hits);
             }
 
             @Override

@@ -18,10 +18,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 import net.kdt.pojavlaunch.extra.ExtraCore;
 import net.kdt.pojavlaunch.extra.ExtraListener;
-import net.kdt.pojavlaunch.fragments.ConsoleFragment;
-import net.kdt.pojavlaunch.fragments.CreateInstancePopupFragment;
-import net.kdt.pojavlaunch.fragments.LauncherFragment;
-import net.kdt.pojavlaunch.fragments.ModsFragment;
+import net.kdt.pojavlaunch.fragments.*;
 import net.kdt.pojavlaunch.modmanager.ModManager;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.prefs.screens.LauncherPreferenceFragment;
@@ -42,18 +39,15 @@ public class PojavLauncherActivity extends BaseLauncherActivity
     // An equivalent ViewPager2 adapter class
     private static class ScreenSlidePagerAdapter extends FragmentStateAdapter {
 
-        private final PojavLauncherActivity fa;
-
         public ScreenSlidePagerAdapter(PojavLauncherActivity fa) {
             super(fa);
-            this.fa = fa;
         }
 
         @Override
         public Fragment createFragment(int position) {
             if (position == 0) return new LauncherFragment();
             if (position == 1) return new ConsoleFragment();
-            if (position == 2) return new ModsFragment(fa);
+            if (position == 2) return new ModsFragment();
             if (position == 3) return new LauncherPreferenceFragment();
             return null;
         }
@@ -62,6 +56,7 @@ public class PojavLauncherActivity extends BaseLauncherActivity
         public int getItemCount() {
             return 4;
         }
+
     }
 
 
