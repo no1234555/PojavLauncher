@@ -1,6 +1,5 @@
 package net.kdt.pojavlaunch.modmanager;
 
-import android.util.Log;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.kdt.pojavlaunch.BaseLauncherActivity;
@@ -44,7 +43,7 @@ public class ModManager {
                     if (!modsJson.exists()) {
                         String gameVersion = Tools.getCompatibleVersions("releases").get(0);
                         String flVersion = Fabric.getLatestLoaderVersion();
-                        Fabric.install(gameVersion, flVersion);
+                        Fabric.downloadJson(gameVersion, flVersion);
 
                         String profileName = String.format("%s-%s-%s", "fabric-loader", flVersion, gameVersion);
                         Instance instance = new Instance();
@@ -118,7 +117,7 @@ public class ModManager {
             public void run() {
                 try {
                     String flVersion = Fabric.getLatestLoaderVersion();
-                    Fabric.install(gameVersion, flVersion);
+                    Fabric.downloadJson(gameVersion, flVersion);
 
                     String profileName = String.format("%s-%s-%s", "fabric-loader", flVersion, gameVersion);
                     Instance instance = new Instance();
@@ -197,12 +196,28 @@ public class ModManager {
         if (!isDownloading(slug)) thread.start();
     }
 
+    //Will return modData if there is an update, otherwise null
+    public static ModData checkModForUpdate(String instanceName, String slug) {
+        try {
+            Instance instance = state.getInstance(instanceName);
+            for (ModData mod : instance.getMods()) {
+                if (mod.getSlug().equals(slug)) {
+                    ModData modData = Modrinth.getModData(slug, instance.getGameVersion());
+                    if (modData != null && !mod.getId().equals(modData.getId())) return modData;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static void setModActive(String instanceName, String slug, boolean active) {
         Thread thread = new Thread() {
             public void run() {
                 Instance instance = state.getInstance(instanceName);
                 for (ModData modData : instance.getMods()) {
-                    if (modData.getSlug().equals(slug)) continue;
+                    if (!modData.getSlug().equals(slug)) continue;
                     modData.setActive(active);
 
                     String suffix = "";
