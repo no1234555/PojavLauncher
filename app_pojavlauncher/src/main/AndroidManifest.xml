@@ -25,7 +25,7 @@
         android:resizeableActivity="true"
         android:hasFragileUserData="true"
         android:allowNativeHeapPointerTagging="false"
-        android:debuggable="true">
+        >
 
         <meta-data 
             android:name="android.max_aspect"
