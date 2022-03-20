@@ -1,9 +1,6 @@
 package net.kdt.pojavlaunch.fragments;
 
 import android.os.Bundle;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.style.BackgroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +20,6 @@ import net.kdt.pojavlaunch.modmanager.ModManager;
 import net.kdt.pojavlaunch.modmanager.State;
 import net.kdt.pojavlaunch.modmanager.api.Modrinth;
 import net.kdt.pojavlaunch.modmanager.api.ModData;
-import net.kdt.pojavlaunch.utils.UiUitls;
 
 import java.util.ArrayList;
 
@@ -76,16 +72,23 @@ public class ModsFragment extends Fragment {
             title.setText(modData.title);
 
             String modCompat = ModManager.getModCompat(modData.slug);
-            details.setText(modCompat);
+            details.setText("  " + modCompat + "  ");
+
             switch (modCompat) {
-                case "Perfect": UiUitls.setHighLightedText(details, modCompat, 0x1fff00);
-                case "Great": details.setHighlightColor(0x00ffff);
-                case "Unusable": details.setHighlightColor(0xff0000);
-                case "Not Working": details.setHighlightColor(0xff0000);
+                default:
+                    details.setBackgroundResource(R.drawable.marker_gray);
+                    break;
+                case "Perfect":
+                    details.setBackgroundResource(R.drawable.marker_green);
+                    break;
+                case "Good":
+                    details.setBackgroundResource(R.drawable.marker_yellow);
+                    break;
+                case "Unusable":
+                case "Not Working":
+                    details.setBackgroundResource(R.drawable.marker_red);
+                    break;
             }
-
-
-
 
             if (!modData.iconUrl.isEmpty()) {
                 Picasso.get().load(modData.iconUrl).into(icon);

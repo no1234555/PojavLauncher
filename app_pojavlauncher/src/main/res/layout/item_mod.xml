@@ -34,17 +34,20 @@
 
     <TextView
             android:id="@+id/mod_details"
-            android:layout_width="358dp"
-            android:layout_height="21dp"
+            android:layout_width="wrap_content"
+            android:layout_height="15dp"
+            android:radius="5dp"
+            android:textColor="#FFFFFF"
             tools:text="Coolest mod you've ever seen"
             android:textSize="10sp"
+            android:background="@drawable/marker_red"
             app:layout_constraintTop_toBottomOf="@+id/mod_title"
             app:layout_constraintStart_toEndOf="@+id/mod_icon"
             android:layout_marginStart="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="8dp"
             app:layout_constraintHorizontal_bias="0.0"
-            android:layout_marginBottom="4dp"/>
+    />
     <Switch
             android:id="@+id/mod_switch"
             android:layout_width="wrap_content"
