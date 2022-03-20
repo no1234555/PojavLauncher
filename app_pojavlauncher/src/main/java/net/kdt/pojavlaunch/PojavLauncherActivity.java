@@ -46,15 +46,14 @@ public class PojavLauncherActivity extends BaseLauncherActivity
         @Override
         public Fragment createFragment(int position) {
             if (position == 0) return new LauncherFragment();
-            if (position == 1) return new ConsoleFragment();
-            if (position == 2) return new ModsFragment();
-            if (position == 3) return new LauncherPreferenceFragment();
+            if (position == 1) return new ModsFragment();
+            if (position == 2) return new LauncherPreferenceFragment();
             return null;
         }
 
         @Override
         public int getItemCount() {
-            return 4;
+            return 3;
         }
 
     }
@@ -63,7 +62,7 @@ public class PojavLauncherActivity extends BaseLauncherActivity
     private TextView tvConnectStatus;
     private Spinner accountSelector;
     private ViewPager2 viewPager;
-    private final Button[] Tabs = new Button[4];
+    private final Button[] Tabs = new Button[3];
     private View selectedTab;
     private ImageView accountFaceImageView;
 
@@ -93,7 +92,6 @@ public class PojavLauncherActivity extends BaseLauncherActivity
         Tabs[0] = findViewById(R.id.btnTab1);
         Tabs[1] = findViewById(R.id.btnTab2);
         Tabs[2] = findViewById(R.id.btnTab3);
-        Tabs[3] = findViewById(R.id.btnTab4);
 
         if (BuildConfig.DEBUG) {
             Toast.makeText(this, "Launcher process id: " + android.os.Process.myPid(), Toast.LENGTH_LONG).show();

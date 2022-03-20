@@ -44,8 +44,8 @@
 
         <ImageView
                 android:id="@+id/mod_icon_main"
-                android:layout_width="125dp"
-                android:layout_height="125dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginStart="16dp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -57,7 +57,7 @@
                 android:text="Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="40sp"
+                android:textSize="30sp"
                 app:layout_constraintTop_toTopOf="@+id/mod_icon_main"
                 app:layout_constraintStart_toEndOf="@+id/mod_icon_main"
                 app:layout_constraintEnd_toEndOf="parent"

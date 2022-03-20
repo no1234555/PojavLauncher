@@ -20,11 +20,11 @@
         app:layout_constraintGuide_percent="0.9" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guidelineLeft"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.23" />
+            android:id="@+id/guidelineLeft"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.15"/>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineRight"
@@ -91,33 +91,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/launchermain_text_accountstatus" />
 
-
     <Button
-        android:id="@+id/btnTab2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="?attr/selectableItemBackground"
-        android:clickable="true"
-        android:drawableStart="@drawable/ic_menu_java"
-        android:focusable="true"
-        android:gravity="center"
-        android:onClick="onTabClicked"
-        android:paddingStart="12dp"
-        android:paddingTop="10dp"
-        android:paddingEnd="0dp"
-        android:paddingBottom="10dp"
-        android:text="@string/mcl_tab_console"
-        android:textAlignment="center"
-        android:textAllCaps="true"
-        android:textColor="#FFFFFF"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toStartOf="@+id/guidelineLeft"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnTab1" />
-
-    <Button
-            android:id="@+id/btnTab3"
+            android:id="@+id/btnTab2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackground"
@@ -138,10 +113,10 @@
             app:layout_constraintEnd_toStartOf="@+id/guidelineLeft"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnTab2" />
+            app:layout_constraintTop_toBottomOf="@+id/btnTab1" />
 
     <Button
-        android:id="@+id/btnTab4"
+        android:id="@+id/btnTab3"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="?attr/selectableItemBackground"
@@ -159,7 +134,6 @@
         android:textAllCaps="true"
         android:textColor="#FFFFFF"
 
-
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guidelineLeft"
@@ -168,14 +142,14 @@
         app:layout_constraintTop_toTopOf="@+id/guidelineBottom" />
 
     <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/launchermainTabPager"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/guidelineBottom"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/guidelineLeft"
-        app:layout_constraintTop_toTopOf="parent" />
-
+            android:id="@+id/launchermainTabPager"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/guidelineBottom"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guidelineLeft"
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintVertical_bias="1.0"/>
     <ProgressBar
         android:id="@+id/progressDownloadBar"
         style="?android:attr/progressBarStyleHorizontal"
