@@ -1,6 +1,7 @@
 package net.kdt.pojavlaunch.fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import net.kdt.pojavlaunch.modmanager.ModManager;
 import net.kdt.pojavlaunch.modmanager.State;
 import net.kdt.pojavlaunch.modmanager.api.Modrinth;
 import net.kdt.pojavlaunch.modmanager.api.ModData;
+import us.feras.mdv.MarkdownView;
 
 import java.util.ArrayList;
 
@@ -27,7 +29,7 @@ public class ModsFragment extends Fragment {
 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View view = inflater.inflate(R.layout.fragment_mods_new, container, false);
+        View view = inflater.inflate(R.layout.fragment_mods, container, false);
 
         ModAdapter modAdapter = new ModAdapter(this);
         RecyclerView modRecycler = view.findViewById(R.id.mods_recycler);
@@ -73,22 +75,10 @@ public class ModsFragment extends Fragment {
 
             String modCompat = ModManager.getModCompat(modData.slug);
             details.setText("  " + modCompat + "  ");
-
-            switch (modCompat) {
-                default:
-                    details.setBackgroundResource(R.drawable.marker_gray);
-                    break;
-                case "Perfect":
-                    details.setBackgroundResource(R.drawable.marker_green);
-                    break;
-                case "Good":
-                    details.setBackgroundResource(R.drawable.marker_yellow);
-                    break;
-                case "Unusable":
-                case "Not Working":
-                    details.setBackgroundResource(R.drawable.marker_red);
-                    break;
-            }
+            if (modCompat.equals("Untested")) details.setBackgroundResource(R.drawable.marker_gray);
+            if (modCompat.equals("Perfect")) details.setBackgroundResource(R.drawable.marker_green);
+            if (modCompat.equals("Good")) details.setBackgroundResource(R.drawable.marker_yellow);
+            if (modCompat.equals("Unusable") || modCompat.equals("Not Working")) details.setBackgroundResource(R.drawable.marker_red);
 
             if (!modData.iconUrl.isEmpty()) {
                 Picasso.get().load(modData.iconUrl).into(icon);
@@ -101,8 +91,10 @@ public class ModsFragment extends Fragment {
             if (fView != null) {
                 ImageView iconMain = fView.findViewById(R.id.mod_icon_main);
                 TextView titleMain = fView.findViewById(R.id.mod_title_main);
+                MarkdownView bodyMain = fView.findViewById(R.id.mod_description);
                 iconMain.setImageDrawable(icon.getDrawable());
                 titleMain.setText(modData.title);
+                Modrinth.loadProjectPage(bodyMain, modData.slug);
             }
         }
     }

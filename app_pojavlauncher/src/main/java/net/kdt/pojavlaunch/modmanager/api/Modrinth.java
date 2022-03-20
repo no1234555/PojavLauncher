@@ -3,6 +3,7 @@ package net.kdt.pojavlaunch.modmanager.api;
 import android.util.Log;
 import com.google.gson.annotations.SerializedName;
 import net.kdt.pojavlaunch.fragments.ModsFragment;
+import net.kdt.pojavlaunch.utils.UiUitls;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -11,6 +12,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import us.feras.mdv.MarkdownView;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -53,6 +55,8 @@ public class Modrinth {
         public String slug;
         @SerializedName("icon_url")
         public String iconUrl;
+        @SerializedName("body")
+        public String body;
     }
 
     public static class ModrinthVersion {
@@ -127,5 +131,21 @@ public class Modrinth {
                 Log.d("MODRINTH", String.valueOf(t));
             }
         });
+    }
+
+    public static void loadProjectPage(MarkdownView view, String slug) {
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    ModrinthProjectInf projectInf = getClient().create(ModrinthProjectInf.class);
+                    ModrinthProject project = projectInf.getProject(slug).execute().body();
+                    if (project != null) UiUitls.runOnUI(() -> view.loadMarkdown(project.body));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        thread.start();
     }
 }
