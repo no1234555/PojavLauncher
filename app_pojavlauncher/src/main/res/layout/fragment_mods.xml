@@ -16,13 +16,20 @@
             android:layout_width="250dp"
             android:layout_height="match_parent">
 
+        <Spinner
+                android:id="@+id/filter_spinner"
+                android:layout_width="200dp"
+                android:layout_height="30dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
         <SearchView
                 android:id="@+id/mods_search"
                 android:layout_width="250dp"
-                android:layout_height="49dp"
+                android:layout_height="30dp"
                 app:layout_constraintBottom_toTopOf="@+id/mods_recycler"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toBottomOf="@id/filter_spinner"/>
 
         <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/mods_recycler"

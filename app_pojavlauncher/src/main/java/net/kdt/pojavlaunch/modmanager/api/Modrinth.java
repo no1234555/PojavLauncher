@@ -45,7 +45,7 @@ public class Modrinth {
 
     public interface ModrinthSearchInf {
         @GET("search")
-        Call<ModrinthSearchResult> searchMods(@Query("limit") int limit);
+        Call<ModrinthSearchResult> searchMods(@Query("query") String query, @Query("offset") int offset, @Query("limit") int limit);
     }
 
     public static class ModrinthProject {
@@ -119,7 +119,7 @@ public class Modrinth {
 
     public static void addProjectsToRecycler(ModsFragment.ModAdapter adapter, String version, int offset, String query) {
         ModrinthSearchInf searchInf = getClient().create(ModrinthSearchInf.class);
-        searchInf.searchMods(50).enqueue(new Callback<ModrinthSearchResult>() {
+        searchInf.searchMods(query, offset, 50).enqueue(new Callback<ModrinthSearchResult>() {
             @Override
             public void onResponse(Call<ModrinthSearchResult> call, Response<ModrinthSearchResult> response) {
                 ModrinthSearchResult result = response.body();

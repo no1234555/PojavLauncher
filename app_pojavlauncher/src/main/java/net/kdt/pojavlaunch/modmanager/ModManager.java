@@ -155,9 +155,6 @@ public class ModManager {
                         if (mod.title.equals(modData.title)) return;
                     }
 
-                    //Must run on ui thread or it crashes. Idk why it works without this over in Modrinth.java
-                    //UiUitls.runOnUI(() -> adapter.addMod(modData));
-
                     DownloadUtils.downloadFile(modData.fileData.url, new File(path.getPath() + "/" + modData.fileData.filename));
                     instance.addMod(modData);
                     currentDownloadSlugs.remove(slug);
