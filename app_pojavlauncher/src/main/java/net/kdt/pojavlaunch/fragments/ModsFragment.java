@@ -42,7 +42,7 @@ public class ModsFragment extends Fragment {
         Spinner filterSpinner = view.findViewById(R.id.filter_spinner);
         filterSpinner.setAdapter(filterAdapter);
 
-        //Uses a lot of api requests at the moment, might break
+        //Uses a lot of api requests at the moment - fine for modrinth, will break curseforge
         SearchView modSearch = view.findViewById(R.id.mods_search);
         modSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -83,7 +83,7 @@ public class ModsFragment extends Fragment {
     }
 
     private void loadDataIntoList(ModAdapter modAdapter, String query) {
-        modAdapter.clearMods();
+        modAdapter.reset();
         State.Instance selectedInstance = ModManager.state.getInstance("QuestCraft-1.18.2");
 
         if (filter.equals("Modrinth")) Modrinth.addProjectsToRecycler(modAdapter, selectedInstance.getGameVersion(), 0, query);
@@ -155,8 +155,8 @@ public class ModsFragment extends Fragment {
     public static class ModAdapter extends RecyclerView.Adapter<ModViewHolder> {
 
         private final ModsFragment fragment;
-        private ArrayList<ModData> mods = new ArrayList<>();
-        private int lastPosition = -1;
+        private final ArrayList<ModData> mods = new ArrayList<>();
+        //private int lastPosition = -1;
 
         public ModAdapter(ModsFragment fragment) {
             this.fragment = fragment;
@@ -168,7 +168,7 @@ public class ModsFragment extends Fragment {
             this.notifyItemRangeChanged(startPos, mods.size());
         }
 
-        public void clearMods() {
+        public void reset() {
             mods.clear();
         }
 
@@ -193,17 +193,17 @@ public class ModsFragment extends Fragment {
         public void onBindViewHolder(@NonNull ModViewHolder holder, int position) {
             if (mods.size() > position) {
                 holder.setData(mods.get(position));
-                setAnimation(holder.itemView, position);
+                //setAnimation(holder.itemView, position);
             }
         }
 
-        private void setAnimation(View viewToAnimate, int position) {
+        /*private void setAnimation(View viewToAnimate, int position) {
             if (position > lastPosition) {
                 Animation animation = AnimationUtils.loadAnimation(fragment.getContext(), android.R.anim.slide_in_left);
                 viewToAnimate.startAnimation(animation);
                 lastPosition = position;
             }
-        }
+        }*/
 
         @Override
         public int getItemCount() {
