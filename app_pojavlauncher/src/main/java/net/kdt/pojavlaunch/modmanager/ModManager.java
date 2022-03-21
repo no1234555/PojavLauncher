@@ -53,13 +53,13 @@ public class ModManager {
                     } else state = Tools.GLOBAL_GSON.fromJson(Tools.read(modsJson.getPath()), net.kdt.pojavlaunch.modmanager.State.class);
 
                     //Load instance versions
-                    for (Instance instance : state.getInstances()) {
+                    /*for (Instance instance : state.getInstances()) {
                         JMinecraftVersionList.Version version = Tools.GLOBAL_GSON.fromJson(Tools.read(Tools.DIR_HOME_VERSION + "/" + instance.getFabricLoaderVersion() + "/" + instance.getFabricLoaderVersion() + ".json"), JMinecraftVersionList.Version.class);
                         version.name = instance.getName();
                         version.arguments.addJvm("-Dfabric.addMods=" + workDir + "/" + instance.getName());
                         activity.mVersionList.versions.add(version);
                     }
-                    new RefreshVersionListTask(activity).execute();
+                    new RefreshVersionListTask(activity).execute();*/
 
                     InputStream stream = PojavApplication.assetManager.open("jsons/mod-compat.json");
                     modCompats = Tools.GLOBAL_GSON.fromJson(Tools.read(stream), JsonObject.class);
@@ -125,11 +125,11 @@ public class ModManager {
                     state.addInstance(instance);
                     saveState();
 
-                    JMinecraftVersionList.Version version = Tools.GLOBAL_GSON.fromJson(Tools.read(Tools.DIR_HOME_VERSION + "/" + profileName + "/" + profileName + ".json"), JMinecraftVersionList.Version.class);
+                    /*JMinecraftVersionList.Version version = Tools.GLOBAL_GSON.fromJson(Tools.read(Tools.DIR_HOME_VERSION + "/" + profileName + "/" + profileName + ".json"), JMinecraftVersionList.Version.class);
                     version.name = name;
                     version.arguments.addJvm("-Dfabric.addMods=" + workDir + "/" + name);
                     activity.mVersionList.versions.add(version);
-                    new RefreshVersionListTask(activity).execute();
+                    new RefreshVersionListTask(activity).execute();*/
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

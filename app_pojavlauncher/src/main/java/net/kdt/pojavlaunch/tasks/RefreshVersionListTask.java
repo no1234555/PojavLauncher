@@ -84,16 +84,14 @@ public class RefreshVersionListTask extends AsyncTask<Void, Void, ArrayList<Stri
     
     private ArrayList<String> filter(List<JMinecraftVersionList.Version> list1) {
         ArrayList<String> output = new ArrayList<>();
-        for (JMinecraftVersionList.Version version: list1) {
-            /*if ((value1.type.equals("release") && LauncherPreferences.PREF_VERTYPE_RELEASE) ||
+        for (JMinecraftVersionList.Version value1: list1) {
+            if ((value1.type.equals("release") && LauncherPreferences.PREF_VERTYPE_RELEASE) ||
                 (value1.type.equals("snapshot") && LauncherPreferences.PREF_VERTYPE_SNAPSHOT) ||
                 (value1.type.equals("old_alpha") && LauncherPreferences.PREF_VERTYPE_OLDALPHA) ||
                 (value1.type.equals("old_beta") && LauncherPreferences.PREF_VERTYPE_OLDBETA) ||
                 (value1.type.equals("modified"))) {
-                output.add(value1.name);
-            }*/
-            //This way we don't show vanilla versions in the spinner
-            if (version.type.equals("fabric")) output.add(version.name);
+                output.add(value1.id);
+            }
         }
         return output;
     }
