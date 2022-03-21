@@ -61,11 +61,14 @@ public class ModsFragment extends Fragment {
             enableSwitch = view.findViewById(R.id.mod_switch);
 
             enableSwitch.setOnCheckedChangeListener((button, value) -> {
-                State.Instance instance = ModManager.state.getInstance("QuestCraft-1.18.2");
-                for (ModData modData : instance.getMods()) {
-                    if (modData.slug.equals(this.modData.slug)) ModManager.setModActive("QuestCraft-1.18.2", this.modData.slug, value);
-                    else ModManager.addMod("QuestCraft-1.18.2", this.modData.slug, "1.18.2");
+                if (ModManager.isDownloading(modData.slug)) {
+                    button.setChecked(true);
+                    return;
                 }
+
+                ModData mod = ModManager.getMod("QuestCraft-1.18.2", modData.slug);
+                if (mod != null) ModManager.setModActive("QuestCraft-1.18.2", this.modData.slug, value);
+                else ModManager.addMod("QuestCraft-1.18.2", this.modData.slug, "1.18.2");
             });
         }
 

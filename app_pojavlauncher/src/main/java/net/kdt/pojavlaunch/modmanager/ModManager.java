@@ -178,20 +178,25 @@ public class ModManager {
         Thread thread = new Thread() {
             public void run() {
                 Instance instance = state.getInstance(instanceName);
-                for (ModData mod : instance.getMods()) {
-                    if (mod.slug.equals(slug)) {
-                        File modJar = new File(workDir + "/instances/" + instanceName + "/" + mod.fileData.filename);
-                        if (modJar.delete()) {
-                            instance.getMods().remove(mod);
-                            //UiUitls.runOnUI(() -> adapter.removeMod(slug));
-                            saveState();
-                        }
-                        break;
-                    }
+                ModData modData = getMod(instanceName, slug);
+                if (modData == null) return;
+
+                File modJar = new File(workDir + "/instances/" + instanceName + "/" + modData.fileData.filename);
+                if (modJar.delete()) {
+                    instance.getMods().remove(modData);
+                    saveState();
                 }
             }
         };
         if (!isDownloading(slug)) thread.start();
+    }
+
+    public static ModData getMod(String instanceName, String slug) {
+        Instance instance = state.getInstance(instanceName);
+        for (ModData mod : instance.getMods()) {
+            if (mod.slug.equals(slug)) return mod;
+        }
+        return null;
     }
 
     //Will return modData if there is an update, otherwise null
@@ -213,31 +218,27 @@ public class ModManager {
     public static void setModActive(String instanceName, String slug, boolean active) {
         Thread thread = new Thread() {
             public void run() {
-                Instance instance = state.getInstance(instanceName);
-                for (ModData modData : instance.getMods()) {
-                    if (!modData.slug.equals(slug)) continue;
-                    modData.isActive = active;
+                ModData modData = getMod(instanceName, slug);
+                if (modData == null) return;
 
-                    String suffix = "";
-                    if (!active) suffix = ".disabled";
+                modData.isActive = active;
+                String suffix = "";
+                if (!active) suffix = ".disabled";
 
-                    File path = new File(workDir + "/instances/" + instanceName);
-                    for (File modJar : path.listFiles()) {
-                        if (modJar.getName().replace(".disabled", "").equals(modData.fileData.filename)) {
-                            try {
-                                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                                    Path source = Paths.get(modJar.getPath());
-                                    Files.move(source, source.resolveSibling(modData.fileData.filename + suffix));
-                                }
-                            } catch (IOException e) {
-                                e.printStackTrace();
+                File path = new File(workDir + "/instances/" + instanceName);
+                for (File modJar : path.listFiles()) {
+                    if (modJar.getName().replace(".disabled", "").equals(modData.fileData.filename)) {
+                        try {
+                            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                                Path source = Paths.get(modJar.getPath());
+                                Files.move(source, source.resolveSibling(modData.fileData.filename + suffix));
                             }
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
                     }
-
-                    saveState();
-                    break;
                 }
+                saveState();
             }
         };
         thread.start();

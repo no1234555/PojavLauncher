@@ -15,8 +15,13 @@ public class ModData {
     public String body;
 
     public String platform;
-    public boolean isActive = false;
+    public boolean isActive;
     public FileData fileData;
+
+    public ModData() {
+        isActive = false;
+        fileData = new FileData();
+    }
 
     //Only set when calling a getModFileData method
     public static class FileData {
