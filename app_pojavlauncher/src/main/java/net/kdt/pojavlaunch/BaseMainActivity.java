@@ -203,7 +203,7 @@ public class BaseMainActivity extends BaseActivity {
         mProfile = PojavProfile.getCurrentProfileContent(this);
         mVersionInfo = Tools.getVersionInfo(null,mProfile.selectedVersion);
 
-        config = PerVersionConfig.configMap.get(mProfile.selectedVersion);
+        PerVersionConfig.configMap.get(mProfile.selectedVersion);
         String runtime = LauncherPreferences.PREF_DEFAULT_RUNTIME;
         MultiRTUtils.setRuntimeNamed(this,runtime);
         if(Tools.LOCAL_RENDERER == null) {
