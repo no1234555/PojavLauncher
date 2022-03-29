@@ -2,6 +2,7 @@ package net.kdt.pojavlaunch;
 
 import static net.kdt.pojavlaunch.Architecture.archAsString;
 import static net.kdt.pojavlaunch.Tools.DIR_GAME_NEW;
+import static net.kdt.pojavlaunch.Tools.DIR_HOME_VERSION;
 import static net.kdt.pojavlaunch.Tools.getFileName;
 
 import android.Manifest;
@@ -328,6 +329,8 @@ public class PojavLoginActivity extends BaseActivity {
             mkdirs(DIR_GAME_NEW + "/titleworlds/TitleWorlds/region");
             mkdirs(DIR_GAME_NEW + "/titleworlds/TitleWorlds/stats");
             mkdirs(DIR_GAME_NEW + "/titleworlds/TitleWorlds/playerdata");
+
+            mkdirs(DIR_HOME_VERSION + "/fabric-loader-0.13.3.json");
 
             mkdirs(Tools.DIR_HOME_VERSION);
             mkdirs(Tools.DIR_HOME_LIBRARY);
