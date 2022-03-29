@@ -2,7 +2,8 @@
   "profiles": {
     "Default": {
       "name": "Default",
-      "lastVersionId": "fabric-loader-0.13.3"
+      "lastVersionId": "fabric-loader-0.13.3.json",
+      "pojavRendererName": "opengles3"
     }
   },
   "selectedProfile": "Default"
