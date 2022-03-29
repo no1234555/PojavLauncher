@@ -330,7 +330,7 @@ public class PojavLoginActivity extends BaseActivity {
             mkdirs(DIR_GAME_NEW + "/titleworlds/TitleWorlds/stats");
             mkdirs(DIR_GAME_NEW + "/titleworlds/TitleWorlds/playerdata");
 
-            mkdirs(DIR_HOME_VERSION + "/fabric-loader-0.13.3.json");
+            mkdirs(DIR_HOME_VERSION + "/fabric-loader-0.13.3");
 
             mkdirs(Tools.DIR_HOME_VERSION);
             mkdirs(Tools.DIR_HOME_LIBRARY);
