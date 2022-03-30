@@ -10,3 +10,4 @@ app_pojavlauncher/.cxx/
 .DS_STORE
 app_pojavlauncher/src/main/assets/artifacts/
 app_pojavlauncher/src/main/assets/unzippedArtifacts/
+/app_pojavlauncher/release
