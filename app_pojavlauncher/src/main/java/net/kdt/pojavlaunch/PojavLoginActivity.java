@@ -1,6 +1,7 @@
 package net.kdt.pojavlaunch;
 
 import static net.kdt.pojavlaunch.Architecture.archAsString;
+import static net.kdt.pojavlaunch.Tools.DIR_GAME_NEW;
 import static net.kdt.pojavlaunch.Tools.getFileName;
 
 import android.Manifest;
@@ -56,6 +57,7 @@ import net.kdt.pojavlaunch.value.launcherprofiles.LauncherProfiles;
 import net.kdt.pojavlaunch.value.launcherprofiles.MinecraftProfile;
 
 import org.apache.commons.io.FileUtils;
+import top.defaults.checkerboarddrawable.BuildConfig;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -69,19 +71,19 @@ import java.util.Locale;
 public class PojavLoginActivity extends BaseActivity {
     private final Object mLockStoragePerm = new Object();
     private final Object mLockSelectJRE = new Object();
-    
+
     private EditText edit2;
     private final int REQUEST_STORAGE_REQUEST_CODE = 1;
     private CheckBox sRemember;
     private TextView startupTextView;
     private SharedPreferences firstLaunchPrefs;
     private MinecraftAccount mProfile = null;
-    
+
     private boolean isSkipInit = false;
     private boolean isStarting = false;
 
     public static final String PREF_IS_INSTALLED_JAVARUNTIME = "isJavaRuntimeInstalled";
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState); // false;
@@ -129,7 +131,7 @@ public class PojavLoginActivity extends BaseActivity {
                             Toast.makeText(PojavLoginActivity.this, R.string.toast_permission_denied, Toast.LENGTH_LONG).show();
                             return 2;
                         }
-                        requestStoragePermission();
+                        requestPermissions();
 
                         synchronized (mLockStoragePerm) {
                             mLockStoragePerm.wait();
@@ -175,11 +177,11 @@ public class PojavLoginActivity extends BaseActivity {
         String defaultLang = LocaleUtils.DEFAULT_LOCALE.getDisplayName();
         SpannableString defaultLangChar = new SpannableString(defaultLang);
         defaultLangChar.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, defaultLang.length(), 0);
-        
+
         final ArrayAdapter<DisplayableLocale> langAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
         langAdapter.add(new DisplayableLocale(LocaleUtils.DEFAULT_LOCALE, defaultLangChar));
         langAdapter.add(new DisplayableLocale(Locale.ENGLISH));
-        
+
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(getAssets().open("language_list.txt")));
             String line;
@@ -194,9 +196,9 @@ public class PojavLoginActivity extends BaseActivity {
         } catch (IOException e) {
             Tools.showError(this, e);
         }
-        
+
         langAdapter.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
-        
+
         int selectedLang = 0;
         for (int i = 0; i < langAdapter.getCount(); i++) {
             if (Locale.getDefault().getDisplayLanguage().equals(langAdapter.getItem(i).mLocale.getDisplayLanguage())) {
@@ -204,7 +206,7 @@ public class PojavLoginActivity extends BaseActivity {
                 break;
             }
         }
-        
+
         spinnerChgLang.setAdapter(langAdapter);
         spinnerChgLang.setSelection(selectedLang);
         spinnerChgLang.setOnItemSelectedListener(new Spinner.OnItemSelectedListener(){
@@ -215,7 +217,7 @@ public class PojavLoginActivity extends BaseActivity {
                     isInitCalled = true;
                     return;
                 }
-                
+
                 Locale locale;
                 if (position == 0) {
                     locale = LocaleUtils.DEFAULT_LOCALE;
@@ -224,36 +226,36 @@ public class PojavLoginActivity extends BaseActivity {
                 } else {
                     locale = langAdapter.getItem(position).mLocale;
                 }
-                
+
                 LauncherPreferences.PREF_LANGUAGE = locale.getLanguage();
                 LauncherPreferences.DEFAULT_PREF.edit().putString("language", LauncherPreferences.PREF_LANGUAGE).apply();
-                
+
                 // Restart to apply language change
                 finish();
                 startActivity(getIntent());
             }
-            
+
             @Override
             public void onNothingSelected(AdapterView<?> adapter) {}
         });
-            
+
         edit2 = (EditText) findViewById(R.id.login_edit_email);
-        
+
         sRemember = findViewById(R.id.login_switch_remember);
         isSkipInit = true;
     }
-    
+
     @Override
     public void onResume() {
         super.onResume();
-        
+
         Tools.updateWindowSize(this);
-        
+
         // Clear current profile
         PojavProfile.setCurrentProfile(this, null);
     }
 
-   
+
     private void unpackComponent(AssetManager am, String component) throws IOException {
         File versionFile = new File(Tools.DIR_GAME_HOME + "/" + component + "/version");
         InputStream is = am.open("components/" + component + "/version");
@@ -262,7 +264,7 @@ public class PojavLoginActivity extends BaseActivity {
                 FileUtils.deleteDirectory(versionFile.getParentFile());
             }
             versionFile.getParentFile().mkdir();
-            
+
             Log.i("UnpackPrep", component + ": Pack was installed manually, or does not exist, unpacking new...");
             String[] fileList = am.list("components/" + component);
             for(String s : fileList) {
@@ -277,7 +279,7 @@ public class PojavLoginActivity extends BaseActivity {
                     FileUtils.deleteDirectory(versionFile.getParentFile());
                 }
                 versionFile.getParentFile().mkdir();
-                
+
                 String[] fileList = am.list("components/" + component);
                 for (String s : fileList) {
                     Tools.copyAssetFile(this, "components/" + component + "/" + s, Tools.DIR_GAME_HOME + "/" + component, true);
@@ -306,13 +308,28 @@ public class PojavLoginActivity extends BaseActivity {
     private void initMain() throws Throwable {
         mkdirs(Tools.DIR_ACCOUNT_NEW);
         PojavMigrator.migrateAccountData(this);
-        
+
         mkdirs(Tools.DIR_GAME_HOME);
         mkdirs(Tools.DIR_GAME_HOME + "/lwjgl3");
         mkdirs(Tools.DIR_GAME_HOME + "/config");
         if (!PojavMigrator.migrateGameDir()) {
             mkdirs(Tools.DIR_GAME_NEW);
             mkdirs(Tools.DIR_GAME_NEW + "/mods");
+            mkdirs(DIR_GAME_NEW + "/resourcepacks");
+
+            // Add TitleWorlds Folders
+            mkdirs(DIR_GAME_NEW + "/titleworlds/TitleWorlds");
+            mkdirs(DIR_GAME_NEW + "/titleworlds/TitleWorlds/DIM1/data");
+            mkdirs(DIR_GAME_NEW + "/titleworlds/TitleWorlds/DIM-1/data");
+            mkdirs(DIR_GAME_NEW + "/titleworlds/TitleWorlds/advancements");
+            mkdirs(DIR_GAME_NEW + "/titleworlds/TitleWorlds/data");
+            mkdirs(DIR_GAME_NEW + "/titleworlds/TitleWorlds/datapacks");
+            mkdirs(DIR_GAME_NEW + "/titleworlds/TitleWorlds/entities");
+            mkdirs(DIR_GAME_NEW + "/titleworlds/TitleWorlds/poi");
+            mkdirs(DIR_GAME_NEW + "/titleworlds/TitleWorlds/region");
+            mkdirs(DIR_GAME_NEW + "/titleworlds/TitleWorlds/stats");
+            mkdirs(DIR_GAME_NEW + "/titleworlds/TitleWorlds/playerdata");
+
             mkdirs(Tools.DIR_HOME_VERSION);
             mkdirs(Tools.DIR_HOME_LIBRARY);
         }
@@ -321,20 +338,74 @@ public class PojavLoginActivity extends BaseActivity {
 
         try {
             new CustomControls(this).save(Tools.CTRLDEF_FILE);
+            Tools.copyAssetFile(this, "jsons/fabric-loader-0.13.3.json", Tools.DIR_HOME_VERSION + "/fabric-loader-0.13.3", false);
 
             Tools.copyAssetFile(this, "components/security/pro-grade.jar", Tools.DIR_DATA, true);
             Tools.copyAssetFile(this, "components/security/java_sandbox.policy", Tools.DIR_DATA, true);
             Tools.copyAssetFile(this, "options.txt", Tools.DIR_GAME_NEW, false);
+
             // TODO: Remove after implement.
             Tools.copyAssetFile(this, "launcher_profiles.json", Tools.DIR_GAME_NEW, false);
             Tools.copyAssetFile(this,"resolv.conf",Tools.DIR_DATA, true);
             Tools.copyAssetFile(this,"arc_dns_injector.jar",Tools.DIR_DATA, true);
+
+            // Install Mods
+            Tools.copyAssetFile(this, "artifacts/mcxr-core-0.2.0+null.jar", DIR_GAME_NEW + "/mods", false);
+            Tools.copyAssetFile(this, "artifacts/mcxr-play-0.2.0+null.jar", DIR_GAME_NEW + "/mods", false);
+            Tools.copyAssetFile(this, "artifacts/titleworlds-0.0.2.jar", DIR_GAME_NEW + "/mods", false);
+            Tools.copyAssetFile(this, "artifacts/lazydfu-0.1.3-SNAPSHOT.jar", DIR_GAME_NEW + "/mods", false);
+            Tools.copyAssetFile(this, "artifacts/fabric-api-0.48.0+1.18.2.jar", DIR_GAME_NEW + "/mods", false);
+
+            // Install Resource Pack
+            Tools.copyAssetFile(this, "assets-v0.zip", DIR_GAME_NEW + "/resourcepacks", false);
+
+            // Install TitleWorlds
+            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/advancements/6b404275-563a-4c56-8f46-c1c0c23df5c8.json", DIR_GAME_NEW + "/titleworlds/TitleWorlds/advancements", false);
+            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/advancements/7a9e9bdd-7198-414b-88b0-483f4f807b1f.json", DIR_GAME_NEW + "/titleworlds/TitleWorlds/advancements", false);
+            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/advancements/5159d2f9-9457-48fb-be3a-49758504d283.json", DIR_GAME_NEW + "/titleworlds/TitleWorlds/advancements", false);
+            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/advancements/9931de1b-d216-4d8f-a952-4b9d0a77249d.json", DIR_GAME_NEW + "/titleworlds/TitleWorlds/advancements", false);
+            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/advancements/b22ca959-c8a3-4549-bd3e-e143b37fc7ab.json", DIR_GAME_NEW + "/titleworlds/TitleWorlds/advancements", false);
+            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/data/raids.dat", DIR_GAME_NEW + "/titleworlds/TitleWorlds/data", false);
+            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/DIM1/data/raids_end.dat", DIR_GAME_NEW + "/titleworlds/TitleWorlds/DIM1/data", false);
+            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/DIM-1/data/raids.dat", DIR_GAME_NEW + "/titleworlds/TitleWorlds/DIM-1/data", false);
+            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/entities/r.0.0.mca", DIR_GAME_NEW + "/titleworlds/TitleWorlds/entities", false);
+            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/entities/r.0.-1.mca", DIR_GAME_NEW + "/titleworlds/TitleWorlds/entities", false);
+            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/entities/r.-1.0.mca", DIR_GAME_NEW + "/titleworlds/TitleWorlds/entities", false);
+            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/entities/r.-1.-1.mca", DIR_GAME_NEW + "/titleworlds/TitleWorlds/entities", false);
+            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/playerdata/6b404275-563a-4c56-8f46-c1c0c23df5c8.dat", DIR_GAME_NEW + "/titleworlds/TitleWorlds/playerdata", false);
+            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/playerdata/6b404275-563a-4c56-8f46-c1c0c23df5c8.dat_old", DIR_GAME_NEW + "/titleworlds/TitleWorlds/playerdata", false);
+            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/playerdata/7a9e9bdd-7198-414b-88b0-483f4f807b1f.dat", DIR_GAME_NEW + "/titleworlds/TitleWorlds/playerdata", false);
+            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/playerdata/7a9e9bdd-7198-414b-88b0-483f4f807b1f.dat_old", DIR_GAME_NEW + "/titleworlds/TitleWorlds/playerdata", false);
+            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/playerdata/5159d2f9-9457-48fb-be3a-49758504d283.dat", DIR_GAME_NEW + "/titleworlds/TitleWorlds/playerdata", false);
+            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/playerdata/5159d2f9-9457-48fb-be3a-49758504d283.dat_old", DIR_GAME_NEW + "/titleworlds/TitleWorlds/playerdata", false);
+            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/playerdata/9931de1b-d216-4d8f-a952-4b9d0a77249d.dat", DIR_GAME_NEW + "/titleworlds/TitleWorlds/playerdata", false);
+            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/playerdata/9931de1b-d216-4d8f-a952-4b9d0a77249d.dat_old", DIR_GAME_NEW + "/titleworlds/TitleWorlds/playerdata", false);
+            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/playerdata/b22ca959-c8a3-4549-bd3e-e143b37fc7ab.dat", DIR_GAME_NEW + "/titleworlds/TitleWorlds/playerdata", false);
+            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/playerdata/b22ca959-c8a3-4549-bd3e-e143b37fc7ab.dat_old", DIR_GAME_NEW + "/titleworlds/TitleWorlds/playerdata", false);
+            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/poi/r.0.0.mca", DIR_GAME_NEW + "/titleworlds/TitleWorlds/poi", false);
+            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/poi/r.0.-1.mca", DIR_GAME_NEW + "/titleworlds/TitleWorlds/poi", false);
+            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/poi/r.-1.0.mca", DIR_GAME_NEW + "/titleworlds/TitleWorlds/poi", false);
+            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/poi/r.-1.-1.mca", DIR_GAME_NEW + "/titleworlds/TitleWorlds/poi", false);
+            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/region/r.0.0.mca", DIR_GAME_NEW + "/titleworlds/TitleWorlds/region", false);
+            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/region/r.0.-1.mca", DIR_GAME_NEW + "/titleworlds/TitleWorlds/region", false);
+            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/region/r.-1.0.mca", DIR_GAME_NEW + "/titleworlds/TitleWorlds/region", false);
+            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/region/r.-1.-1.mca", DIR_GAME_NEW + "/titleworlds/TitleWorlds/region", false);
+            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/stats/6b404275-563a-4c56-8f46-c1c0c23df5c8.json", DIR_GAME_NEW + "/titleworlds/TitleWorlds/stats", false);
+            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/stats/7a9e9bdd-7198-414b-88b0-483f4f807b1f.json", DIR_GAME_NEW + "/titleworlds/TitleWorlds/stats", false);
+            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/stats/5159d2f9-9457-48fb-be3a-49758504d283.json", DIR_GAME_NEW + "/titleworlds/TitleWorlds/stats", false);
+            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/stats/9931de1b-d216-4d8f-a952-4b9d0a77249d.json", DIR_GAME_NEW + "/titleworlds/TitleWorlds/stats", false);
+            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/stats/b22ca959-c8a3-4549-bd3e-e143b37fc7ab.json", DIR_GAME_NEW + "/titleworlds/TitleWorlds/stats", false);
+            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/level.dat", DIR_GAME_NEW + "/titleworlds/TitleWorlds", false);
+            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/level.dat_old", DIR_GAME_NEW + "/titleworlds/TitleWorlds", false);
+            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/session.lock", DIR_GAME_NEW + "/titleworlds/TitleWorlds", false);
+
+
             AssetManager am = this.getAssets();
-            
+
             unpackComponent(am, "caciocavallo");
             unpackComponent(am, "lwjgl3");
             if(!installRuntimeAutomatically(am,MultiRTUtils.getRuntimes().size() > 0)) {
-               MultiRTConfigDialog.openRuntimeSelector(this, MultiRTConfigDialog.MULTIRT_PICK_RUNTIME_STARTUP);
+                MultiRTConfigDialog.openRuntimeSelector(this, MultiRTConfigDialog.MULTIRT_PICK_RUNTIME_STARTUP);
                 synchronized (mLockSelectJRE) {
                     mLockSelectJRE.wait();
                 }
@@ -351,12 +422,12 @@ public class PojavLoginActivity extends BaseActivity {
         if(!firstLaunchPrefs.getBoolean("storageDialogShown",false)) {
             AlertDialog.Builder bldr = new AlertDialog.Builder(this);
             bldr.setTitle(R.string.storage_warning_title);
-            Spanned sp = Html.fromHtml(getString(R.string.storage_warning_text,BuildConfig.APPLICATION_ID));
+            Spanned sp = Html.fromHtml(getString(R.string.storage_warning_text, BuildConfig.APPLICATION_ID));
             bldr.setMessage(sp);
             bldr.setCancelable(false);
             bldr.setPositiveButton(android.R.string.ok, (dialog, which)->{
-               firstLaunchPrefs.edit().putBoolean("storageDialogShown",true).apply();
-               dialog.dismiss();
+                firstLaunchPrefs.edit().putBoolean("storageDialogShown",true).apply();
+                dialog.dismiss();
             });
             bldr.show();
         }
@@ -448,16 +519,16 @@ public class PojavLoginActivity extends BaseActivity {
         File file = new File(path);
         // check necessary???
         if(file.getParentFile().exists())
-             return file.mkdir();
+            return file.mkdir();
         else return file.mkdirs();
     }
 
-    
+
     public void loginMicrosoft(View view) {
         Intent i = new Intent(this,MicrosoftLoginGUIActivity.class);
         startActivityForResult(i,MicrosoftLoginGUIActivity.AUTHENTICATE_MICROSOFT_REQUEST);
     }
-    
+
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
@@ -502,12 +573,12 @@ public class PojavLoginActivity extends BaseActivity {
             return listView.getChildAt(childIndex);
         }
     }
-    
+
     public void loginSavedAcc(View view) {
         String[] accountArr = new File(Tools.DIR_ACCOUNT_NEW).list();
         if(accountArr.length == 0){
-           showNoAccountDialog();
-           return;
+            showNoAccountDialog();
+            return;
         }
 
         final Dialog accountDialog = new Dialog(PojavLoginActivity.this);
@@ -593,10 +664,10 @@ public class PojavLoginActivity extends BaseActivity {
         accountDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         accountDialog.show();
     }
-    
+
     private MinecraftAccount loginLocal() {
         new File(Tools.DIR_ACCOUNT_OLD).mkdir();
-        
+
         String text = edit2.getText().toString();
         if (text.isEmpty()) {
             edit2.setError(getString(R.string.global_error_field_empty));
@@ -608,19 +679,19 @@ public class PojavLoginActivity extends BaseActivity {
             MinecraftAccount builder = new MinecraftAccount();
             builder.isMicrosoft = false;
             builder.username = text;
-            
+
             return builder;
         }
         return null;
     }
-    
+
 
     public void loginMC(final View v)
     {
         mProfile = loginLocal();
         playProfile(false);
     }
-    
+
     private void playProfile(boolean notOnLogin) {
         if (mProfile != null) {
             try {
@@ -628,22 +699,22 @@ public class PojavLoginActivity extends BaseActivity {
                 if (sRemember.isChecked() || notOnLogin) {
                     profileName = mProfile.save();
                 }
-                
+
                 PojavProfile.launch(PojavLoginActivity.this, profileName == null ? mProfile : profileName);
             } catch (IOException e) {
                 Tools.showError(this, e);
             }
         }
     }
-    
+
     public static String strArrToString(String[] strArr)
     {
         String[] strArrEdit = strArr.clone();
         strArrEdit[0] = "";
-        
+
         String str = Arrays.toString(strArrEdit);
         str = str.substring(1, str.length() - 1).replace(",", "\n");
-        
+
         return str;
     }
     //We are calling this method to check the permission status
@@ -655,20 +726,23 @@ public class PojavLoginActivity extends BaseActivity {
 
         //If permission is granted returning true
         return result1 == PackageManager.PERMISSION_GRANTED &&
-            result2 == PackageManager.PERMISSION_GRANTED;
+                result2 == PackageManager.PERMISSION_GRANTED;
     }
 
     //Requesting permission
-    private void requestStoragePermission()
+    private void requestPermissions()
     {
         ActivityCompat.requestPermissions(this, new String[]{
-            Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_STORAGE_REQUEST_CODE);
+                Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_STORAGE_REQUEST_CODE);
+        ActivityCompat.requestPermissions(this, new String[]{
+                Manifest.permission.RECORD_AUDIO}, 2);
     }
 
     // This method will be called when the user will tap on allow or deny
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == REQUEST_STORAGE_REQUEST_CODE){
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_STORAGE_REQUEST_CODE) {
             synchronized (mLockStoragePerm) {
                 mLockStoragePerm.notifyAll();
             }

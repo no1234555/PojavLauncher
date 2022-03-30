@@ -36,16 +36,14 @@ def getVersionName =  {
     return TAG.toString().trim().replace("-g","-") + "-" + BRANCH.toString().trim();
 }
 
+
 android {
     compileSdkVersion 31
-    dexOptions {
-        javaMaxHeapSize "4g"
-    }
-	
+
     lintOptions {
         abortOnError false
     }
-	
+
     signingConfigs {
         customDebug {
             storeFile file("debug.keystore")
@@ -63,7 +61,7 @@ android {
 	
     defaultConfig {
         applicationId "net.kdt.pojavlaunch"
-        minSdkVersion 21
+        minSdkVersion 23
         targetSdkVersion 31
         versionCode getDateSeconds()
         versionName getVersionName()
@@ -99,12 +97,6 @@ android {
             signingConfig signingConfigs.googlePlayBuild
         }
     }
-	
-	externalNativeBuild {
-        ndkBuild {
-            path file('src/main/jni/Android.mk')
-        }
-    }
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -115,7 +107,15 @@ android {
             enableSplit = false
         }
     }
-    buildToolsVersion '30.0.2'
+
+    externalNativeBuild {
+        ndkBuild {
+            path file('src/main/jni/Android.mk')
+        }
+    }
+
+    buildToolsVersion '30.0.3'
+    ndkVersion '21.4.7075529'
 }
 
 dependencies {
@@ -132,10 +132,9 @@ dependencies {
 
     implementation "androidx.constraintlayout:constraintlayout:2.1.2"
 
-    implementation 'com.github.martin-stone:hsv-alpha-color-picker-android:3.0.1'
+    implementation 'com.rarepebble:colorpicker:3.0.1'
     implementation 'com.github.duanhong169:checkerboarddrawable:1.0.2'
 
-    
     // implementation 'com.intuit.sdp:sdp-android:1.0.5'
     // implementation 'com.intuit.ssp:ssp-android:1.0.5'
 

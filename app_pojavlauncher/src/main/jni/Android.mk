@@ -5,9 +5,14 @@ HERE_PATH := $(LOCAL_PATH)
 # include $(HERE_PATH)/crash_dump/libbacktrace/Android.mk
 # include $(HERE_PATH)/crash_dump/debuggerd/Android.mk
 
-
 LOCAL_PATH := $(HERE_PATH)
 
+include $(CLEAR_VARS)
+LOCAL_LDLIBS := -lGLESv3
+LOCAL_MODULE := mcxr_loader
+        LOCAL_SRC_FILES := \
+                    mcxr_loader.cpp
+include $(BUILD_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)
 LOCAL_MODULE     := xhook
@@ -26,7 +31,7 @@ include $(BUILD_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)
 # Link GLESv2 for test
-LOCAL_LDLIBS := -ldl -llog -landroid
+LOCAL_LDLIBS := -ldl -llog -landroid -lEGL -lGLESv3
 # -lGLESv2
 LOCAL_MODULE := pojavexec
 # LOCAL_CFLAGS += -DDEBUG

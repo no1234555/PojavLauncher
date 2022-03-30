@@ -6,6 +6,9 @@ import android.os.*;
 import android.util.*;
 
 import java.io.*;
+import java.nio.ByteOrder;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
 import java.util.*;
 import java.util.concurrent.*;
 import net.kdt.pojavlaunch.*;

@@ -6,3 +6,7 @@ local.properties
 .idea/
 app_pojavlauncher/.cxx/
 .vs/
+/app_pojavlauncher/libs/OpenXR-SDK/
+.DS_STORE
+app_pojavlauncher/src/main/assets/artifacts/
+app_pojavlauncher/src/main/assets/unzippedArtifacts/

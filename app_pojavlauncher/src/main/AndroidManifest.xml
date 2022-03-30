@@ -3,29 +3,36 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="net.kdt.pojavlaunch">
 
-    <uses-feature android:glEsVersion="0x00020000"/>
+    <uses-feature android:glEsVersion="0x00030002" />
+    <uses-feature
+        android:name="android.hardware.vr.headtracking"
+        android:required="true"
+        android:version="1" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="28"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="28"/>
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <application
         android:allowBackup="true"
         android:name=".PojavApplication"
         android:theme="@style/AppTheme"
-        android:label="@string/app_name"
+        android:label="QuestCraft"
         android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:resizeableActivity="true"
         android:hasFragileUserData="true"
-        android:allowNativeHeapPointerTagging="false">
+        android:allowNativeHeapPointerTagging="false"
+        >
 
         <meta-data 
             android:name="android.max_aspect"
             android:value="ratio_float"/>
-		
+        <meta-data android:name="com.oculus.intent.category.VR" android:value="vr_only"/>
+        <meta-data android:name="com.oculus.supportedDevices" android:value="quest|quest2"/>
+        <meta-data android:name="com.oculus.vr.focusaware" android:value="true"/>
         <activity
             android:exported="true"
             android:launchMode="singleTop"
@@ -34,7 +41,8 @@
             android:name=".PojavLoginActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|keyboard|navigation">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="com.oculus.intent.category.VR" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -71,13 +79,14 @@
         <activity
             android:screenOrientation="sensorLandscape"
             android:name=".PojavLauncherActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize|keyboard|navigation"/>
-        
+            android:configChanges="keyboardHidden|orientation|screenSize|keyboard|navigation"
+            android:exported="true">
+        </activity>
         <activity
             android:screenOrientation="sensorLandscape"
             android:name=".JavaGUILauncherActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize|keyboard|navigation"/>
-		
+            android:configChanges="keyboardHidden|orientation|screenSize|keyboard|navigation">
+        </activity>
         <activity
             android:screenOrientation="sensorLandscape"
             android:name=".CustomControlsActivity"
@@ -85,12 +94,20 @@
         <activity
             android:screenOrientation="sensorLandscape"
             android:name=".authenticator.microsoft.ui.MicrosoftLoginGUIActivity"/>
+
         <activity
             android:launchMode="standard"
             android:multiprocess="true"
             android:screenOrientation="sensorLandscape"
             android:name=".MainActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout|keyboard|navigation"/>
+            android:resizeableActivity="false"
+            android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout|keyboard|navigation"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.RUN"/>
+                <category android:name="com.oculus.intent.category.VR"/>
+            </intent-filter>
+        </activity>
         <provider
             android:name=".scoped.GameFolderProvider"
             android:authorities="@string/storageProviderAuthorities"
@@ -104,5 +121,4 @@
         </provider>
 
     </application>
-
 </manifest>
