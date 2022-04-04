@@ -310,7 +310,7 @@ public class PojavLoginActivity extends BaseActivity {
         mkdirs(Tools.DIR_GAME_HOME + "/config");
         if (!PojavMigrator.migrateGameDir()) {
             mkdirs(Tools.DIR_GAME_NEW);
-            mkdirs(Tools.DIR_GAME_NEW + "/mods");
+            mkdirs(Tools.DIR_GAME_NEW + "/mods/extra");
             mkdirs(DIR_GAME_NEW + "/resourcepacks");
 
             // Add TitleWorlds Folders
@@ -352,6 +352,15 @@ public class PojavLoginActivity extends BaseActivity {
             Tools.copyAssetFile(this, "artifacts/lazydfu-0.1.3-SNAPSHOT.jar", DIR_GAME_NEW + "/mods", false);
             Tools.copyAssetFile(this, "artifacts/fabric-api-0.48.0+1.18.2.jar", DIR_GAME_NEW + "/mods", false);
 
+            // Remove old versions
+            File[] files = new File(DIR_GAME_NEW + "mods").listFiles();
+
+            for(File file : files) {
+                if(file.exists() && !file.isDirectory()) {
+                    file.delete();
+                }
+            }
+            
             // Install Resource Pack
             Tools.copyAssetFile(this, "assets-v0.zip", DIR_GAME_NEW + "/resourcepacks", false);
 
