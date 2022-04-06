@@ -59,6 +59,7 @@ import top.defaults.checkerboarddrawable.BuildConfig;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -346,10 +347,11 @@ public class PojavLoginActivity extends BaseActivity {
             Tools.copyAssetFile(this,"arc_dns_injector.jar",Tools.DIR_DATA, true);
 
             // Remove old versions
-            File[] files = new File(DIR_GAME_NEW + "mods").listFiles();
+            File[] files = new File(DIR_GAME_NEW + "mods").listFiles((dir, name) ->
+                    name.contains("mcxr-") || name.contains("titleworlds") || name.contains("lazydfu") || name.contains("fabric-api"));
 
             for(File file : files) {
-                if(file.exists() && !file.isDirectory()) {
+                if(file.exists()) {
                     file.delete();
                 }
             }
