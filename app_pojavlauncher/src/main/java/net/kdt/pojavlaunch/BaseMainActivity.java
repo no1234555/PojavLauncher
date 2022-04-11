@@ -50,7 +50,7 @@ public class BaseMainActivity extends BaseActivity {
 
     MinecraftAccount mProfile;
     MinecraftProfile minecraftProfile;
-    
+
     private DrawerLayout drawerLayout;
     private NavigationView navDrawer;
 
@@ -69,7 +69,7 @@ public class BaseMainActivity extends BaseActivity {
             GLOBAL_CLIPBOARD = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
             touchCharInput = findViewById(R.id.mainTouchCharInput);
             loggerView = findViewById(R.id.mainLoggerView);
-            
+
             mProfile = PojavProfile.getCurrentProfileContent(this);
             minecraftProfile = LauncherProfiles.mainProfileJson.profiles.get(mProfile.selectedProfile);
             if(minecraftProfile == null) {
@@ -78,27 +78,27 @@ public class BaseMainActivity extends BaseActivity {
                 return;
             }
             String runtime = LauncherPreferences.PREF_DEFAULT_RUNTIME;
-                LauncherProfiles.update();
+            LauncherProfiles.update();
 
-                mVersionInfo = Tools.getVersionInfo(null, BaseLauncherActivity.getVersionId(
-                        minecraftProfile.lastVersionId));
-                if(minecraftProfile.javaDir != null && minecraftProfile.javaDir.startsWith(Tools.LAUNCHERPROFILES_RTPREFIX)) {
-                    String runtimeName = minecraftProfile.javaDir.substring(Tools.LAUNCHERPROFILES_RTPREFIX.length());
-                    if(MultiRTUtils.forceReread(runtimeName).versionString != null) {
-                        runtime = runtimeName;
-                    }
+            mVersionInfo = Tools.getVersionInfo(null, BaseLauncherActivity.getVersionId(
+                    minecraftProfile.lastVersionId));
+            if(minecraftProfile.javaDir != null && minecraftProfile.javaDir.startsWith(Tools.LAUNCHERPROFILES_RTPREFIX)) {
+                String runtimeName = minecraftProfile.javaDir.substring(Tools.LAUNCHERPROFILES_RTPREFIX.length());
+                if(MultiRTUtils.forceReread(runtimeName).versionString != null) {
+                    runtime = runtimeName;
                 }
-                if(minecraftProfile.pojavRendererName != null) {
-                    Log.i("RdrDebug","__P_renderer="+minecraftProfile.pojavRendererName);
-                    Tools.LOCAL_RENDERER = minecraftProfile.pojavRendererName;
-                }
-            
+            }
+            if(minecraftProfile.pojavRendererName != null) {
+                Log.i("RdrDebug","__P_renderer="+minecraftProfile.pojavRendererName);
+                Tools.LOCAL_RENDERER = minecraftProfile.pojavRendererName;
+            }
+
             setTitle("Minecraft " + minecraftProfile.lastVersionId);
 
             MultiRTUtils.setRuntimeNamed(this,runtime);
             // Minecraft 1.13+
             isInputStackCall = mVersionInfo.arguments != null;
-            
+
             Tools.getDisplayMetrics(this);
             windowWidth = Tools.getDisplayFriendlyRes(currentDisplayMetrics.widthPixels, scaleFactor);
             windowHeight = Tools.getDisplayFriendlyRes(currentDisplayMetrics.heightPixels, scaleFactor);
@@ -165,7 +165,6 @@ public class BaseMainActivity extends BaseActivity {
         CallbackBridge.nativeSetWindowAttrib(LwjglGlfwKeycode.GLFW_HOVERED, 1);
     }
 
-   //terremomo was here
     @Override
     protected void onPause() {
         if (CallbackBridge.isGrabbing()){
@@ -193,45 +192,36 @@ public class BaseMainActivity extends BaseActivity {
     }
 
     public static boolean isAndroid8OrHigher() {
-        return Build.VERSION.SDK_INT >= 26; 
+        return Build.VERSION.SDK_INT >= 26;
     }
 
     private void runCraft() throws Throwable {
-        windowHeight = 1080;
-        windowWidth = 1980;
-
-        mProfile = PojavProfile.getCurrentProfileContent(this);
-        mVersionInfo = Tools.getVersionInfo(null,mProfile.selectedVersion);
-
-        config = PerVersionConfig.configMap.get(mProfile.selectedVersion);
-        String runtime = LauncherPreferences.PREF_DEFAULT_RUNTIME;
-        MultiRTUtils.setRuntimeNamed(this,runtime);
         if(Tools.LOCAL_RENDERER == null) {
             Tools.LOCAL_RENDERER = LauncherPreferences.PREF_RENDERER;
         }
         Logger.getInstance().appendToLog("--------- beggining with launcher debug");
-        Logger.getInstance().appendToLog("Info: Launcher version: " + "null");
+        //Logger.getInstance().appendToLog("Info: Launcher version: " + BuildConfig.VERSION_NAME);
         if (Tools.LOCAL_RENDERER.equals("vulkan_zink")) {
             checkVulkanZinkIsSupported();
         }
         checkLWJGL3Installed();
-        
+
         JREUtils.jreReleaseList = JREUtils.readJREReleaseProperties();
         Logger.getInstance().appendToLog("Architecture: " + Architecture.archAsString(Tools.DEVICE_ARCHITECTURE));
         checkJavaArgsIsLaunchable(JREUtils.jreReleaseList.get("JAVA_VERSION"));
         // appendlnToLog("Info: Custom Java arguments: \"" + LauncherPreferences.PREF_CUSTOM_JAVA_ARGS + "\"");
 
         Logger.getInstance().appendToLog("Info: Selected Minecraft version: " + mVersionInfo.id +
-            ((mVersionInfo.inheritsFrom == null || mVersionInfo.inheritsFrom.equals(mVersionInfo.id)) ?
-            "" : " (" + mVersionInfo.inheritsFrom + ")"));
+                ((mVersionInfo.inheritsFrom == null || mVersionInfo.inheritsFrom.equals(mVersionInfo.id)) ?
+                        "" : " (" + mVersionInfo.inheritsFrom + ")"));
 
 
         JREUtils.redirectAndPrintJRELog();
-            LauncherProfiles.update();
-            Tools.launchMinecraft(this, mProfile, BaseLauncherActivity.getVersionId(
-                    minecraftProfile.lastVersionId));
+        LauncherProfiles.update();
+        Tools.launchMinecraft(this, mProfile, BaseLauncherActivity.getVersionId(
+                minecraftProfile.lastVersionId));
     }
-    
+
     private void checkJavaArgsIsLaunchable(String jreVersion) throws Throwable {
         Logger.getInstance().appendToLog("Info: Custom Java arguments: \"" + LauncherPreferences.PREF_CUSTOM_JAVA_ARGS + "\"");
     }
@@ -248,14 +238,14 @@ public class BaseMainActivity extends BaseActivity {
 
     private void checkVulkanZinkIsSupported() {
         if (Tools.DEVICE_ARCHITECTURE == ARCH_X86
-         || Build.VERSION.SDK_INT < 25
-         || !getPackageManager().hasSystemFeature(PackageManager.FEATURE_VULKAN_HARDWARE_LEVEL)
-         || !getPackageManager().hasSystemFeature(PackageManager.FEATURE_VULKAN_HARDWARE_VERSION)) {
+                || Build.VERSION.SDK_INT < 25
+                || !getPackageManager().hasSystemFeature(PackageManager.FEATURE_VULKAN_HARDWARE_LEVEL)
+                || !getPackageManager().hasSystemFeature(PackageManager.FEATURE_VULKAN_HARDWARE_VERSION)) {
             Logger.getInstance().appendToLog("Error: Vulkan Zink renderer is not supported!");
             throw new RuntimeException(getString(R.string. mcn_check_fail_vulkan_support));
         }
     }
-    
+
     public void printStream(InputStream stream) {
         try {
             BufferedReader buffStream = new BufferedReader(new InputStreamReader(stream));
@@ -330,21 +320,21 @@ public class BaseMainActivity extends BaseActivity {
         if (CallbackBridge.isGrabbing()) return;
 
         Toast.makeText(ctx, touchpad.switchState()
-                 ? R.string.control_mouseon : R.string.control_mouseoff,
+                        ? R.string.control_mouseon : R.string.control_mouseoff,
                 Toast.LENGTH_SHORT).show();
     }
 
     public static void dialogForceClose(Context ctx) {
         new AlertDialog.Builder(ctx)
-            .setMessage(R.string.mcn_exit_confirm)
-            .setNegativeButton(android.R.string.cancel, null)
-            .setPositiveButton(android.R.string.ok, (p1, p2) -> {
-                try {
-                    fullyExit();
-                } catch (Throwable th) {
-                    Log.w(Tools.APP_NAME, "Could not enable System.exit() method!", th);
-                }
-            }).show();
+                .setMessage(R.string.mcn_exit_confirm)
+                .setNegativeButton(android.R.string.cancel, null)
+                .setPositiveButton(android.R.string.ok, (p1, p2) -> {
+                    try {
+                        fullyExit();
+                    } catch (Throwable th) {
+                        Log.w(Tools.APP_NAME, "Could not enable System.exit() method!", th);
+                    }
+                }).show();
     }
 
     @Override
