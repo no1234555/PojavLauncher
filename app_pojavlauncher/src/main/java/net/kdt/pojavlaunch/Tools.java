@@ -648,7 +648,7 @@ public final class Tools {
                    }
                 //inheritsVer.inheritsFrom = inheritsVer.id;
                 insertSafety(inheritsVer, customVer,
-                             "assetIndex", "assets", "id",
+                             "assetIndex", "assets",
                              "mainClass", "minecraftArguments",
                              "optifineLib", "releaseTime", "time", "type"
                              );
