@@ -2,22 +2,31 @@ package net.kdt.pojavlaunch;
 
 import static net.kdt.pojavlaunch.BaseMainActivity.touchCharInput;
 import static net.kdt.pojavlaunch.utils.MCOptionUtils.getMcScale;
-
 import static org.lwjgl.glfw.CallbackBridge.sendKeyPress;
 import static org.lwjgl.glfw.CallbackBridge.sendMouseButton;
 import static org.lwjgl.glfw.CallbackBridge.windowHeight;
 import static org.lwjgl.glfw.CallbackBridge.windowWidth;
 
 import android.app.Activity;
-import android.content.*;
+import android.content.Context;
 import android.graphics.SurfaceTexture;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.util.*;
-import android.view.*;
+import android.util.AttributeSet;
+import android.util.Log;
+import android.view.InputDevice;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
+import android.view.Surface;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
+import android.view.TextureView;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
 import com.google.android.material.math.MathUtils;
@@ -32,36 +41,28 @@ import org.lwjgl.glfw.CallbackBridge;
 /**
  * Class dealing with showing minecraft surface and taking inputs to dispatch them to minecraft
  */
-public class MinecraftGLView extends TextureView {
-    /* How much distance a finger has to go for touch sloppiness to be disabled */
-    public static final int FINGER_STILL_THRESHOLD = (int) Tools.dpToPx(9);
-    /* How much distance a finger has to go to scroll */
-    public static final int FINGER_SCROLL_THRESHOLD = (int) Tools.dpToPx(6);
-    /* Handle hotbar throw button and mouse mining button */
-    public static final int MSG_LEFT_MOUSE_BUTTON_CHECK = 1028;
-    public static final int MSG_DROP_ITEM_BUTTON_CHECK = 1029;
-    
+public class MinecraftGLSurface extends View {
     /* Gamepad object for gamepad inputs, instantiated on need */
     private Gamepad mGamepad = null;
     /* Pointer Debug textview, used to show info about the pointer state */
     private TextView mPointerDebugTextView;
     /* Resolution scaler option, allow downsizing a window */
-    private final float mScaleFactor = LauncherPreferences.DEFAULT_PREF.getInt("resolutionRatio",100)/100f;
-    /* Display properties, such as resolution and DPI */
-    private final DisplayMetrics mDisplayMetrics = Tools.getDisplayMetrics((Activity) getContext());
+    private final float mScaleFactor = LauncherPreferences.PREF_SCALE_FACTOR/100f;
     /* Sensitivity, adjusted according to screen size */
-    private final double mSensitivityFactor = (1.4 * (1080f/ mDisplayMetrics.heightPixels));
+    private final double mSensitivityFactor = (1.4 * (1080f/ Tools.getDisplayMetrics((Activity) getContext()).heightPixels));
     /* Use to detect simple and double taps */
     private final TapDetector mSingleTapDetector = new TapDetector(1, TapDetector.DETECTION_METHOD_BOTH);
     private final TapDetector mDoubleTapDetector = new TapDetector(2, TapDetector.DETECTION_METHOD_DOWN);
     /* MC GUI scale, listened by MCOptionUtils */
     private int mGuiScale = getMcScale();
-    private MCOptionUtils.MCOptionListener mGuiScaleListener = () -> mGuiScale = getMcScale();
+    private final MCOptionUtils.MCOptionListener mGuiScaleListener = () -> mGuiScale = getMcScale();
     /* Surface ready listener, used by the activity to launch minecraft */
     SurfaceReadyListener mSurfaceReadyListener = null;
+    /* View holding the surface, either a SurfaceView or a TextureView */
+    View mSurface;
 
     /* List of hotbarKeys, used when clicking on the hotbar */
-    private static final int[] sHotbarKeys = {
+    private static final int[] HOTBAR_KEYS = {
             LwjglGlfwKeycode.GLFW_KEY_1, LwjglGlfwKeycode.GLFW_KEY_2,   LwjglGlfwKeycode.GLFW_KEY_3,
             LwjglGlfwKeycode.GLFW_KEY_4, LwjglGlfwKeycode.GLFW_KEY_5,   LwjglGlfwKeycode.GLFW_KEY_6,
             LwjglGlfwKeycode.GLFW_KEY_7, LwjglGlfwKeycode.GLFW_KEY_8, LwjglGlfwKeycode.GLFW_KEY_9};
@@ -79,8 +80,16 @@ public class MinecraftGLView extends TextureView {
     private float mInitialX, mInitialY;
     /* Last first pointer positions non-scaled, used to scroll distance */
     private float mScrollLastInitialX, mScrollLastInitialY;
+    /* How much distance a finger has to go for touch sloppiness to be disabled */
+    public static final int FINGER_STILL_THRESHOLD = (int) Tools.dpToPx(9);
+    /* How much distance a finger has to go to scroll */
+    public static final int FINGER_SCROLL_THRESHOLD = (int) Tools.dpToPx(6);
+    /* Whether the button was triggered, used by the handler */
+    private static boolean triggeredLeftMouseButton = false;
     /* Handle hotbar throw button and mouse mining button */
-    private final Handler theHandler = new Handler(Looper.getMainLooper()) {
+    public static final int MSG_LEFT_MOUSE_BUTTON_CHECK = 1028;
+    public static final int MSG_DROP_ITEM_BUTTON_CHECK = 1029;
+    private final Handler mHandler = new Handler(Looper.getMainLooper()) {
         public void handleMessage(Message msg) {
             if(msg.what == MSG_LEFT_MOUSE_BUTTON_CHECK) {
                 if (LauncherPreferences.PREF_DISABLE_GESTURES) return;
@@ -88,7 +97,7 @@ public class MinecraftGLView extends TextureView {
                 float y = CallbackBridge.mouseY;
                 if (CallbackBridge.isGrabbing() &&
                         MathUtils.dist(x, y, mInitialX, mInitialY) < FINGER_STILL_THRESHOLD) {
-                    mTriggeredLeftMouseButton = true;
+                    triggeredLeftMouseButton = true;
                     sendMouseButton(LwjglGlfwKeycode.GLFW_MOUSE_BUTTON_LEFT, true);
                 }
                 return;
@@ -96,31 +105,93 @@ public class MinecraftGLView extends TextureView {
             if(msg.what == MSG_DROP_ITEM_BUTTON_CHECK) {
                 if(CallbackBridge.isGrabbing()){
                     sendKeyPress(LwjglGlfwKeycode.GLFW_KEY_Q);
-                    theHandler.sendEmptyMessageDelayed(MSG_DROP_ITEM_BUTTON_CHECK, 600);
+                    mHandler.sendEmptyMessageDelayed(MSG_DROP_ITEM_BUTTON_CHECK, 600);
                 }
                 return;
             }
 
         }
     };
-    /* Whether the button was triggered, used by the handler */
-    private boolean mTriggeredLeftMouseButton = false;
-    /* Whether the pointer debug has failed at some point */
-    private boolean debugErrored = false;
 
 
-    public MinecraftGLView(Context context) {
+
+    public MinecraftGLSurface(Context context) {
         this(context, null);
     }
 
-    public MinecraftGLView(Context context, AttributeSet attributeSet) {
+    public MinecraftGLSurface(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
-        //Fixes freeform and dex mode having transparent glass,
-        //since it forces android to used the background color of the view/layout behind it.
-        setOpaque(false);
         setFocusable(true);
 
         MCOptionUtils.addMCOptionListener(mGuiScaleListener);
+    }
+
+    /** Initialize the view and all its settings */
+    public void start(){
+        // Add the pointer debug textview
+        mPointerDebugTextView = new TextView(getContext());
+        mPointerDebugTextView.setX(0);
+        mPointerDebugTextView.setY(0);
+        mPointerDebugTextView.setVisibility(GONE);
+        ((ViewGroup)getParent()).addView(mPointerDebugTextView);
+
+        if(LauncherPreferences.PREF_USE_ALTERNATE_SURFACE){
+            SurfaceView surfaceView = new SurfaceView(getContext());
+            mSurface = surfaceView;
+
+            surfaceView.getHolder().addCallback(new SurfaceHolder.Callback() {
+                private boolean isCalled = false;
+                @Override
+                public void surfaceCreated(@NonNull SurfaceHolder holder) {
+                    if(isCalled) return;
+                    isCalled = true;
+
+                    realStart(surfaceView.getHolder().getSurface());
+                }
+
+                @Override
+                public void surfaceChanged(@NonNull SurfaceHolder holder, int format, int width, int height) {
+                    refreshSize();
+                }
+
+                @Override
+                public void surfaceDestroyed(@NonNull SurfaceHolder holder) {}
+            });
+
+            ((ViewGroup)getParent()).addView(surfaceView);
+        }else{
+            TextureView textureView = new TextureView(getContext());
+            textureView.setOpaque(true);
+            mSurface = textureView;
+
+            textureView.setSurfaceTextureListener(new TextureView.SurfaceTextureListener() {
+                private boolean isCalled = false;
+                @Override
+                public void onSurfaceTextureAvailable(@NonNull SurfaceTexture surface, int width, int height) {
+                    if(isCalled) return;
+                    isCalled = true;
+
+                    realStart(new Surface(textureView.getSurfaceTexture()));
+                }
+
+                @Override
+                public void onSurfaceTextureSizeChanged(@NonNull SurfaceTexture surface, int width, int height) {
+                    refreshSize();
+                }
+
+                @Override
+                public boolean onSurfaceTextureDestroyed(@NonNull SurfaceTexture surface) {
+                    return true;
+                }
+
+                @Override
+                public void onSurfaceTextureUpdated(@NonNull SurfaceTexture surface) {}
+            });
+
+            ((ViewGroup)getParent()).addView(textureView);
+        }
+
+
     }
 
 
@@ -223,7 +294,7 @@ public class MinecraftGLView extends TextureView {
                         sendKeyPress(LwjglGlfwKeycode.GLFW_KEY_F);
                     }
 
-                    theHandler.sendEmptyMessageDelayed(MSG_DROP_ITEM_BUTTON_CHECK, 350);
+                    mHandler.sendEmptyMessageDelayed(MSG_DROP_ITEM_BUTTON_CHECK, 350);
                     CallbackBridge.sendCursorPos(CallbackBridge.mouseX, CallbackBridge.mouseY);
                     mLastHotbarKey = hudKeyHandled;
                     break;
@@ -238,7 +309,7 @@ public class MinecraftGLView extends TextureView {
                     // It cause hold left mouse while moving camera
                     mInitialX = CallbackBridge.mouseX;
                     mInitialY = CallbackBridge.mouseY;
-                    theHandler.sendEmptyMessageDelayed(MSG_LEFT_MOUSE_BUTTON_CHECK, LauncherPreferences.PREF_LONGPRESS_TRIGGER);
+                    mHandler.sendEmptyMessageDelayed(MSG_LEFT_MOUSE_BUTTON_CHECK, LauncherPreferences.PREF_LONGPRESS_TRIGGER);
                 }
                 mLastHotbarKey = hudKeyHandled;
                 break;
@@ -254,19 +325,16 @@ public class MinecraftGLView extends TextureView {
                 if (!CallbackBridge.isGrabbing()) break;
 
                 // Stop the dropping of items
-                if (isTouchInHotbar) {
-                    sendKeyPress(LwjglGlfwKeycode.GLFW_KEY_Q, 0, false);
-                    theHandler.removeMessages(MSG_DROP_ITEM_BUTTON_CHECK);
-                    break;
-                }
+                sendKeyPress(LwjglGlfwKeycode.GLFW_KEY_Q, 0, false);
+                mHandler.removeMessages(MSG_DROP_ITEM_BUTTON_CHECK);
 
                 // Remove the mouse left button
-                if(mTriggeredLeftMouseButton){
+                if(triggeredLeftMouseButton){
                     sendMouseButton(LwjglGlfwKeycode.GLFW_MOUSE_BUTTON_LEFT, false);
-                    mTriggeredLeftMouseButton = false;
+                    triggeredLeftMouseButton = false;
                     break;
                 }
-                theHandler.removeMessages(MSG_LEFT_MOUSE_BUTTON_CHECK);
+                mHandler.removeMessages(MSG_LEFT_MOUSE_BUTTON_CHECK);
 
                 // In case of a short click, just send a quick right click
                 if(!LauncherPreferences.PREF_DISABLE_GESTURES &&
@@ -355,8 +423,8 @@ public class MinecraftGLView extends TextureView {
         }
     }
 
-
-
+    //TODO MOVE THIS SOMEWHERE ELSE
+    private boolean debugErrored = false;
     /** The input event for mouse with a captured pointer */
     @RequiresApi(26)
     @Override
@@ -450,7 +518,7 @@ public class MinecraftGLView extends TextureView {
                 return true;
             }
         }
-        System.out.println(event);
+        //System.out.println(event);
 
         if(Gamepad.isGamepadEvent(event)){
 
@@ -472,66 +540,11 @@ public class MinecraftGLView extends TextureView {
         return false;
     }
 
-
-    /** Initialize the view and all its settings */
-    public void start(){
-        // Add the pointer debug textview
-        mPointerDebugTextView = new TextView(getContext());
-        mPointerDebugTextView.setX(0);
-        mPointerDebugTextView.setY(0);
-        mPointerDebugTextView.setVisibility(GONE);
-        ((ViewGroup)getParent()).addView(mPointerDebugTextView);
-
-        setSurfaceTextureListener(new SurfaceTextureListener() {
-            private boolean isCalled = false;
-            @Override
-            public void onSurfaceTextureAvailable(SurfaceTexture texture, int width, int height) {
-                windowWidth = Tools.getDisplayFriendlyRes(width, mScaleFactor);
-                windowHeight = Tools.getDisplayFriendlyRes(height, mScaleFactor);
-                texture.setDefaultBufferSize(windowWidth, windowHeight);
-
-                //Load Minecraft options:
-                MCOptionUtils.load();
-                MCOptionUtils.set("overrideWidth", String.valueOf(windowWidth));
-                MCOptionUtils.set("overrideHeight", String.valueOf(windowHeight));
-                MCOptionUtils.save();
-                getMcScale();
-                // Should we do that?
-                if(isCalled) return;
-                isCalled = true;
-
-                JREUtils.setupBridgeWindow(new Surface(texture));
-
-                new Thread(() -> {
-                    try {
-                        Thread.sleep(200);
-                        if(mSurfaceReadyListener != null){
-                            mSurfaceReadyListener.isReady();
-                        }
-                    } catch (Throwable e) {
-                        Tools.showError(getContext(), e, true);
-                    }
-                }, "JVM Main thread").start();
-            }
-
-            @Override
-            public boolean onSurfaceTextureDestroyed(SurfaceTexture texture) {
-                return true;
-            }
-
-            @Override
-            public void onSurfaceTextureSizeChanged(SurfaceTexture texture, int width, int height) {
-                windowWidth = Tools.getDisplayFriendlyRes(width, mScaleFactor);
-                windowHeight = Tools.getDisplayFriendlyRes(height, mScaleFactor);
-                CallbackBridge.sendUpdateWindowSize(windowWidth, windowHeight);
-                getMcScale();
-            }
-
-            @Override
-            public void onSurfaceTextureUpdated(SurfaceTexture texture) {
-                texture.setDefaultBufferSize(windowWidth, windowHeight);
-            }
-        });
+    /** Get the mouse direction as a string */
+    private String getMoving(float pos, boolean xOrY) {
+        if (pos == 0) return "STOPPED";
+        if (pos > 0) return xOrY ? "RIGHT" : "DOWN";
+        return xOrY ? "LEFT" : "UP";
     }
 
     /** Convert the mouse button, then send it
@@ -555,6 +568,8 @@ public class MinecraftGLView extends TextureView {
         return true;
     }
 
+
+
     /** @return the hotbar key, given the position. -1 if no key are pressed */
     public int handleGuiBar(int x, int y) {
         if (!CallbackBridge.isGrabbing()) return -1;
@@ -567,12 +582,60 @@ public class MinecraftGLView extends TextureView {
         int barX = (CallbackBridge.physicalWidth / 2) - (barWidth / 2);
         if(x < barX || x >= barX + barWidth) return -1;
 
-        return sHotbarKeys[(int) net.kdt.pojavlaunch.utils.MathUtils.map(x, barX, barX + barWidth, 0, 9)];
+        return HOTBAR_KEYS[(int) net.kdt.pojavlaunch.utils.MathUtils.map(x, barX, barX + barWidth, 0, 9)];
+    }
+
+    /** Return the size, given the UI scale size */
+    private int mcscale(int input) {
+        return (int)((mGuiScale * input)/ mScaleFactor);
     }
 
     /** Toggle the pointerDebugText visibility state */
     public void togglepointerDebugging() {
         mPointerDebugTextView.setVisibility(mPointerDebugTextView.getVisibility() == View.GONE ? View.VISIBLE : View.GONE);
+    }
+
+    /** Called when the size need to be set at any point during the surface lifecycle **/
+    public void refreshSize(){
+        windowWidth = Tools.getDisplayFriendlyRes(Tools.currentDisplayMetrics.widthPixels, mScaleFactor);
+        windowHeight = Tools.getDisplayFriendlyRes(Tools.currentDisplayMetrics.heightPixels, mScaleFactor);
+        if(LauncherPreferences.PREF_USE_ALTERNATE_SURFACE){
+            ((SurfaceView)mSurface).getHolder().setFixedSize(windowWidth, windowHeight);
+        }else{
+            ((TextureView)mSurface).getSurfaceTexture().setDefaultBufferSize(windowWidth, windowHeight);
+        }
+
+        CallbackBridge.sendUpdateWindowSize(windowWidth, windowHeight);
+        //getMcScale();
+        //Toast.makeText(getContext(), "width: " + width, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getContext(), "height: " + height, Toast.LENGTH_SHORT).show();
+
+    }
+
+    private void realStart(Surface surface){
+        // Initial size set
+        refreshSize();
+
+        //Load Minecraft options:
+        MCOptionUtils.load();
+        MCOptionUtils.set("fullscreen", "off");
+        MCOptionUtils.set("overrideWidth", String.valueOf(windowWidth));
+        MCOptionUtils.set("overrideHeight", String.valueOf(windowHeight));
+        MCOptionUtils.save();
+        getMcScale();
+
+        JREUtils.setupBridgeWindow(surface);
+
+        new Thread(() -> {
+            try {
+                Thread.sleep(200);
+                if(mSurfaceReadyListener != null){
+                    mSurfaceReadyListener.isReady();
+                }
+            } catch (Throwable e) {
+                Tools.showError(getContext(), e, true);
+            }
+        }, "JVM Main thread").start();
     }
 
     /** A small interface called when the listener is ready for the first time */
@@ -582,18 +645,5 @@ public class MinecraftGLView extends TextureView {
 
     public void setSurfaceReadyListener(SurfaceReadyListener listener){
         mSurfaceReadyListener = listener;
-    }
-
-
-    /** Return the size, given the UI scale size */
-    private int mcscale(int input) {
-        return (int)((mGuiScale * input)/ mScaleFactor);
-    }
-
-    /** Get the mouse direction as a string */
-    private String getMoving(float pos, boolean xOrY) {
-        if (pos == 0) return "STOPPED";
-        if (pos > 0) return xOrY ? "RIGHT" : "DOWN";
-        return xOrY ? "LEFT" : "UP";
     }
 }

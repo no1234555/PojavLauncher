@@ -45,6 +45,8 @@ import androidx.core.content.ContextCompat;
 import net.kdt.pojavlaunch.authenticator.microsoft.MicrosoftAuthTask;
 import net.kdt.pojavlaunch.authenticator.microsoft.ui.MicrosoftLoginGUIActivity;
 import net.kdt.pojavlaunch.authenticator.mojang.InvalidateTokenTask;
+import net.kdt.pojavlaunch.authenticator.mojang.LoginListener;
+import net.kdt.pojavlaunch.authenticator.mojang.LoginTask;
 import net.kdt.pojavlaunch.authenticator.mojang.RefreshListener;
 import net.kdt.pojavlaunch.customcontrols.CustomControls;
 import net.kdt.pojavlaunch.multirt.MultiRTConfigDialog;
@@ -52,6 +54,9 @@ import net.kdt.pojavlaunch.multirt.MultiRTUtils;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.utils.LocaleUtils;
 import net.kdt.pojavlaunch.value.MinecraftAccount;
+import net.kdt.pojavlaunch.value.PerVersionConfig;
+import net.kdt.pojavlaunch.value.launcherprofiles.LauncherProfiles;
+import net.kdt.pojavlaunch.value.launcherprofiles.MinecraftProfile;
 
 import org.apache.commons.io.FileUtils;
 import top.defaults.checkerboarddrawable.BuildConfig;
@@ -69,11 +74,10 @@ import java.util.Locale;
 public class PojavLoginActivity extends BaseActivity {
     private final Object mLockStoragePerm = new Object();
     private final Object mLockSelectJRE = new Object();
-
-    private EditText edit2;
+    
+    private EditText edit2, edit3;
     private final int REQUEST_STORAGE_REQUEST_CODE = 1;
-    private final int MY_PERMISSIONS_RECORD_AUDIO = 2;
-    private CheckBox sRemember;
+    private CheckBox sRemember, sLocal;
     private TextView startupTextView;
     private SharedPreferences firstLaunchPrefs;
     private MinecraftAccount mProfile = null;
@@ -237,22 +241,29 @@ public class PojavLoginActivity extends BaseActivity {
             @Override
             public void onNothingSelected(AdapterView<?> adapter) {}
         });
-
+            
+        edit2 = findViewById(R.id.login_edit_email);
+        edit3 = findViewById(R.id.login_edit_password);
         sRemember = findViewById(R.id.login_switch_remember);
+        sLocal = findViewById(R.id.login_switch_local);
+        sLocal.setOnCheckedChangeListener((p1, p2) -> {
+            // May delete later
+            edit3.setEnabled(!p2);
+        });
         isSkipInit = true;
     }
-
+    
     @Override
     public void onResume() {
         super.onResume();
-
+        
         Tools.updateWindowSize(this);
-
+        
         // Clear current profile
         PojavProfile.setCurrentProfile(this, null);
     }
 
-
+   
     private void unpackComponent(AssetManager am, String component) throws IOException {
         File versionFile = new File(Tools.DIR_GAME_HOME + "/" + component + "/version");
         InputStream is = am.open("components/" + component + "/version");
@@ -261,7 +272,7 @@ public class PojavLoginActivity extends BaseActivity {
                 FileUtils.deleteDirectory(versionFile.getParentFile());
             }
             versionFile.getParentFile().mkdir();
-
+            
             Log.i("UnpackPrep", component + ": Pack was installed manually, or does not exist, unpacking new...");
             String[] fileList = am.list("components/" + component);
             for(String s : fileList) {
@@ -412,11 +423,12 @@ public class PojavLoginActivity extends BaseActivity {
             unpackComponent(am, "caciocavallo");
             unpackComponent(am, "lwjgl3");
             if(!installRuntimeAutomatically(am,MultiRTUtils.getRuntimes().size() > 0)) {
-                MultiRTConfigDialog.openRuntimeSelector(this, MultiRTConfigDialog.MULTIRT_PICK_RUNTIME_STARTUP);
+               MultiRTConfigDialog.openRuntimeSelector(this, MultiRTConfigDialog.MULTIRT_PICK_RUNTIME_STARTUP);
                 synchronized (mLockSelectJRE) {
                     mLockSelectJRE.wait();
                 }
             }
+            migrateToProfiles();
             if(Build.VERSION.SDK_INT > 28) runOnUiThread(this::showStorageDialog);
             LauncherPreferences.loadPreferences(getApplicationContext());
         }
@@ -489,6 +501,33 @@ public class PojavLoginActivity extends BaseActivity {
                 //Log.i("MicroLoginWrap","Got microsoft login result:" + data);
                 performMicroLogin(data);
             }
+        }
+    }
+    private void migrateToProfiles() {
+        try {
+            if(!PerVersionConfig.exists()) return;
+            LauncherProfiles.update();
+            PerVersionConfig.update();
+            if(PerVersionConfig.erase()) {
+                for (String version : PerVersionConfig.configMap.keySet()) {
+                    PerVersionConfig.VersionConfig config = PerVersionConfig.configMap.get(version);
+                    if (config != null) {
+                        MinecraftProfile profile = new MinecraftProfile();
+                        profile.lastVersionId = version;
+                        profile.name = getString(R.string.migrated_profile_str, version);
+                        profile.pojavRendererName = config.renderer;
+                        profile.gameDir = config.gamePath;
+                        profile.javaDir = Tools.LAUNCHERPROFILES_RTPREFIX + config.selectedRuntime;
+                        profile.javaArgs = config.jvmArgs;
+                        LauncherProfiles.mainProfileJson.profiles.put("pvc-migrated-" + version, profile);
+                    }
+                }
+                LauncherProfiles.update();
+            }else{
+                Log.e("ProfileMigrator"," Unable to remove Per Version Config files.");
+            }
+        }catch (IOException e) {
+            Log.e("ProfileMigrator","Failed to migrate!",e);
         }
     }
     private boolean installRuntimeAutomatically(AssetManager am, boolean otherRuntimesAvailable) {
@@ -665,10 +704,10 @@ public class PojavLoginActivity extends BaseActivity {
         accountDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         accountDialog.show();
     }
-
+    
     private MinecraftAccount loginLocal() {
         new File(Tools.DIR_ACCOUNT_OLD).mkdir();
-
+        
         String text = edit2.getText().toString();
         if (text.isEmpty()) {
             edit2.setError(getString(R.string.global_error_field_empty));
@@ -680,7 +719,7 @@ public class PojavLoginActivity extends BaseActivity {
             MinecraftAccount builder = new MinecraftAccount();
             builder.isMicrosoft = false;
             builder.username = text;
-
+            
             return builder;
         }
         return null;
@@ -689,8 +728,42 @@ public class PojavLoginActivity extends BaseActivity {
 
     public void loginMC(final View v)
     {
-        mProfile = loginLocal();
-        playProfile(false);
+        if (sLocal.isChecked()) {
+            mProfile = loginLocal();
+            playProfile(false);
+        } else {
+            ProgressBar prb = findViewById(R.id.launcherAccProgress);
+            new LoginTask().setLoginListener(new LoginListener(){
+
+
+                @Override
+                public void onBeforeLogin() {
+                    v.setEnabled(false);
+                    prb.setVisibility(View.VISIBLE);
+                }
+
+                @Override
+                public void onLoginDone(String[] result) {
+                    if(result[0].equals("ERROR")){
+                        Tools.dialogOnUiThread(PojavLoginActivity.this,
+                                getResources().getString(R.string.global_error), strArrToString(result));
+                    } else{
+                        MinecraftAccount builder = new MinecraftAccount();
+                        builder.accessToken = result[1];
+                        builder.clientToken = result[2];
+                        builder.profileId = result[3];
+                        builder.username = result[4];
+                        builder.updateSkinFace();
+                        mProfile = builder;
+                    }
+                    runOnUiThread(() -> {
+                        v.setEnabled(true);
+                        prb.setVisibility(View.GONE);
+                        playProfile(false);
+                    });
+                }
+            }).execute(edit2.getText().toString(), edit3.getText().toString());
+        }
     }
 
     private void playProfile(boolean notOnLogin) {
@@ -731,10 +804,10 @@ public class PojavLoginActivity extends BaseActivity {
     }
 
     //Requesting permission
-    private void requestPermissions()
+    private void requestStoragePermission()
     {
         ActivityCompat.requestPermissions(this, new String[]{
-                Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_STORAGE_REQUEST_CODE);
+            Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_STORAGE_REQUEST_CODE);
     }
 
     // This method will be called when the user will tap on allow or deny
