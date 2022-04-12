@@ -636,8 +636,8 @@ public final class Tools {
 
     public static String getVersionId(BaseLauncherActivity bla, String versionName) {
         for (JMinecraftVersionList.Version valueVer: bla.mVersionList.versions) {
-            if (valueVer.name != null && valueVer.name.equals(versionName)) {
-                Log.d("VERSION", valueVer.name);
+            if (valueVer.id != null && valueVer.id.equals(versionName)) {
+                Log.d("VERSION", valueVer.id);
                 return valueVer.id;
             }
         }
