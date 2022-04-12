@@ -35,7 +35,7 @@ public abstract class BaseLauncherActivity extends BaseActivity {
     public JMinecraftVersionList mVersionList = new JMinecraftVersionList();
 	public MinecraftDownloaderTask mTask;
 	public MinecraftAccount mProfile;
-	//public String[] mAvailableVersions;
+	public String[] mAvailableVersions;
     
 	public boolean mIsAssetsProcessing = false;
     protected boolean canBack = false;
