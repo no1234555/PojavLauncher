@@ -190,7 +190,7 @@ public class PojavLauncherActivity extends BaseLauncherActivity
         //mVersionSelector.setAdapter(adapterVer);
 
 
-        ModManager.init(this);
+        ModManager.init();
 
 
         statusIsLaunching(false);

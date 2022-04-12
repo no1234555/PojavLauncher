@@ -8,6 +8,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import androidx.appcompat.widget.PopupMenu;
 import net.kdt.pojavlaunch.*;
+import net.kdt.pojavlaunch.modmanager.ModManager;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.prefs.PerVersionConfigDialog;
 import net.kdt.pojavlaunch.utils.DownloadUtils;
@@ -32,6 +33,12 @@ public class RefreshVersionListTask extends AsyncTask<Void, Void, ArrayList<Stri
                 Log.i("ExtVL", "Syncing to external: " + url);
                 list = Tools.GLOBAL_GSON.fromJson(DownloadUtils.downloadString(url), JMinecraftVersionList.class);
                 Log.i("ExtVL","Downloaded the version list, len="+list.versions.size());
+
+                //Add arg to load mods from custom dir
+                for (JMinecraftVersionList.Version version : list.versions) {
+                    version.arguments.addJvm("-Dfabric.addMods=" + ModManager.getWorkDir() + "/core/" + version.inheritsFrom);
+                }
+
                 mActivity.mVersionList.versions.addAll(list.versions);
             }
             Log.i("ExtVL","Final list size: " + mActivity.mVersionList.versions.size());

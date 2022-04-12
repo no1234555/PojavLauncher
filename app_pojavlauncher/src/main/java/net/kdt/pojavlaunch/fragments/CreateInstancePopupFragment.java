@@ -36,7 +36,7 @@ public class CreateInstancePopupFragment extends DialogFragment {
         createButton.setOnClickListener(button -> {
             Editable input = text.getText();
             if (input != null) {
-                ModManager.createInstance(activity, input.toString(), mcVersionSelector.getSelectedItem().toString());
+                ModManager.createInstance(input.toString(), mcVersionSelector.getSelectedItem().toString());
                 this.dismiss();
             }
         });

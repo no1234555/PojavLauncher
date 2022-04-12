@@ -33,7 +33,7 @@ public class ModManager {
     private static final ArrayList<String> currentDownloadSlugs = new ArrayList<>();
     private static boolean saveStateCalled = false;
 
-    public static void init(BaseLauncherActivity activity) {
+    public static void init() {
         Thread thread = new Thread() {
             @Override
             public void run() {
@@ -78,6 +78,10 @@ public class ModManager {
         return "Untested";
     }
 
+    public static String getWorkDir() {
+        return workDir;
+    }
+
     //Will only save the state if there is nothing currently happening
     public static void saveState() {
         Thread thread = new Thread() {
@@ -110,7 +114,7 @@ public class ModManager {
         return currentDownloadSlugs.contains(slug);
     }
 
-    public static void createInstance(BaseLauncherActivity activity, String name, String gameVersion) {
+    public static void createInstance(String name, String gameVersion) {
         Thread thread = new Thread() {
             @Override
             public void run() {
