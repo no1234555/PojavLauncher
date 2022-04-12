@@ -12,7 +12,11 @@ import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.*;
 import java.util.concurrent.*;
+
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import net.kdt.pojavlaunch.*;
+import net.kdt.pojavlaunch.modmanager.ModManager;
 import net.kdt.pojavlaunch.multirt.MultiRTUtils;
 import net.kdt.pojavlaunch.multirt.Runtime;
 import net.kdt.pojavlaunch.prefs.*;
@@ -270,17 +274,25 @@ public class MinecraftDownloaderTask extends AsyncTask<String, String, Throwable
             } finally {
                 mActivity.mIsAssetsProcessing = false;
             }
+
+            setMax(ModManager.getCoreMods().size());
+            zeroProgress();
+            downloadCoreMods(verInfo.inheritsFrom);
+
         } catch (Throwable th){
             throwable = th;
         } finally {
             return throwable;
         }
     }
+
     private int addProgress = 0;
     public static class SilentException extends Exception{}
+
     public void zeroProgress() {
         addProgress = 0;
     }
+
     protected void downloadLibrary(DependentLibrary libItem,String libArtifact,File outLib) throws Throwable{
         publishProgress("1", mActivity.getString(R.string.mcl_launch_downloading, libItem.name));
         String libPathURL;
@@ -493,6 +505,17 @@ public class MinecraftDownloaderTask extends AsyncTask<String, String, Throwable
                 e.printStackTrace();
             }
             System.out.println("Assets end time: " + System.currentTimeMillis());
+        }
+    }
+
+    public void downloadCoreMods(String version) {
+        for (JsonElement element : ModManager.getCoreMods()) {
+            JsonObject modData = element.getAsJsonObject();
+            String slug = modData.get("slug").getAsString();
+            String platform = modData.get("platform").getAsString();
+
+            publishProgress("Downloading " + slug);
+            ModManager.addMod("core", platform, slug, version, true);
         }
     }
 

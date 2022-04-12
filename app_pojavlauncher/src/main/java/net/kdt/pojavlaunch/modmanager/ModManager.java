@@ -1,5 +1,6 @@
 package net.kdt.pojavlaunch.modmanager;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.kdt.pojavlaunch.BaseLauncherActivity;
@@ -8,6 +9,7 @@ import net.kdt.pojavlaunch.PojavApplication;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.modmanager.State.Instance;
 import net.kdt.pojavlaunch.modmanager.api.Fabric;
+import net.kdt.pojavlaunch.modmanager.api.Github;
 import net.kdt.pojavlaunch.modmanager.api.Modrinth;
 import net.kdt.pojavlaunch.modmanager.api.ModData;
 import net.kdt.pojavlaunch.tasks.RefreshVersionListTask;
@@ -20,6 +22,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ModManager {
 
@@ -53,9 +56,6 @@ public class ModManager {
                         Tools.write(modsJson.getPath(), Tools.GLOBAL_GSON.toJson(state)); //Cant use save state cause async issues
                     } else state = Tools.GLOBAL_GSON.fromJson(Tools.read(modsJson.getPath()), net.kdt.pojavlaunch.modmanager.State.class);
 
-                    File coreModsFolder = new File(workDir + "/coreMods/1.18.2");
-                    if (!coreModsFolder.exists()) coreModsFolder.mkdirs();
-
                     InputStream modmanagerFile = PojavApplication.assetManager.open("jsons/modmanager.json");
                     modmanagerJson = Tools.GLOBAL_GSON.fromJson(Tools.read(modmanagerFile), JsonObject.class);
                     InputStream compatFile = PojavApplication.assetManager.open("jsons/mod-compat.json");
@@ -68,25 +68,8 @@ public class ModManager {
         thread.start();
     }
 
-    public static void installCoreMods(String version) {
-        for (JsonElement element : modmanagerJson.get("core_mods").getAsJsonObject().getAsJsonArray(version)) {
-            JsonObject mod = element.getAsJsonObject();
-            File modFile = null;
-            String url = "";
-
-            if (mod.get("platform").getAsString().equals("github")) {
-                modFile = new File(workDir + "/coreMods/1.18.2/" + mod.get("name").getAsString() + "-" + mod.get("version").getAsString() + ".jar");
-                url = mod.get("repo").getAsString() + "/releases/download/" + mod.get("version_id").getAsString() + "/" + mod.get("name").getAsString() + ".jar";
-            }
-
-            if (modFile != null) {
-                try {
-                    DownloadUtils.downloadFile(url, modFile);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
+    public static JsonArray getCoreMods() {
+        return modmanagerJson.getAsJsonArray("core_mods");
     }
 
     public static String getModCompat(String slug) {
@@ -151,25 +134,36 @@ public class ModManager {
         thread.start();
     }
 
-    public static void addMod(String instanceName, String slug, String gameVersion) {
+    public static void addMod(String instanceName, String platform, String slug, String gameVersion, boolean isCoreMod) {
         Thread thread = new Thread() {
             public void run() {
                 currentDownloadSlugs.add(slug);
-                File path = new File(workDir + "/instances/" + instanceName);
+
+                File path;
+                if (isCoreMod) path = new File(workDir + "/core/" + gameVersion);
+                else path = new File(workDir + "/instances/" + instanceName);
                 if (!path.exists()) path.mkdir();
 
                 try {
-                    ModData modData = Modrinth.getModFileData(slug, gameVersion);
+                    ModData modData = null;
+                    if (platform.equals("modrinth")) modData = Modrinth.getModFileData(slug, gameVersion);
+                    else if (platform.equals("github")) modData = Github.getModFileData(modmanagerJson.getAsJsonArray("repos"), slug, gameVersion);
                     if (modData == null) return;
 
                     //No duplicate mods allowed
-                    Instance instance = state.getInstance(instanceName);
-                    for (ModData mod : instance.getMods()) {
-                        if (mod.title.equals(modData.title)) return;
+                    if (isCoreMod) {
+                        for (File file : path.listFiles()) {
+                            if (file.getName().equals(modData.fileData.filename)) return;
+                        }
+                    } else {
+                        Instance instance = state.getInstance(instanceName);
+                        for (ModData mod : instance.getMods()) {
+                            if (mod.title.equals(modData.title)) return;
+                        }
+                        instance.addMod(modData);
                     }
 
                     DownloadUtils.downloadFile(modData.fileData.url, new File(path.getPath() + "/" + modData.fileData.filename));
-                    instance.addMod(modData);
                     currentDownloadSlugs.remove(slug);
 
                     saveState();

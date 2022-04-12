@@ -116,7 +116,7 @@ public class ModsFragment extends Fragment {
 
                 ModData mod = ModManager.getMod("QuestCraft-1.18.2", modData.slug);
                 if (mod != null) ModManager.setModActive("QuestCraft-1.18.2", this.modData.slug, value);
-                else ModManager.addMod("QuestCraft-1.18.2", this.modData.slug, "1.18.2");
+                else ModManager.addMod("QuestCraft-1.18.2", "modrinth", this.modData.slug, "1.18.2", false);
             });
         }
 

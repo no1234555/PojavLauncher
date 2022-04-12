@@ -1,5 +1,7 @@
 package net.kdt.pojavlaunch.modmanager.api;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.annotations.SerializedName;
 import net.kdt.pojavlaunch.utils.UiUitls;
 import retrofit2.Call;
@@ -48,29 +50,31 @@ public class Github {
         public String url;
     }
 
-    public static ModData getModFileData(String repo, String slug, String gameVersion) throws IOException {
-        String[] repoData = repo.split("/");
+    public static ModData getModFileData(JsonArray repoList, String slug, String gameVersion) throws IOException {
+        for (JsonElement repo : repoList) {
+            String[] repoData = repo.getAsString().split("/");
 
-        GithubReleasesInf releasesInf = getClient().create(GithubReleasesInf.class);
-        List<Release> releases = releasesInf.getReleases(repoData[0], repoData[1]).execute().body();
+            GithubReleasesInf releasesInf = getClient().create(GithubReleasesInf.class);
+            List<Release> releases = releasesInf.getReleases(repoData[0], repoData[1]).execute().body();
 
-        if (releases == null) {
-            return null;
-        }
+            if (releases == null) {
+                return null;
+            }
 
-        for (Release release : releases) {
-            if (release.name.split("-")[1].equals(gameVersion)) {
-                for (Asset asset : release.assets) {
-                    if (asset.name.replace(".jar", "").equals(slug)) {
-                        ModData modData = new ModData();
+            for (Release release : releases) {
+                if (release.name.split("-")[1].equals(gameVersion)) {
+                    for (Asset asset : release.assets) {
+                        if (asset.name.replace(".jar", "").equals(slug)) {
+                            ModData modData = new ModData();
 
-                        modData.platform = "github";
-                        modData.title = slug;
-                        modData.slug = slug;
-                        modData.fileData.id = release.id;
-                        modData.fileData.url = asset.url;
-                        modData.fileData.filename = asset.name;
-                        return modData;
+                            modData.platform = "github";
+                            modData.title = slug;
+                            modData.slug = slug;
+                            modData.fileData.id = release.id;
+                            modData.fileData.url = asset.url;
+                            modData.fileData.filename = asset.name;
+                            return modData;
+                        }
                     }
                 }
             }
