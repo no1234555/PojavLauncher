@@ -496,7 +496,7 @@ public class MinecraftDownloaderTask extends AsyncTask<String, String, Throwable
         }
     }
 
-     private JMinecraftVersionList.Version findVersion(String version) {
+    private JMinecraftVersionList.Version findVersion(String version) {
          if (mActivity.mVersionList != null) {
              for (JMinecraftVersionList.Version valueVer: mActivity.mVersionList.versions) {
                  if (valueVer.id.equals(version)) {
@@ -507,5 +507,5 @@ public class MinecraftDownloaderTask extends AsyncTask<String, String, Throwable
 
          // Custom version, inherits from base.
          return Tools.getVersionInfo(mActivity,version);
-     }
+    }
 }

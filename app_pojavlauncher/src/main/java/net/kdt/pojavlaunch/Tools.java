@@ -7,34 +7,26 @@ import android.database.Cursor;
 import android.net.*;
 import android.os.*;
 import android.provider.OpenableColumns;
-import android.system.*;
 import android.util.*;
 import com.google.gson.*;
-import com.oracle.dalvik.*;
+
 import java.io.*;
 import java.lang.reflect.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.*;
-import java.util.zip.*;
+
 import net.kdt.pojavlaunch.prefs.*;
 import net.kdt.pojavlaunch.utils.*;
 import net.kdt.pojavlaunch.value.*;
-import net.kdt.pojavlaunch.value.launcherprofiles.LauncherProfiles;
 
 import org.apache.commons.codec.binary.Hex;
-import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.io.FileUtils;
 import org.lwjgl.glfw.*;
 import android.view.*;
-import android.widget.Toast;
 
 import static android.os.Build.VERSION.SDK_INT;
 import static android.os.Build.VERSION_CODES.P;
-import static android.os.Build.VERSION_CODES.Q;
 import static net.kdt.pojavlaunch.prefs.LauncherPreferences.PREF_IGNORE_NOTCH;
 import static net.kdt.pojavlaunch.prefs.LauncherPreferences.PREF_NOTCH_SIZE;
 
@@ -355,7 +347,7 @@ public final class Tools {
     public static ArrayList<String> getCompatibleVersions(String tag) {
         ArrayList<String> versions = new ArrayList<>();
         try {
-            InputStream stream = PojavApplication.assetManager.open("jsons/version-compat.json");
+            InputStream stream = PojavApplication.assetManager.open("jsons/modmanager.json");
             JsonObject versionsJson = GLOBAL_GSON.fromJson(read(stream), JsonObject.class);
 
             for (JsonElement version : versionsJson.getAsJsonArray(tag)) {

@@ -26,6 +26,7 @@ public class ModManager {
     public static final String workDir = Tools.DIR_GAME_NEW + "/modmanager";
     public static State state = new State();
     private static JsonObject modCompats = new JsonObject();
+    private static JsonObject modmanagerJson = new JsonObject();
     private static final ArrayList<String> currentDownloadSlugs = new ArrayList<>();
     private static boolean saveStateCalled = false;
 
@@ -52,23 +53,40 @@ public class ModManager {
                         Tools.write(modsJson.getPath(), Tools.GLOBAL_GSON.toJson(state)); //Cant use save state cause async issues
                     } else state = Tools.GLOBAL_GSON.fromJson(Tools.read(modsJson.getPath()), net.kdt.pojavlaunch.modmanager.State.class);
 
-                    //Load instance versions
-                    /*for (Instance instance : state.getInstances()) {
-                        JMinecraftVersionList.Version version = Tools.GLOBAL_GSON.fromJson(Tools.read(Tools.DIR_HOME_VERSION + "/" + instance.getFabricLoaderVersion() + "/" + instance.getFabricLoaderVersion() + ".json"), JMinecraftVersionList.Version.class);
-                        version.name = instance.getName();
-                        version.arguments.addJvm("-Dfabric.addMods=" + workDir + "/" + instance.getName());
-                        activity.mVersionList.versions.add(version);
-                    }
-                    new RefreshVersionListTask(activity).execute();*/
+                    File coreModsFolder = new File(workDir + "/coreMods/1.18.2");
+                    if (!coreModsFolder.exists()) coreModsFolder.mkdirs();
 
-                    InputStream stream = PojavApplication.assetManager.open("jsons/mod-compat.json");
-                    modCompats = Tools.GLOBAL_GSON.fromJson(Tools.read(stream), JsonObject.class);
+                    InputStream modmanagerFile = PojavApplication.assetManager.open("jsons/modmanager.json");
+                    modmanagerJson = Tools.GLOBAL_GSON.fromJson(Tools.read(modmanagerFile), JsonObject.class);
+                    InputStream compatFile = PojavApplication.assetManager.open("jsons/mod-compat.json");
+                    modCompats = Tools.GLOBAL_GSON.fromJson(Tools.read(compatFile), JsonObject.class);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         };
         thread.start();
+    }
+
+    public static void installCoreMods(String version) {
+        for (JsonElement element : modmanagerJson.get("core_mods").getAsJsonObject().getAsJsonArray(version)) {
+            JsonObject mod = element.getAsJsonObject();
+            File modFile = null;
+            String url = "";
+
+            if (mod.get("platform").getAsString().equals("github")) {
+                modFile = new File(workDir + "/coreMods/1.18.2/" + mod.get("name").getAsString() + "-" + mod.get("version").getAsString() + ".jar");
+                url = mod.get("repo").getAsString() + "/releases/download/" + mod.get("version_id").getAsString() + "/" + mod.get("name").getAsString() + ".jar";
+            }
+
+            if (modFile != null) {
+                try {
+                    DownloadUtils.downloadFile(url, modFile);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     public static String getModCompat(String slug) {
@@ -125,11 +143,6 @@ public class ModManager {
                     state.addInstance(instance);
                     saveState();
 
-                    /*JMinecraftVersionList.Version version = Tools.GLOBAL_GSON.fromJson(Tools.read(Tools.DIR_HOME_VERSION + "/" + profileName + "/" + profileName + ".json"), JMinecraftVersionList.Version.class);
-                    version.name = name;
-                    version.arguments.addJvm("-Dfabric.addMods=" + workDir + "/" + name);
-                    activity.mVersionList.versions.add(version);
-                    new RefreshVersionListTask(activity).execute();*/
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

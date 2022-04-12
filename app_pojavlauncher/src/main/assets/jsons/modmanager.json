@@ -1,0 +1,40 @@
+{
+  "compatible_versions": {
+    "releases": [
+      "1.18.2"
+    ],
+    "snapshots": [
+    ]
+  },
+  "core_mods": {
+    "1.18.2": [
+      {
+        "name": "fabric-api",
+        "platform": "modrinth",
+        "version_id": "5csZv4Dd"
+      },
+      {
+        "name": "lazydfu",
+        "platform": "modrinth",
+        "version_id": "C6e265zK"
+      },
+      {
+        "name": "ferrite-core",
+        "platform": "modrinth",
+        "version_id": "OhuTVpQH"
+      },
+      {
+        "name": "mcxr-core",
+        "platform": "github",
+        "repo": "https://github.com/QuestCraftPlusPlus/MCXR",
+        "version_id": "v1.0"
+      },
+      {
+        "name": "mcxr-play",
+        "platform": "github",
+        "repo": "https://github.com/QuestCraftPlusPlus/MCXR",
+        "version_id": "v1.0"
+      }
+    ]
+  }
+}
