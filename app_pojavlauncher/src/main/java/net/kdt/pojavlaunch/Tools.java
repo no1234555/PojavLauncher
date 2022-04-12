@@ -350,7 +350,7 @@ public final class Tools {
             InputStream stream = PojavApplication.assetManager.open("jsons/modmanager.json");
             JsonObject versionsJson = GLOBAL_GSON.fromJson(read(stream), JsonObject.class);
 
-            for (JsonElement version : versionsJson.getAsJsonArray(tag)) {
+            for (JsonElement version : versionsJson.get("compatible_versions").getAsJsonObject().getAsJsonArray(tag)) {
                 versions.add(version.getAsString());
             }
         } catch (IOException e) {
