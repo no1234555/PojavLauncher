@@ -122,28 +122,6 @@ jobs:
         run: |
           rm -rf app_pojavlauncher/main/src/assets/artifacts/*
 
-      - name: Collect MCXR (mcxr-core)
-        uses: dawidd6/action-download-artifact@v2
-        with:
-          github_token: ${{secrets.GITHUB_TOKEN}}
-          workflow: build.yml
-          path: app_pojavlauncher/src/main/assets/artifacts
-          workflow_conclusion: success
-          repo: QuestCraftPlusPlus/MCXR
-          branch: master
-          name: mcxr-core
-
-      - name: Collect MCXR (mcxr-play)
-        uses: dawidd6/action-download-artifact@v2
-        with:
-          github_token: ${{secrets.GITHUB_TOKEN}}
-          workflow: build.yml
-          path: app_pojavlauncher/src/main/assets/artifacts
-          workflow_conclusion: success
-          repo: QuestCraftPlusPlus/MCXR
-          branch: master
-          name: mcxr-play
-
       - name: Collect TitleWorlds
         uses: dawidd6/action-download-artifact@v2
         with:
@@ -154,28 +132,6 @@ jobs:
           repo: QuestCraftPlusPlus/TitleWorlds
           branch: master
           name: title-worlds
-
-      - name: Collect lazydfu
-        uses: dawidd6/action-download-artifact@v2
-        with:
-          github_token: ${{secrets.GITHUB_TOKEN}}
-          workflow: build.yml
-          path: app_pojavlauncher/src/main/assets/artifacts
-          workflow_conclusion: success
-          repo: QuestCraftPlusPlus/lazydfu
-          branch: master
-          name: lazydfu
-
-      - name: Collect fabric-api
-        uses: dawidd6/action-download-artifact@v2
-        with:
-          github_token: ${{secrets.GITHUB_TOKEN}}
-          workflow: build.yml
-          path: app_pojavlauncher/src/main/assets/artifacts
-          workflow_conclusion: success
-          repo: QuestCraftPlusPlus/fabric
-          branch: 1.18.2
-          name: fabric-api
 
       - name: Build APK with Gradle
         run: |
