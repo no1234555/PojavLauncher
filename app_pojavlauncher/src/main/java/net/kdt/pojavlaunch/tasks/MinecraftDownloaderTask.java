@@ -169,6 +169,13 @@ public class MinecraftDownloaderTask extends AsyncTask<String, String, Throwable
                     }
                 }
 
+                //TMP
+                Log.d("VER", verInfo.id);
+                Log.d("VER", verInfo.inheritsFrom);
+                Log.d("VER", verInfo.type);
+                Log.d("VER", verInfo.arguments.jvm.toString());
+                Log.d("VER", verInfo.javaVersion.component);
+
                 setMax(ModManager.getCoreMods(verInfo.assets).size());
                 zeroProgress();
                 publishProgress("Downloading Core Mods");
