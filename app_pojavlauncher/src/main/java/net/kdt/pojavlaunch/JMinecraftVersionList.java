@@ -61,13 +61,6 @@ public class JMinecraftVersionList {
         public Object[] game;
         public Object[] jvm;
 
-        public void addJvm(String arg) {
-            Object[] newJvm = new Object[jvm.length + 1];
-            System.arraycopy(jvm, 0, newJvm, 0, jvm.length);
-            newJvm[jvm.length] = arg;
-            jvm = newJvm;
-        }
-
         @Keep
         public static class ArgValue {
             public ArgRules[] rules;

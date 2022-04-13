@@ -1,5 +1,6 @@
 package net.kdt.pojavlaunch.modmanager;
 
+import android.util.Log;
 import android.util.Pair;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -70,6 +71,8 @@ public class ModManager {
     }
 
     public static ArrayList<Pair<String, String>> getCoreMods(String version) {
+
+        Log.d("MODMAN", version);
         ArrayList<Pair<String, String>> mods = new ArrayList<>();
         for (JsonElement element : modmanagerJson.get("core_mods").getAsJsonObject().getAsJsonArray(version)) {
             JsonObject mod = element.getAsJsonObject();
