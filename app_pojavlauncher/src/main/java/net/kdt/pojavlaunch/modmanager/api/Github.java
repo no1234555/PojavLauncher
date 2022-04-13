@@ -83,6 +83,6 @@ public class Github {
     }
 
     public static void loadProjectPage(MarkdownView view, String repo) {
-        UiUitls.runOnUI(() -> view.loadMarkdownFile("https://raw.githubusercontent.com/" + repo + "/master/README.md"));
+        UiUitls.runOnUI(() -> view.loadMarkdownFile("https://raw.githubusercontent.com/" + repo + "/master/README.md", "file:///ModDescription.css"));
     }
 }
