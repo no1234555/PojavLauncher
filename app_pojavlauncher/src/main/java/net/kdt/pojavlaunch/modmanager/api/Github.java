@@ -30,7 +30,7 @@ public class Github {
     }
 
     public interface GithubReleasesInf {
-        @GET("{user}/{repo}")
+        @GET("{user}/{repo}/releases")
         Call<List<Release>> getReleases(@Path("user") String user, @Path("repo") String repo);
     }
 
