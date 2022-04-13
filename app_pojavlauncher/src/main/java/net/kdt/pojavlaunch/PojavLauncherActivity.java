@@ -88,7 +88,6 @@ public class PojavLauncherActivity extends BaseLauncherActivity
         mLaunchTextStatus = findViewById(R.id.progressDownloadText);
         logoutBtn = findViewById(R.id.installJarButton);
         mPlayButton = findViewById(R.id.launchermainPlayButton);
-        mAddInstanceButton = findViewById(R.id.add_instance_button);
         Tabs[0] = findViewById(R.id.btnTab1);
         Tabs[1] = findViewById(R.id.btnTab2);
         Tabs[2] = findViewById(R.id.btnTab3);
@@ -244,11 +243,6 @@ public class PojavLauncherActivity extends BaseLauncherActivity
                 return;
             }
         }
-    }
-
-    public void showAddInstancePopup(View view) {
-        CreateInstancePopupFragment popup = new CreateInstancePopupFragment(this);
-        popup.show(this.getSupportFragmentManager(), "");
     }
 
     private void setTabActive(int index){

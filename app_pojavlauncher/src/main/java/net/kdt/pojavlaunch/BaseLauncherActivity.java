@@ -26,7 +26,6 @@ import org.apache.commons.io.IOUtils;
 
 public abstract class BaseLauncherActivity extends BaseActivity {
 	public Button mPlayButton;
-    public Button mAddInstanceButton;
     public ProgressBar mLaunchProgress;
 	public Spinner mVersionSelector;
 	public MultiRTConfigDialog mRuntimeConfigDialog;

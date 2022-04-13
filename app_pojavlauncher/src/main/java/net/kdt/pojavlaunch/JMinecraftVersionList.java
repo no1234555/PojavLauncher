@@ -11,7 +11,7 @@ public class JMinecraftVersionList {
     public static final String TYPE_RELEASE = "release";
     public static final String TYPE_SNAPSHOT = "snapshot";
     public Map<String, String> latest;
-    public final List<Version> versions = new ArrayList<>();
+    public Version[] versions;
 
     @Keep
     public static class FileProperties {
@@ -88,4 +88,3 @@ public class JMinecraftVersionList {
         public long totalSize;
     }
 }
-

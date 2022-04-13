@@ -180,7 +180,7 @@
             android:layout_width="0dp"
             android:layout_height="63dp"
             app:layout_constraintBottom_toTopOf="@+id/guidelineBottom2"
-            app:layout_constraintStart_toEndOf="@+id/add_instance_button"
+            app:layout_constraintStart_toEndOf="@+id/guidelineLeft"
             app:layout_constraintEnd_toStartOf="@+id/launchermainPlayButton"
             app:layout_constraintTop_toTopOf="@+id/guidelineBottom"
             app:layout_constraintVertical_bias="0.0"/>
@@ -236,21 +236,5 @@
         app:layout_constraintBottom_toBottomOf="@+id/btnTab1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/launchermain_text_accountstatus" />
-
-    <com.kdt.mcgui.MineButton
-            android:id="@+id/add_instance_button"
-            android:onClick="showAddInstancePopup"
-            android:layout_width="58dp"
-            android:layout_height="63dp"
-            android:layout_alignParentBottom="true"
-            android:background="@drawable/mine_button_background"
-            android:text="+"
-            android:textColor="@android:color/white"
-            app:layout_constraintTop_toBottomOf="@+id/launchermainTabPager"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintWidth_default="percent"
-            app:layout_constraintWidth_percent="0.25"
-            app:layout_constraintStart_toStartOf="@+id/guidelineLeft"
-            app:layout_constraintHorizontal_bias="0.0"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
