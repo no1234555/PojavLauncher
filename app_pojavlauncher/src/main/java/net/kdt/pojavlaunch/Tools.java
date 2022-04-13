@@ -256,7 +256,7 @@ public final class Tools {
         javaArgList.add(getLWJGL3ClassPath() + ":" + launchClassPath);
         javaArgList.add(versionInfo.mainClass);
         javaArgList.addAll(Arrays.asList(launchArgs));
-        javaArgList.add("-Dfabric.addMods=" + ModManager.getWorkDir() + "/core/" + versionInfo.id);
+        javaArgList.add("-Dfabric.addMods=" + ModManager.getWorkDir() + "/core/1.18.2");
         ///ctx.appendlnToLog("full args: "+javaArgList.toString());
         JREUtils.launchJavaVM(activity, javaArgList);
     }
