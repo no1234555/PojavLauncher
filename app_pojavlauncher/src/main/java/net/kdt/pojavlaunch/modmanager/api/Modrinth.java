@@ -140,7 +140,7 @@ public class Modrinth {
                 try {
                     ModrinthProjectInf projectInf = getClient().create(ModrinthProjectInf.class);
                     ModrinthProject project = projectInf.getProject(slug).execute().body();
-                    if (project != null) UiUitls.runOnUI(() -> view.loadMarkdown(project.body, "file:///ModDescription.css"));
+                    if (project != null) UiUitls.runOnUI(() -> view.loadMarkdown(project.body, "file:///assets/ModDescription.css"));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

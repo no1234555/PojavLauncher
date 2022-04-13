@@ -251,12 +251,12 @@ public final class Tools {
         if (versionInfo.logging != null) {
             javaArgList.add("-Dlog4j.configurationFile=" + Tools.DIR_GAME_NEW + "/" + versionInfo.logging.client.file.id);
         }
+        javaArgList.add("-Dfabric.addMods=" + ModManager.getWorkDir() + "/core/" + versionInfo.id);
         javaArgList.add("-Djna.library.path=" + activity.getApplicationInfo().nativeLibraryDir + "/libjnadispatch.so");
         javaArgList.add("-cp");
         javaArgList.add(getLWJGL3ClassPath() + ":" + launchClassPath);
         javaArgList.add(versionInfo.mainClass);
         javaArgList.addAll(Arrays.asList(launchArgs));
-        javaArgList.add("-Dfabric.addMods=" + ModManager.getWorkDir() + "/core/" + versionInfo.id);
         ///ctx.appendlnToLog("full args: "+javaArgList.toString());
         Log.d("GAME", "Full args: " + javaArgList);
         JREUtils.launchJavaVM(activity, javaArgList);
