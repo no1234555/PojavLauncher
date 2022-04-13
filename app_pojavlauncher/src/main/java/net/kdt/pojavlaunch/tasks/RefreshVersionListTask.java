@@ -39,12 +39,6 @@ public class RefreshVersionListTask extends AsyncTask<Void, Void, ArrayList<Stri
                     Log.i("ExtVL", "Syncing to external: " + url);
                     list = Tools.GLOBAL_GSON.fromJson(DownloadUtils.downloadString(url), JMinecraftVersionList.class);
                     Log.i("ExtVL","Downloaded the version list, len="+list.versions.length);
-
-                    //Add java arg for custom mod path loading
-                    for (JMinecraftVersionList.Version version : list.versions) {
-                        version.arguments.addJvm("-Dfabric.addMods=" + ModManager.getWorkDir() + "/core/" + version.inheritsFrom);
-                    }
-
                     Collections.addAll(versions, list.versions);
                 }
                 mActivity.mVersionList = new JMinecraftVersionList();
