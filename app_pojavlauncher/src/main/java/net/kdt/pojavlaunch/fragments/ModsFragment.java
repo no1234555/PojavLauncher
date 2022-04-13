@@ -1,8 +1,6 @@
 package net.kdt.pojavlaunch.fragments;
 
-import android.os.Build;
 import android.os.Bundle;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
