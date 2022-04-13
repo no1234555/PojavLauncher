@@ -1,5 +1,6 @@
 package net.kdt.pojavlaunch.modmanager;
 
+import android.util.Pair;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -68,8 +69,13 @@ public class ModManager {
         thread.start();
     }
 
-    public static JsonArray getCoreMods() {
-        return modmanagerJson.getAsJsonArray("core_mods");
+    public static ArrayList<Pair<String, String>> getCoreMods() {
+        ArrayList<Pair<String, String>> mods = new ArrayList<>();
+        for (JsonElement element : modmanagerJson.getAsJsonArray("core_mods")) {
+            JsonObject mod = element.getAsJsonObject();
+            mods.add(new Pair<>(mod.get("slug").getAsString(), mod.get("platform").getAsString()));
+        }
+        return mods;
     }
 
     public static String getModCompat(String slug) {

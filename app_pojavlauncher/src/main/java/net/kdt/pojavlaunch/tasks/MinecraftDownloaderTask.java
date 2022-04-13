@@ -509,13 +509,9 @@ public class MinecraftDownloaderTask extends AsyncTask<String, String, Throwable
     }
 
     public void downloadCoreMods(String version) {
-        for (JsonElement element : ModManager.getCoreMods()) {
-            JsonObject modData = element.getAsJsonObject();
-            String slug = modData.get("slug").getAsString();
-            String platform = modData.get("platform").getAsString();
-
-            publishProgress("Downloading " + slug);
-            ModManager.addMod("core", platform, slug, version, true);
+        for (Pair<String, String> mod : ModManager.getCoreMods()) {
+            publishProgress("Downloading " + mod.first);
+            ModManager.addMod("core", mod.second, mod.first, version, true);
         }
     }
 
