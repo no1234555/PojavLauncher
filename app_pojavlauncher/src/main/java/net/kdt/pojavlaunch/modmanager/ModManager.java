@@ -69,9 +69,9 @@ public class ModManager {
         thread.start();
     }
 
-    public static ArrayList<Pair<String, String>> getCoreMods() {
+    public static ArrayList<Pair<String, String>> getCoreMods(String version) {
         ArrayList<Pair<String, String>> mods = new ArrayList<>();
-        for (JsonElement element : modmanagerJson.getAsJsonArray("core_mods")) {
+        for (JsonElement element : modmanagerJson.get("core_mods").getAsJsonObject().getAsJsonArray(version)) {
             JsonObject mod = element.getAsJsonObject();
             mods.add(new Pair<>(mod.get("slug").getAsString(), mod.get("platform").getAsString()));
         }

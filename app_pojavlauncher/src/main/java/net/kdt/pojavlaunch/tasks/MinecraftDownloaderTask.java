@@ -169,7 +169,7 @@ public class MinecraftDownloaderTask extends AsyncTask<String, String, Throwable
                     }
                 }
 
-                setMax(ModManager.getCoreMods().size());
+                setMax(ModManager.getCoreMods(verInfo.assets).size());
                 zeroProgress();
                 publishProgress("Downloading Core Mods");
                 downloadCoreMods(verInfo.inheritsFrom);
@@ -510,7 +510,7 @@ public class MinecraftDownloaderTask extends AsyncTask<String, String, Throwable
     }
 
     public void downloadCoreMods(String version) {
-        for (Pair<String, String> mod : ModManager.getCoreMods()) {
+        for (Pair<String, String> mod : ModManager.getCoreMods(version)) {
             publishProgress("Downloading " + mod.first);
             ModManager.addMod("core", mod.second, mod.first, version, true);
         }
