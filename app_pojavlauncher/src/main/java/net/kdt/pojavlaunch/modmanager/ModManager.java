@@ -51,7 +51,7 @@ public class ModManager {
 
                         String profileName = String.format("%s-%s-%s", "fabric-loader", flVersion, gameVersion);
                         Instance instance = new Instance();
-                        instance.setName("QuestCraft-" + gameVersion);
+                        instance.setName("fabric-loader-0.13.3-1.18.2");
                         instance.setGameVersion(gameVersion);
                         instance.setFabricLoaderVersion(profileName);
                         state.addInstance(instance);
