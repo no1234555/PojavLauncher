@@ -118,7 +118,7 @@ public class ModsFragment extends Fragment {
             enableSwitch = view.findViewById(R.id.mod_switch);
 
             enableSwitch.setOnCheckedChangeListener((button, value) -> {
-                if (ModManager.isDownloading(modData.slug)) {
+                if (filter.equals("Core") || ModManager.isDownloading(modData.slug)) {
                     button.setChecked(true);
                     return;
                 }
