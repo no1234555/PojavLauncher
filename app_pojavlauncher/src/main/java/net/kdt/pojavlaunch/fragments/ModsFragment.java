@@ -4,8 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,7 +15,7 @@ import net.kdt.pojavlaunch.R;
 import net.kdt.pojavlaunch.modmanager.ModManager;
 import net.kdt.pojavlaunch.modmanager.State;
 import net.kdt.pojavlaunch.modmanager.api.Curse;
-import net.kdt.pojavlaunch.modmanager.api.ModData;
+import net.kdt.pojavlaunch.modmanager.ModData;
 import net.kdt.pojavlaunch.modmanager.api.Modrinth;
 import us.feras.mdv.MarkdownView;
 
@@ -90,6 +88,7 @@ public class ModsFragment extends Fragment {
         if (filter.equals("Modrinth")) Modrinth.addProjectsToRecycler(modAdapter, selectedInstance.getGameVersion(), offset, query);
         else if (filter.equals("CurseForge")) Curse.addProjectsToRecycler(modAdapter, selectedInstance.getGameVersion(), offset, query);
         else if (filter.equals("Installed")) modAdapter.addMods(ModManager.listInstalledMods(selectedInstance.getName()));
+        else if (filter.equals("Core")) modAdapter.addMods(ModManager.listCoreMods(selectedInstance.getGameVersion()));
     }
 
     public static class ModViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

@@ -7,14 +7,9 @@ import android.os.*;
 import android.util.*;
 
 import java.io.*;
-import java.nio.ByteOrder;
-import java.nio.MappedByteBuffer;
-import java.nio.channels.FileChannel;
 import java.util.*;
 import java.util.concurrent.*;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import net.kdt.pojavlaunch.*;
 import net.kdt.pojavlaunch.modmanager.ModManager;
 import net.kdt.pojavlaunch.multirt.MultiRTUtils;
@@ -169,7 +164,7 @@ public class MinecraftDownloaderTask extends AsyncTask<String, String, Throwable
                     }
                 }
 
-                setMax(ModManager.getCoreMods(verInfo.id).size());
+                setMax(ModManager.getCoreModsFromJson(verInfo.id).size());
                 zeroProgress();
                 downloadCoreMods(verInfo.id);
 
@@ -509,7 +504,7 @@ public class MinecraftDownloaderTask extends AsyncTask<String, String, Throwable
     }
 
     public void downloadCoreMods(String version) {
-        for (Pair<String, String> mod : ModManager.getCoreMods(version)) {
+        for (Pair<String, String> mod : ModManager.getCoreModsFromJson(version)) {
             ModManager.addMod("core", mod.second, mod.first, version, true);
         }
     }

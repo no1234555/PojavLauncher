@@ -1,14 +1,16 @@
 package net.kdt.pojavlaunch.modmanager;
 
 import com.google.gson.annotations.SerializedName;
-import net.kdt.pojavlaunch.modmanager.api.ModData;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class State {
     @SerializedName("instances")
     private final List<Instance> instances = new ArrayList<>();
+    @SerializedName("core_mods")
+    private final HashMap<String, List<ModData>> coreMods = new HashMap<>();
 
     public List<Instance> getInstances() {
         return instances;
@@ -19,6 +21,17 @@ public class State {
             if (instance.name.equalsIgnoreCase(name)) return instance;
         }
         return null;
+    }
+
+    public void addCoreMod(String version, ModData modData) {
+        List<ModData> mods = coreMods.get(version);
+        if (mods == null) mods = new ArrayList<>();
+        mods.add(modData);
+        coreMods.put(version, mods);
+    }
+
+    public List<ModData> getCoreMods(String version) {
+        return coreMods.get(version);
     }
 
     public void addInstance(Instance instance) {

@@ -3,6 +3,7 @@ package net.kdt.pojavlaunch.modmanager.api;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.annotations.SerializedName;
+import net.kdt.pojavlaunch.modmanager.ModData;
 import net.kdt.pojavlaunch.utils.UiUitls;
 import retrofit2.Call;
 import retrofit2.Retrofit;

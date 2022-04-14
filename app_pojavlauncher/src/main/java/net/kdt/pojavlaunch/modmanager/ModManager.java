@@ -1,17 +1,12 @@
 package net.kdt.pojavlaunch.modmanager;
 
-import android.util.Log;
 import android.util.Pair;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import net.kdt.pojavlaunch.BaseLauncherActivity;
-import net.kdt.pojavlaunch.JMinecraftVersionList;
 import net.kdt.pojavlaunch.PojavApplication;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.modmanager.State.Instance;
 import net.kdt.pojavlaunch.modmanager.api.*;
-import net.kdt.pojavlaunch.tasks.RefreshVersionListTask;
 import net.kdt.pojavlaunch.utils.DownloadUtils;
 
 import java.io.File;
@@ -21,7 +16,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.List;
 
 public class ModManager {
 
@@ -67,7 +61,7 @@ public class ModManager {
         thread.start();
     }
 
-    public static ArrayList<Pair<String, String>> getCoreMods(String version) {
+    public static ArrayList<Pair<String, String>> getCoreModsFromJson(String version) {
         ArrayList<Pair<String, String>> mods = new ArrayList<>();
         for (JsonElement element : modmanagerJson.get("core_mods").getAsJsonObject().getAsJsonArray(version)) {
             JsonObject mod = element.getAsJsonObject();
@@ -161,16 +155,14 @@ public class ModManager {
 
                     //No duplicate mods allowed
                     if (isCoreMod) {
-                        File[] files = path.listFiles();
-                        if (files != null) {
-                            for (File file : files) {
-                                if (file.getName().equals(modData.fileData.filename)) return;
-                            }
+                        for (ModData mod : state.getCoreMods(gameVersion)) {
+                            if (mod.slug.equals(modData.slug)) return;
                         }
+                        state.addCoreMod(gameVersion, modData);
                     } else {
                         Instance instance = state.getInstance(instanceName);
                         for (ModData mod : instance.getMods()) {
-                            if (mod.title.equals(modData.title)) return;
+                            if (mod.slug.equals(modData.slug)) return;
                         }
                         instance.addMod(modData);
                     }
@@ -262,5 +254,9 @@ public class ModManager {
 
     public static ArrayList<ModData> listInstalledMods(String instanceName) {
         return (ArrayList<ModData>) state.getInstance(instanceName).getMods();
+    }
+
+    public static ArrayList<ModData> listCoreMods(String gameVersion) {
+        return (ArrayList<ModData>) state.getCoreMods(gameVersion);
     }
 }
