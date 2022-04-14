@@ -17,6 +17,7 @@ public class Fabric {
 
     private static final String BASE_URL = "https://meta.fabricmc.net/v2/";
     private static Retrofit retrofit;
+    private static String fabricLoaderVersion; //Store so we don't need to ask the api every time
 
     public static Retrofit getClient(){
         if (retrofit == null) {
@@ -45,15 +46,28 @@ public class Fabric {
         public boolean stable;
     }
 
-    public static String getLatestLoaderVersion() throws IOException {
-        FabricLoaderVersionsInf inf = getClient().create(FabricLoaderVersionsInf.class);
-        List<Version> versions = inf.getVersions().execute().body();
-        if (versions != null) {
-            for (Version version : versions) {
-                if (version.stable) return version.version;
+    //Will only ask api first time called, return fabricLoadVersion var every next time - save on unneeded api calls
+    public static String getLatestLoaderVersion()  {
+        if (fabricLoaderVersion != null) return fabricLoaderVersion;
+
+        try {
+            FabricLoaderVersionsInf inf = getClient().create(FabricLoaderVersionsInf.class);
+            List<Version> versions = inf.getVersions().execute().body();
+
+            if (versions != null) {
+                for (Version version : versions) {
+                    if (version.stable) {
+                        fabricLoaderVersion = version.version;
+                        return version.version;
+                    }
+                }
             }
+        } catch (IOException e) {
+            return "0.13.3"; //Known latest as backup
         }
-        return null;
+
+        fabricLoaderVersion = "0.13.3"; //Known latest as backup
+        return fabricLoaderVersion;
     }
 
     //Won't do anything if version is already installed

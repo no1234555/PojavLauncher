@@ -31,7 +31,9 @@ public class State {
     }
 
     public List<ModData> getCoreMods(String version) {
-        return coreMods.get(version);
+        List<ModData> mods = coreMods.get(version);
+        if (mods != null) return mods;
+        return new ArrayList<>();
     }
 
     public void addInstance(Instance instance) {

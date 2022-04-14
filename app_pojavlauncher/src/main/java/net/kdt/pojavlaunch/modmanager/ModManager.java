@@ -35,9 +35,9 @@ public class ModManager {
                     if (!path.exists()) path.mkdir();
 
                     File modsJson = new File(workDir + "/mods.json");
+                    String flVersion = Fabric.getLatestLoaderVersion(); //Init outside to cache version (see Fabric.java)
                     if (!modsJson.exists()) {
                         String gameVersion = Tools.getCompatibleVersions("releases").get(0);
-                        String flVersion = Fabric.getLatestLoaderVersion();
                         Fabric.downloadJson(gameVersion, flVersion);
 
                         String profileName = String.format("%s-%s-%s", "fabric-loader", flVersion, gameVersion);
@@ -116,21 +116,16 @@ public class ModManager {
         Thread thread = new Thread() {
             @Override
             public void run() {
-                try {
-                    String flVersion = Fabric.getLatestLoaderVersion();
-                    Fabric.downloadJson(gameVersion, flVersion);
+                String flVersion = Fabric.getLatestLoaderVersion();
+                Fabric.downloadJson(gameVersion, flVersion);
 
-                    String profileName = String.format("%s-%s-%s", "fabric-loader", flVersion, gameVersion);
-                    Instance instance = new Instance();
-                    instance.setName(name);
-                    instance.setGameVersion(gameVersion);
-                    instance.setFabricLoaderVersion(profileName);
-                    state.addInstance(instance);
-                    saveState();
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                String profileName = String.format("%s-%s-%s", "fabric-loader", flVersion, gameVersion);
+                Instance instance = new Instance();
+                instance.setName(name);
+                instance.setGameVersion(gameVersion);
+                instance.setFabricLoaderVersion(profileName);
+                state.addInstance(instance);
+                saveState();
             }
         };
         thread.start();
@@ -152,6 +147,7 @@ public class ModManager {
                     else if (platform.equals("curseforge")) modData = Curseforge.getModFileData(slug, gameVersion);
                     else if (platform.equals("github")) modData = Github.getModFileData(modmanagerJson.getAsJsonArray("repos"), slug, gameVersion);
                     if (modData == null) return;
+                    modData.isActive = true;
 
                     //No duplicate mods allowed
                     if (isCoreMod) {
@@ -226,6 +222,8 @@ public class ModManager {
     public static void setModActive(String instanceName, String slug, boolean active) {
         Thread thread = new Thread() {
             public void run() {
+                if (android.os.Build.VERSION.SDK_INT <= android.os.Build.VERSION_CODES.O) return;
+
                 ModData modData = getMod(instanceName, slug);
                 if (modData == null) return;
 
@@ -237,10 +235,8 @@ public class ModManager {
                 for (File modJar : path.listFiles()) {
                     if (modJar.getName().replace(".disabled", "").equals(modData.fileData.filename)) {
                         try {
-                            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                                Path source = Paths.get(modJar.getPath());
-                                Files.move(source, source.resolveSibling(modData.fileData.filename + suffix));
-                            }
+                            Path source = Paths.get(modJar.getPath());
+                            Files.move(source, source.resolveSibling(modData.fileData.filename + suffix));
                         } catch (IOException e) {
                             e.printStackTrace();
                         }

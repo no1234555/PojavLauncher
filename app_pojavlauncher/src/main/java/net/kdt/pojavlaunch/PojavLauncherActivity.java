@@ -164,6 +164,8 @@ public class PojavLauncherActivity extends BaseLauncherActivity
             }
         });
 
+        ModManager.init();
+
         // Setup the minecraft version list
         List<String> versions = new ArrayList<>();
         final File fVers = new File(Tools.DIR_HOME_VERSION);
@@ -191,8 +193,6 @@ public class PojavLauncherActivity extends BaseLauncherActivity
         mVersionSelector.setAdapter(adapterVer);
 
         statusIsLaunching(false);
-
-        ModManager.init();
 
 
         //Add the preference changed listener

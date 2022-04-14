@@ -1,6 +1,7 @@
 package net.kdt.pojavlaunch.fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import net.kdt.pojavlaunch.modmanager.ModManager;
 import net.kdt.pojavlaunch.modmanager.State;
 import net.kdt.pojavlaunch.modmanager.api.Curseforge;
 import net.kdt.pojavlaunch.modmanager.ModData;
+import net.kdt.pojavlaunch.modmanager.api.Fabric;
 import net.kdt.pojavlaunch.modmanager.api.Modrinth;
 import us.feras.mdv.MarkdownView;
 
@@ -33,7 +35,7 @@ public class ModsFragment extends Fragment {
         RecyclerView modRecycler = view.findViewById(R.id.mods_recycler);
         modRecycler.setLayoutManager(new LinearLayoutManager(modRecycler.getContext()));
         modRecycler.setAdapter(modAdapter);
-        loadDataIntoList(modAdapter, "", 0, false);
+        modAdapter.setFilter(filter);
 
         String[] filters = new String[] {"Modrinth", "CurseForge", "Installed", "Core"};
         ArrayAdapter<String> filterAdapter = new ArrayAdapter<>(this.getActivity(), android.R.layout.simple_spinner_item, filters);
@@ -41,7 +43,6 @@ public class ModsFragment extends Fragment {
         Spinner filterSpinner = view.findViewById(R.id.filter_spinner);
         filterSpinner.setAdapter(filterAdapter);
 
-        //Uses a lot of api requests at the moment - fine for modrinth, will break curseforge
         SearchView modSearch = view.findViewById(R.id.mods_search);
         modSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -83,12 +84,18 @@ public class ModsFragment extends Fragment {
 
     private void loadDataIntoList(ModAdapter modAdapter, String query, int offset, boolean refresh) {
         if (refresh) modAdapter.reset();
-        State.Instance selectedInstance = ModManager.state.getInstance("fabric-loader-0.13.3-1.18.2");
+        State.Instance selectedInstance = ModManager.state.getInstance("fabric-loader-" + Fabric.getLatestLoaderVersion() + "-1.18.2");
 
         if (filter.equals("Modrinth")) Modrinth.addProjectsToRecycler(modAdapter, selectedInstance.getGameVersion(), offset, query);
-        else if (filter.equals("Curseforge")) Curseforge.addProjectsToRecycler(modAdapter, selectedInstance.getGameVersion(), offset, query);
-        else if (filter.equals("Installed")) modAdapter.addMods(ModManager.listInstalledMods(selectedInstance.getName()));
-        else if (filter.equals("Core")) modAdapter.addMods(ModManager.listCoreMods(selectedInstance.getGameVersion()));
+        else if (filter.equals("CurseForge")) Curseforge.addProjectsToRecycler(modAdapter, selectedInstance.getGameVersion(), offset, query);
+        else if (filter.equals("Installed")) {
+            ArrayList<ModData> mods = ModManager.listInstalledMods(selectedInstance.getName());
+            if (mods.size() != 0) modAdapter.addMods(mods);
+        }
+        else if (filter.equals("Core")) {
+            ArrayList<ModData> mods = ModManager.listCoreMods(selectedInstance.getGameVersion());
+            if (mods.size() != 0) modAdapter.addMods(mods);
+        }
     }
 
     public static class ModViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -116,15 +123,15 @@ public class ModsFragment extends Fragment {
                     return;
                 }
 
-                State.Instance selectedInstance = ModManager.state.getInstance("fabric-loader-0.13.3-1.18.2");
+                State.Instance selectedInstance = ModManager.state.getInstance("fabric-loader-" + Fabric.getLatestLoaderVersion() + "-1.18.2");
                 ModData mod = ModManager.getMod(selectedInstance.getName(), modData.slug);
                 if (mod != null) ModManager.setModActive(selectedInstance.getName(), this.modData.slug, value);
-                ModManager.addMod(selectedInstance.getName(), filter.toLowerCase(), this.modData.slug, selectedInstance.getGameVersion(), false);
+                else ModManager.addMod(selectedInstance.getName(), filter.toLowerCase(), this.modData.slug, selectedInstance.getGameVersion(), false);
             });
         }
 
         public void setData(ModData modData) {
-            ModData installedMod = ModManager.getMod("fabric-loader-0.13.3-1.18.2", modData.slug);
+            ModData installedMod = ModManager.getMod("fabric-loader-" + Fabric.getLatestLoaderVersion() + "-1.18.2", modData.slug);
             if (installedMod != null) modData = installedMod; //Check if mod in already installed and overwrite fetched data
 
             this.modData = modData;
@@ -179,6 +186,7 @@ public class ModsFragment extends Fragment {
 
         public void reset() {
             mods.clear();
+            this.notifyDataSetChanged();
         }
 
         //Needs testing - might need + or - 1

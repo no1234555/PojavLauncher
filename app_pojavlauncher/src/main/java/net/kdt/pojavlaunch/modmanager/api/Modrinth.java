@@ -48,7 +48,7 @@ public class Modrinth {
 
     public interface SearchInf {
         @GET("search")
-        Call<SearchResult> searchMods(@Query("query") String query, @Query("offset") int offset, @Query("limit") int limit, @Query("facets") String[][] facets);
+        Call<SearchResult> searchMods(@Query("query") String query, @Query("offset") int offset, @Query("limit") int limit, @Query("facets") String facets);
     }
 
     public static class Project {
@@ -122,11 +122,13 @@ public class Modrinth {
 
     public static void addProjectsToRecycler(ModsFragment.ModAdapter adapter, String version, int offset, String query) {
         SearchInf searchInf = getClient().create(SearchInf.class);
-        searchInf.searchMods(query, offset, 50, new String[][]{{"categories:fabric"}, {"versions:" + version}}).enqueue(new Callback<SearchResult>() {
+        searchInf.searchMods(query, offset, 50, "[[\"categories:fabric\"], [\"versions:" + version + "\"]]").enqueue(new Callback<SearchResult>() {
             @Override
             public void onResponse(Call<SearchResult> call, Response<SearchResult> response) {
                 SearchResult result = response.body();
-                if (result == null || Build.VERSION.SDK_INT <= Build.VERSION_CODES.N) return;
+                if (result == null || Build.VERSION.SDK_INT <= Build.VERSION_CODES.N) {
+                    return;
+                }
 
                 result.hits.removeIf(modData -> {
                     for (ModData coreMod : ModManager.listCoreMods(version)) {
@@ -134,6 +136,13 @@ public class Modrinth {
                     }
                     return false;
                 });
+
+                for (ModData installedMod : ModManager.listInstalledMods("fabric-loader-" + Fabric.getLatestLoaderVersion() + "-1.18.2")) {
+                    for (ModData mod : result.hits) {
+                        if (installedMod.isActive && installedMod.slug.equals(mod.slug)) mod.isActive = true;
+                    }
+                }
+
                 adapter.addMods((ArrayList<ModData>) result.hits);
             }
 

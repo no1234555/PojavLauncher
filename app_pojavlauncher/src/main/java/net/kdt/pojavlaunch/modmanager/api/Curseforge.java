@@ -5,6 +5,7 @@ import android.util.Log;
 import com.google.gson.annotations.SerializedName;
 import net.kdt.pojavlaunch.fragments.ModsFragment;
 import net.kdt.pojavlaunch.modmanager.ModData;
+import net.kdt.pojavlaunch.modmanager.ModManager;
 import net.kdt.pojavlaunch.utils.UiUitls;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -136,10 +137,12 @@ public class Curseforge {
 
     public static void addProjectsToRecycler(ModsFragment.ModAdapter adapter, String version, int offset, String query) {
         SearchInf searchInf = getClient().create(SearchInf.class);
-        searchInf.searchMods(0, 432, version, offset, 50, query, 432, 0).enqueue(new Callback<List<Project>>() {
+        searchInf.searchMods(0, 432, version, offset, 50, query, 0, 0).enqueue(new Callback<List<Project>>() {
 
             @Override
             public void onResponse(Call<List<Project>> call, Response<List<Project>> response) {
+                Log.d("CURSE", response.raw().toString());
+
                 List<Project> projects = response.body();
                 if (projects == null) return;
 
@@ -149,6 +152,14 @@ public class Curseforge {
                     modData.title = project.name;
                     modData.slug = String.valueOf(project.id);
                     modData.iconUrl = project.attachments.get(0).thumbnailUrl;
+
+                    for (ModData installedMod : ModManager.listInstalledMods("fabric-loader-" + Fabric.getLatestLoaderVersion() + "-1.18.2")) {
+                        if (installedMod.isActive && project.id.equals(installedMod.slug)) {
+                            modData.isActive = true;
+                            break;
+                        }
+                    }
+
                     mods.add(modData);
                 }
                 adapter.addMods(mods);
