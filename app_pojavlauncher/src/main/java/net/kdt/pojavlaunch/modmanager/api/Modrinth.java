@@ -33,22 +33,22 @@ public class Modrinth {
         return retrofit;
     }
 
-    public interface ModrinthProjectInf {
+    public interface ProjectInf {
         @GET("project/{slug}")
-        Call<ModrinthProject> getProject(@Path("slug") String slug);
+        Call<Project> getProject(@Path("slug") String slug);
     }
 
-    public interface ModrinthVersionsInf {
+    public interface VersionsInf {
         @GET("project/{slug}/version")
-        Call<List<ModrinthVersion>> getVersions(@Path("slug") String slug);
+        Call<List<Version>> getVersions(@Path("slug") String slug);
     }
 
-    public interface ModrinthSearchInf {
+    public interface SearchInf {
         @GET("search")
-        Call<ModrinthSearchResult> searchMods(@Query("query") String query, @Query("offset") int offset, @Query("limit") int limit);
+        Call<SearchResult> searchMods(@Query("query") String query, @Query("offset") int offset, @Query("limit") int limit, @Query("facets") String[][] facets);
     }
 
-    public static class ModrinthProject {
+    public static class Project {
         @SerializedName("title")
         public String title;
         @SerializedName("slug")
@@ -59,7 +59,7 @@ public class Modrinth {
         public String body;
     }
 
-    public static class ModrinthVersion {
+    public static class Version {
         @SerializedName("id")
         public String id;
         @SerializedName("loaders")
@@ -67,9 +67,9 @@ public class Modrinth {
         @SerializedName("game_versions")
         public List<String> gameVersions;
         @SerializedName("files")
-        public List<ModrinthFile> files;
+        public List<File> files;
 
-        public static class ModrinthFile {
+        public static class File {
             @SerializedName("url")
             public String url;
             @SerializedName("filename")
@@ -77,28 +77,28 @@ public class Modrinth {
         }
     }
 
-    public static class ModrinthSearchResult {
+    public static class SearchResult {
         @SerializedName("hits")
         public List<ModData> hits;
     }
 
     public static ModData getModFileData(String slug, String gameVersion) throws IOException {
-        ModrinthProjectInf projectInf = getClient().create(ModrinthProjectInf.class);
-        ModrinthProject project = projectInf.getProject(slug).execute().body();
+        ProjectInf projectInf = getClient().create(ProjectInf.class);
+        Project project = projectInf.getProject(slug).execute().body();
 
-        ModrinthVersionsInf versionsInf = getClient().create(ModrinthVersionsInf.class);
-        List<ModrinthVersion> versions = versionsInf.getVersions(slug).execute().body();
+        VersionsInf versionsInf = getClient().create(VersionsInf.class);
+        List<Version> versions = versionsInf.getVersions(slug).execute().body();
 
         if (project == null || versions == null) {
             return null;
         }
 
-        for (ModrinthVersion modVersion : versions) {
+        for (Version modVersion : versions) {
             for (String loader : modVersion.loaders) {
                 if (loader.equals("fabric")) {
                     for (String modGameVersion : modVersion.gameVersions) {
                         if (modGameVersion.equals(gameVersion)) {
-                            ModrinthVersion.ModrinthFile file = modVersion.files.get(0);
+                            Version.File file = modVersion.files.get(0);
 
                             ModData modData = new ModData();
                             modData.platform = "modrinth";
@@ -118,16 +118,16 @@ public class Modrinth {
     }
 
     public static void addProjectsToRecycler(ModsFragment.ModAdapter adapter, String version, int offset, String query) {
-        ModrinthSearchInf searchInf = getClient().create(ModrinthSearchInf.class);
-        searchInf.searchMods(query, offset, 50).enqueue(new Callback<ModrinthSearchResult>() {
+        SearchInf searchInf = getClient().create(SearchInf.class);
+        searchInf.searchMods(query, offset, 50, new String[][]{{"categories:fabric"}, {"versions:" + version}}).enqueue(new Callback<SearchResult>() {
             @Override
-            public void onResponse(Call<ModrinthSearchResult> call, Response<ModrinthSearchResult> response) {
-                ModrinthSearchResult result = response.body();
+            public void onResponse(Call<SearchResult> call, Response<SearchResult> response) {
+                SearchResult result = response.body();
                 if (result != null) adapter.addMods((ArrayList<ModData>) result.hits);
             }
 
             @Override
-            public void onFailure(Call<ModrinthSearchResult> call, Throwable t) {
+            public void onFailure(Call<SearchResult> call, Throwable t) {
                 Log.d("MODRINTH", String.valueOf(t));
             }
         });
@@ -138,9 +138,9 @@ public class Modrinth {
             @Override
             public void run() {
                 try {
-                    ModrinthProjectInf projectInf = getClient().create(ModrinthProjectInf.class);
-                    ModrinthProject project = projectInf.getProject(slug).execute().body();
-                    if (project != null) UiUitls.runOnUI(() -> view.loadMarkdown(project.body, "file:///assets/ModDescription.css"));
+                    ProjectInf projectInf = getClient().create(ProjectInf.class);
+                    Project project = projectInf.getProject(slug).execute().body();
+                    if (project != null) UiUitls.runOnUI(() -> view.loadMarkdown(project.body, "file:///android_asset/ModDescription.css"));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

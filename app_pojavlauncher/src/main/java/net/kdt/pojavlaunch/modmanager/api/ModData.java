@@ -9,10 +9,6 @@ public class ModData {
     public String slug;
     @SerializedName("icon_url")
     public String iconUrl;
-    @SerializedName("description")
-    public String description;
-    @SerializedName("body")
-    public String body;
 
     public String platform;
     public boolean isActive;

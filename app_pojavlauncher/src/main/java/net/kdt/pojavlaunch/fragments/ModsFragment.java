@@ -16,6 +16,7 @@ import com.squareup.picasso.Picasso;
 import net.kdt.pojavlaunch.R;
 import net.kdt.pojavlaunch.modmanager.ModManager;
 import net.kdt.pojavlaunch.modmanager.State;
+import net.kdt.pojavlaunch.modmanager.api.Curse;
 import net.kdt.pojavlaunch.modmanager.api.ModData;
 import net.kdt.pojavlaunch.modmanager.api.Modrinth;
 import us.feras.mdv.MarkdownView;
@@ -34,9 +35,9 @@ public class ModsFragment extends Fragment {
         RecyclerView modRecycler = view.findViewById(R.id.mods_recycler);
         modRecycler.setLayoutManager(new LinearLayoutManager(modRecycler.getContext()));
         modRecycler.setAdapter(modAdapter);
-        loadDataIntoList(modAdapter, "");
+        loadDataIntoList(modAdapter, "", 0, false);
 
-        String[] filters = new String[] {"Modrinth", "Installed", "Core"};
+        String[] filters = new String[] {"Modrinth", "CurseForge", "Installed", "Core"};
         ArrayAdapter<String> filterAdapter = new ArrayAdapter<>(this.getActivity(), android.R.layout.simple_spinner_item, filters);
         filterAdapter.setDropDownViewResource(android.R.layout.simple_list_item_single_choice);
         Spinner filterSpinner = view.findViewById(R.id.filter_spinner);
@@ -52,7 +53,7 @@ public class ModsFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String s) {
-                loadDataIntoList(modAdapter, s);
+                loadDataIntoList(modAdapter, s, 0, true);
                 return true;
             }
         });
@@ -62,8 +63,7 @@ public class ModsFragment extends Fragment {
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 if (!recyclerView.canScrollVertically(1)) {
-                    State.Instance selectedInstance = ModManager.state.getInstance("QuestCraft-1.18.2");
-                    Modrinth.addProjectsToRecycler(modAdapter, selectedInstance.getGameVersion(), modAdapter.getOffset(), "");
+                    loadDataIntoList(modAdapter, "", modAdapter.getOffset(), false);
                 }
             }
         });
@@ -72,7 +72,7 @@ public class ModsFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 filter = filters[i];
-                loadDataIntoList(modAdapter, "");
+                loadDataIntoList(modAdapter, "", 0, true);
             }
 
             @Override
@@ -82,12 +82,13 @@ public class ModsFragment extends Fragment {
         return view;
     }
 
-    private void loadDataIntoList(ModAdapter modAdapter, String query) {
-        modAdapter.reset();
-        State.Instance selectedInstance = ModManager.state.getInstance("QuestCraft-1.18.2");
+    private void loadDataIntoList(ModAdapter modAdapter, String query, int offset, boolean refresh) {
+        if (refresh) modAdapter.reset();
+        State.Instance selectedInstance = ModManager.state.getInstance("fabric-loader-0.13.3-1.18.2");
 
-        if (filter.equals("Modrinth")) Modrinth.addProjectsToRecycler(modAdapter, selectedInstance.getGameVersion(), 0, query);
-        if (filter.equals("Installed")) modAdapter.addMods(ModManager.listInstalledMods(selectedInstance.getName()));
+        if (filter.equals("Modrinth")) Modrinth.addProjectsToRecycler(modAdapter, selectedInstance.getGameVersion(), offset, query);
+        else if (filter.equals("CurseForge")) Curse.addProjectsToRecycler(modAdapter, selectedInstance.getGameVersion(), offset, query);
+        else if (filter.equals("Installed")) modAdapter.addMods(ModManager.listInstalledMods(selectedInstance.getName()));
     }
 
     public static class ModViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -95,7 +96,7 @@ public class ModsFragment extends Fragment {
         private final ModsFragment fragment;
         private final ImageView icon;
         private final TextView title;
-        private final TextView details;
+        private final TextView compat;
         private final Switch enableSwitch;
         private ModData modData;
 
@@ -105,7 +106,7 @@ public class ModsFragment extends Fragment {
             view.setOnClickListener(this);
             icon = view.findViewById(R.id.mod_icon);
             title = view.findViewById(R.id.mod_title);
-            details = view.findViewById(R.id.mod_details);
+            compat = view.findViewById(R.id.mod_details);
             enableSwitch = view.findViewById(R.id.mod_switch);
 
             enableSwitch.setOnCheckedChangeListener((button, value) -> {
@@ -114,14 +115,14 @@ public class ModsFragment extends Fragment {
                     return;
                 }
 
-                ModData mod = ModManager.getMod("QuestCraft-1.18.2", modData.slug);
-                if (mod != null) ModManager.setModActive("QuestCraft-1.18.2", this.modData.slug, value);
-                else ModManager.addMod("QuestCraft-1.18.2", "modrinth", this.modData.slug, "1.18.2", false);
+                ModData mod = ModManager.getMod("fabric-loader-0.13.3-1.18.2", modData.slug);
+                if (mod != null) ModManager.setModActive("fabric-loader-0.13.3-1.18.2", this.modData.slug, value);
+                else ModManager.addMod("fabric-loader-0.13.3-1.18.2", "modrinth", this.modData.slug, "1.18.2", false);
             });
         }
 
         public void setData(ModData modData) {
-            ModData installedMod = ModManager.getMod("QuestCraft-1.18.2", modData.slug);
+            ModData installedMod = ModManager.getMod("fabric-loader-0.13.3-1.18.2", modData.slug);
             if (installedMod != null) modData = installedMod; //Check if mod in already installed and overwrite fetched data
 
             this.modData = modData;
@@ -129,11 +130,11 @@ public class ModsFragment extends Fragment {
             if (!modData.iconUrl.isEmpty()) Picasso.get().load(modData.iconUrl).into(icon);
 
             String modCompat = ModManager.getModCompat(modData.slug);
-            details.setText("  " + modCompat + "  ");
-            if (modCompat.equals("Untested")) details.setBackgroundResource(R.drawable.marker_gray);
-            if (modCompat.equals("Perfect")) details.setBackgroundResource(R.drawable.marker_green);
-            if (modCompat.equals("Good")) details.setBackgroundResource(R.drawable.marker_yellow);
-            if (modCompat.equals("Unusable") || modCompat.equals("Not Working")) details.setBackgroundResource(R.drawable.marker_red);
+            compat.setText("  " + modCompat + "  ");
+            if (modCompat.equals("Untested")) compat.setBackgroundResource(R.drawable.marker_gray);
+            if (modCompat.equals("Perfect")) compat.setBackgroundResource(R.drawable.marker_green);
+            if (modCompat.equals("Good")) compat.setBackgroundResource(R.drawable.marker_yellow);
+            if (modCompat.equals("Unusable") || modCompat.equals("Not Working")) compat.setBackgroundResource(R.drawable.marker_red);
 
             enableSwitch.setChecked(modData.isActive);
         }

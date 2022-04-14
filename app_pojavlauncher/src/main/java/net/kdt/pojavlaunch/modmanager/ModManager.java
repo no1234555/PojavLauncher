@@ -10,10 +10,7 @@ import net.kdt.pojavlaunch.JMinecraftVersionList;
 import net.kdt.pojavlaunch.PojavApplication;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.modmanager.State.Instance;
-import net.kdt.pojavlaunch.modmanager.api.Fabric;
-import net.kdt.pojavlaunch.modmanager.api.Github;
-import net.kdt.pojavlaunch.modmanager.api.Modrinth;
-import net.kdt.pojavlaunch.modmanager.api.ModData;
+import net.kdt.pojavlaunch.modmanager.api.*;
 import net.kdt.pojavlaunch.tasks.RefreshVersionListTask;
 import net.kdt.pojavlaunch.utils.DownloadUtils;
 
@@ -160,6 +157,7 @@ public class ModManager {
                 try {
                     ModData modData = null;
                     if (platform.equals("modrinth")) modData = Modrinth.getModFileData(slug, gameVersion);
+                    else if (platform.equals("curse")) modData = Curse.getModFileData(slug, gameVersion);
                     else if (platform.equals("github")) modData = Github.getModFileData(modmanagerJson.getAsJsonArray("repos"), slug, gameVersion);
                     if (modData == null) return;
 
