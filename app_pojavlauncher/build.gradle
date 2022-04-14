@@ -145,6 +145,7 @@ dependencies {
     // implementation 'net.sourceforge.streamsupport:streamsupport-cfuture:1.7.0'
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
+    //Mod manager related things
     implementation 'us.feras.mdv:markdownview:1.1.0'
     implementation 'com.squareup.picasso:picasso:2.8'
     implementation ('com.squareup.retrofit2:retrofit:2.9.0')

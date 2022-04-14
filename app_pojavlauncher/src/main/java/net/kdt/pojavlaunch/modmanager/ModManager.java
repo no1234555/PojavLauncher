@@ -149,7 +149,7 @@ public class ModManager {
                 try {
                     ModData modData = null;
                     if (platform.equals("modrinth")) modData = Modrinth.getModFileData(slug, gameVersion);
-                    else if (platform.equals("curseforge")) modData = Curse.getModFileData(slug, gameVersion);
+                    else if (platform.equals("curseforge")) modData = Curseforge.getModFileData(slug, gameVersion);
                     else if (platform.equals("github")) modData = Github.getModFileData(modmanagerJson.getAsJsonArray("repos"), slug, gameVersion);
                     if (modData == null) return;
 

@@ -311,7 +311,6 @@ public class PojavLoginActivity extends BaseActivity {
         mkdirs(Tools.DIR_GAME_HOME + "/config");
         if (!PojavMigrator.migrateGameDir()) {
             mkdirs(Tools.DIR_GAME_NEW);
-            mkdirs(Tools.DIR_GAME_NEW + "/mods");
             mkdirs(DIR_GAME_NEW + "/resourcepacks");
 
             // Add TitleWorlds Folders
@@ -335,8 +334,6 @@ public class PojavLoginActivity extends BaseActivity {
 
         try {
             new CustomControls(this).save(Tools.CTRLDEF_FILE);
-            //Tools.copyAssetFile(this, "jsons/fabric-loader-0.13.3.json", Tools.DIR_HOME_VERSION + "/fabric-loader-0.13.3", false);
-
             Tools.copyAssetFile(this, "components/security/pro-grade.jar", Tools.DIR_DATA, true);
             Tools.copyAssetFile(this, "components/security/java_sandbox.policy", Tools.DIR_DATA, true);
             Tools.copyAssetFile(this, "options.txt", Tools.DIR_GAME_NEW, false);
@@ -345,13 +342,6 @@ public class PojavLoginActivity extends BaseActivity {
             Tools.copyAssetFile(this, "launcher_profiles.json", Tools.DIR_GAME_NEW, false);
             Tools.copyAssetFile(this,"resolv.conf",Tools.DIR_DATA, true);
             Tools.copyAssetFile(this,"arc_dns_injector.jar",Tools.DIR_DATA, true);
-
-            // Install Mods
-            //Tools.copyAssetFile(this, "artifacts/mcxr-core-0.2.0+null.jar", DIR_GAME_NEW + "/mods", false);
-            //Tools.copyAssetFile(this, "artifacts/mcxr-play-0.2.0+null.jar", DIR_GAME_NEW + "/mods", false);
-            Tools.copyAssetFile(this, "artifacts/titleworlds-0.0.2.jar", DIR_GAME_NEW + "/mods", false);
-            //Tools.copyAssetFile(this, "artifacts/lazydfu-0.1.3-SNAPSHOT.jar", DIR_GAME_NEW + "/mods", false);
-            //Tools.copyAssetFile(this, "artifacts/fabric-api-0.48.0+1.18.2.jar", DIR_GAME_NEW + "/mods", false);
 
             // Install Resource Pack
             Tools.copyAssetFile(this, "assets-v0.zip", DIR_GAME_NEW + "/resourcepacks", false);

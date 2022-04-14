@@ -21,7 +21,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Curse {
+public class Curseforge {
 
     private static final String BASE_URL = "https://addons-ecs.forgesvc.net/api/v2/addon/";
     private static Retrofit retrofit;

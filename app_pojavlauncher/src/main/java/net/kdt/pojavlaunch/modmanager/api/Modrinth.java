@@ -1,9 +1,11 @@
 package net.kdt.pojavlaunch.modmanager.api;
 
+import android.os.Build;
 import android.util.Log;
 import com.google.gson.annotations.SerializedName;
 import net.kdt.pojavlaunch.fragments.ModsFragment;
 import net.kdt.pojavlaunch.modmanager.ModData;
+import net.kdt.pojavlaunch.modmanager.ModManager;
 import net.kdt.pojavlaunch.utils.UiUitls;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -124,7 +126,15 @@ public class Modrinth {
             @Override
             public void onResponse(Call<SearchResult> call, Response<SearchResult> response) {
                 SearchResult result = response.body();
-                if (result != null) adapter.addMods((ArrayList<ModData>) result.hits);
+                if (result == null || Build.VERSION.SDK_INT <= Build.VERSION_CODES.N) return;
+
+                result.hits.removeIf(modData -> {
+                    for (ModData coreMod : ModManager.listCoreMods(version)) {
+                        if (coreMod.slug.equals(modData.slug)) return true;
+                    }
+                    return false;
+                });
+                adapter.addMods((ArrayList<ModData>) result.hits);
             }
 
             @Override

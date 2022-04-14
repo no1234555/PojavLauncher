@@ -14,7 +14,7 @@ import com.squareup.picasso.Picasso;
 import net.kdt.pojavlaunch.R;
 import net.kdt.pojavlaunch.modmanager.ModManager;
 import net.kdt.pojavlaunch.modmanager.State;
-import net.kdt.pojavlaunch.modmanager.api.Curse;
+import net.kdt.pojavlaunch.modmanager.api.Curseforge;
 import net.kdt.pojavlaunch.modmanager.ModData;
 import net.kdt.pojavlaunch.modmanager.api.Modrinth;
 import us.feras.mdv.MarkdownView;
@@ -86,7 +86,7 @@ public class ModsFragment extends Fragment {
         State.Instance selectedInstance = ModManager.state.getInstance("fabric-loader-0.13.3-1.18.2");
 
         if (filter.equals("Modrinth")) Modrinth.addProjectsToRecycler(modAdapter, selectedInstance.getGameVersion(), offset, query);
-        else if (filter.equals("CurseForge")) Curse.addProjectsToRecycler(modAdapter, selectedInstance.getGameVersion(), offset, query);
+        else if (filter.equals("Curseforge")) Curseforge.addProjectsToRecycler(modAdapter, selectedInstance.getGameVersion(), offset, query);
         else if (filter.equals("Installed")) modAdapter.addMods(ModManager.listInstalledMods(selectedInstance.getName()));
         else if (filter.equals("Core")) modAdapter.addMods(ModManager.listCoreMods(selectedInstance.getGameVersion()));
     }
@@ -154,7 +154,8 @@ public class ModsFragment extends Fragment {
                 MarkdownView bodyMain = fView.findViewById(R.id.mod_description);
                 iconMain.setImageDrawable(icon.getDrawable());
                 titleMain.setText(modData.title);
-                Modrinth.loadProjectPage(bodyMain, modData.slug);
+                if (filter.equals("Modrinth")) Modrinth.loadProjectPage(bodyMain, modData.slug);
+                if (filter.equals("Curseforge")) Curseforge.loadProjectPage(bodyMain, modData.slug);
             }
         }
     }
