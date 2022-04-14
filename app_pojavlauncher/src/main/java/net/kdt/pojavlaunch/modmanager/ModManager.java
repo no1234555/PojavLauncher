@@ -31,9 +31,6 @@ public class ModManager {
             @Override
             public void run() {
                 try {
-                    File path = new File(workDir);
-                    if (!path.exists()) path.mkdir();
-
                     File modsJson = new File(workDir + "/mods.json");
                     String flVersion = Fabric.getLatestLoaderVersion(); //Init outside to cache version (see Fabric.java)
                     if (!modsJson.exists()) {

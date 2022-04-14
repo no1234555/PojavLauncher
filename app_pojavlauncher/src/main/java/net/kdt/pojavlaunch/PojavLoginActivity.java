@@ -47,6 +47,7 @@ import net.kdt.pojavlaunch.authenticator.microsoft.ui.MicrosoftLoginGUIActivity;
 import net.kdt.pojavlaunch.authenticator.mojang.InvalidateTokenTask;
 import net.kdt.pojavlaunch.authenticator.mojang.RefreshListener;
 import net.kdt.pojavlaunch.customcontrols.CustomControls;
+import net.kdt.pojavlaunch.modmanager.ModManager;
 import net.kdt.pojavlaunch.multirt.MultiRTConfigDialog;
 import net.kdt.pojavlaunch.multirt.MultiRTUtils;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
@@ -307,6 +308,7 @@ public class PojavLoginActivity extends BaseActivity {
         PojavMigrator.migrateAccountData(this);
 
         mkdirs(Tools.DIR_GAME_HOME);
+        mkdirs(ModManager.getWorkDir());
         mkdirs(Tools.DIR_GAME_HOME + "/lwjgl3");
         mkdirs(Tools.DIR_GAME_HOME + "/config");
         if (!PojavMigrator.migrateGameDir()) {
@@ -374,6 +376,7 @@ public class PojavLoginActivity extends BaseActivity {
             Tools.copyAssetFile(this, "titleworlds/TitleWorlds/level.dat_old", DIR_GAME_NEW + "/titleworlds/TitleWorlds", false);
             Tools.copyAssetFile(this, "titleworlds/TitleWorlds/session.lock", DIR_GAME_NEW + "/titleworlds/TitleWorlds", false);
 
+            //Tools.copyAssetFile(this, "ModDescription.css", ModManager.getWorkDir(), false);
 
             AssetManager am = this.getAssets();
 

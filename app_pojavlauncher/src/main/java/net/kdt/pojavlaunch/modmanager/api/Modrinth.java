@@ -144,6 +144,7 @@ public class Modrinth {
                 }
 
                 adapter.addMods((ArrayList<ModData>) result.hits);
+                adapter.loadProjectPage(result.hits.get(0), null);
             }
 
             @Override
@@ -154,6 +155,7 @@ public class Modrinth {
     }
 
     public static void loadProjectPage(MarkdownView view, String slug) {
+        view.loadMarkdown("");
         Thread thread = new Thread() {
             @Override
             public void run() {

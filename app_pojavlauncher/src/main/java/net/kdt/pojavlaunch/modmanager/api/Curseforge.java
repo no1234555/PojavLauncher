@@ -163,6 +163,7 @@ public class Curseforge {
                     mods.add(modData);
                 }
                 adapter.addMods(mods);
+                adapter.loadProjectPage(mods.get(0), null);
             }
 
             @Override
@@ -173,6 +174,7 @@ public class Curseforge {
     }
 
     public static void loadProjectPage(MarkdownView view, String id) {
+        view.loadMarkdown("");
         Thread thread = new Thread() {
             @Override
             public void run() {

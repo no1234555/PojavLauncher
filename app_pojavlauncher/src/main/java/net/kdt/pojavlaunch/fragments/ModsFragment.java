@@ -1,7 +1,8 @@
 package net.kdt.pojavlaunch.fragments;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,7 +62,7 @@ public class ModsFragment extends Fragment {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                if (!recyclerView.canScrollVertically(1)) {
+                if ((filter.equals("Modrinth") || filter.equals("CurseForge")) && !recyclerView.canScrollVertically(1)) {
                     modAdapter.setFilter(filter);
                     loadDataIntoList(modAdapter, "", modAdapter.getOffset(), false);
                 }
@@ -98,19 +99,20 @@ public class ModsFragment extends Fragment {
         }
     }
 
+
+
     public static class ModViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private final ModsFragment fragment;
+        private final ModAdapter adapter;
         private final ImageView icon;
         private final TextView title;
         private final TextView compat;
         private final Switch enableSwitch;
         private ModData modData;
-        private String filter;
 
-        public ModViewHolder(View view, ModsFragment fragment) {
+        public ModViewHolder(View view, String filter, ModAdapter adapter) {
             super(view);
-            this.fragment = fragment;
+            this.adapter = adapter;
             view.setOnClickListener(this);
             icon = view.findViewById(R.id.mod_icon);
             title = view.findViewById(R.id.mod_title);
@@ -148,23 +150,19 @@ public class ModsFragment extends Fragment {
             enableSwitch.setChecked(modData.isActive);
         }
 
-        public void setFilter(String filter) {
-            this.filter = filter;
-        }
-
         @Override
         public void onClick(View view) {
-            View fView = fragment.getView();
-            if (fView != null) {
-                ImageView iconMain = fView.findViewById(R.id.mod_icon_main);
-                TextView titleMain = fView.findViewById(R.id.mod_title_main);
-                MarkdownView bodyMain = fView.findViewById(R.id.mod_description);
-                iconMain.setImageDrawable(icon.getDrawable());
-                titleMain.setText(modData.title);
-                if (filter.equals("Modrinth")) Modrinth.loadProjectPage(bodyMain, modData.slug);
-                if (filter.equals("Curseforge")) Curseforge.loadProjectPage(bodyMain, modData.slug);
-            }
+           adapter.loadProjectPage(modData, icon);
         }
+
+        /*@Override
+        public boolean onLongClick(View view) {
+            ModData installedMod = ModManager.getMod("fabric-loader-" + Fabric.getLatestLoaderVersion() + "-1.18.2", modData.slug);
+            if (installedMod == null) return false;
+
+            ModManager.removeMod("fabric-loader-" + Fabric.getLatestLoaderVersion() + "-1.18.2", modData.slug);
+            return false;
+        }*/
     }
 
     public static class ModAdapter extends RecyclerView.Adapter<ModViewHolder> {
@@ -198,6 +196,22 @@ public class ModsFragment extends Fragment {
             this.filter = filter;
         }
 
+        public void loadProjectPage(ModData modData, ImageView icon) {
+            View view = this.fragment.getView();
+            if (view == null) return;
+
+            ImageView iconMain = view.findViewById(R.id.mod_icon_main);
+            TextView titleMain = view.findViewById(R.id.mod_title_main);
+            MarkdownView bodyMain = view.findViewById(R.id.mod_description);
+            titleMain.setText(modData.title);
+
+            if (filter.equals("Modrinth")) Modrinth.loadProjectPage(bodyMain, modData.slug);
+            if (filter.equals("CurseForge")) Curseforge.loadProjectPage(bodyMain, modData.slug);
+
+            if (icon != null) iconMain.setImageDrawable(icon.getDrawable());
+            else Picasso.get().load(modData.iconUrl).into(iconMain);
+        }
+
         @Override
         public int getItemViewType(final int position) {
             return R.layout.item_mod;
@@ -207,14 +221,13 @@ public class ModsFragment extends Fragment {
         @Override
         public ModViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext()).inflate(viewType, parent, false);
-            return new ModViewHolder(view, fragment);
+            return new ModViewHolder(view, filter, this);
         }
 
         @Override
         public void onBindViewHolder(@NonNull ModViewHolder holder, int position) {
             if (mods.size() > position) {
                 holder.setData(mods.get(position));
-                holder.setFilter(filter);
                 //setAnimation(holder.itemView, position);
             }
         }
