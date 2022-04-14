@@ -68,8 +68,6 @@ public class ModManager {
     }
 
     public static ArrayList<Pair<String, String>> getCoreMods(String version) {
-
-        Log.d("MODMAN", version);
         ArrayList<Pair<String, String>> mods = new ArrayList<>();
         for (JsonElement element : modmanagerJson.get("core_mods").getAsJsonObject().getAsJsonArray(version)) {
             JsonObject mod = element.getAsJsonObject();
@@ -157,7 +155,7 @@ public class ModManager {
                 try {
                     ModData modData = null;
                     if (platform.equals("modrinth")) modData = Modrinth.getModFileData(slug, gameVersion);
-                    else if (platform.equals("curse")) modData = Curse.getModFileData(slug, gameVersion);
+                    else if (platform.equals("curseforge")) modData = Curse.getModFileData(slug, gameVersion);
                     else if (platform.equals("github")) modData = Github.getModFileData(modmanagerJson.getAsJsonArray("repos"), slug, gameVersion);
                     if (modData == null) return;
 

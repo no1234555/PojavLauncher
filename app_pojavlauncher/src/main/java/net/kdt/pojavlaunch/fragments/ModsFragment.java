@@ -63,6 +63,7 @@ public class ModsFragment extends Fragment {
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 if (!recyclerView.canScrollVertically(1)) {
+                    modAdapter.setFilter(filter);
                     loadDataIntoList(modAdapter, "", modAdapter.getOffset(), false);
                 }
             }
@@ -99,6 +100,7 @@ public class ModsFragment extends Fragment {
         private final TextView compat;
         private final Switch enableSwitch;
         private ModData modData;
+        private String filter;
 
         public ModViewHolder(View view, ModsFragment fragment) {
             super(view);
@@ -115,9 +117,10 @@ public class ModsFragment extends Fragment {
                     return;
                 }
 
-                ModData mod = ModManager.getMod("fabric-loader-0.13.3-1.18.2", modData.slug);
-                if (mod != null) ModManager.setModActive("fabric-loader-0.13.3-1.18.2", this.modData.slug, value);
-                else ModManager.addMod("fabric-loader-0.13.3-1.18.2", "modrinth", this.modData.slug, "1.18.2", false);
+                State.Instance selectedInstance = ModManager.state.getInstance("fabric-loader-0.13.3-1.18.2");
+                ModData mod = ModManager.getMod(selectedInstance.getName(), modData.slug);
+                if (mod != null) ModManager.setModActive(selectedInstance.getName(), this.modData.slug, value);
+                ModManager.addMod(selectedInstance.getName(), filter.toLowerCase(), this.modData.slug, selectedInstance.getGameVersion(), false);
             });
         }
 
@@ -139,6 +142,10 @@ public class ModsFragment extends Fragment {
             enableSwitch.setChecked(modData.isActive);
         }
 
+        public void setFilter(String filter) {
+            this.filter = filter;
+        }
+
         @Override
         public void onClick(View view) {
             View fView = fragment.getView();
@@ -157,6 +164,7 @@ public class ModsFragment extends Fragment {
 
         private final ModsFragment fragment;
         private final ArrayList<ModData> mods = new ArrayList<>();
+        private String filter;
         //private int lastPosition = -1;
 
         public ModAdapter(ModsFragment fragment) {
@@ -178,6 +186,10 @@ public class ModsFragment extends Fragment {
             return mods.size();
         }
 
+        public void setFilter(String filter) {
+            this.filter = filter;
+        }
+
         @Override
         public int getItemViewType(final int position) {
             return R.layout.item_mod;
@@ -194,6 +206,7 @@ public class ModsFragment extends Fragment {
         public void onBindViewHolder(@NonNull ModViewHolder holder, int position) {
             if (mods.size() > position) {
                 holder.setData(mods.get(position));
+                holder.setFilter(filter);
                 //setAnimation(holder.itemView, position);
             }
         }
