@@ -1,5 +1,6 @@
 package net.kdt.pojavlaunch.fragments;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,7 @@ import net.kdt.pojavlaunch.modmanager.api.Modrinth;
 import us.feras.mdv.MarkdownView;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class ModsFragment extends Fragment {
 
@@ -77,11 +79,11 @@ public class ModsFragment extends Fragment {
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {}
         });
-
         return view;
     }
 
     private void loadDataIntoList(ModAdapter modAdapter, String query, int offset, boolean refresh) {
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.N) return;
         if (refresh) modAdapter.reset();
         State.Instance selectedInstance = ModManager.state.getInstance("fabric-loader-" + Fabric.getLatestLoaderVersion() + "-1.18.2");
 
@@ -89,11 +91,15 @@ public class ModsFragment extends Fragment {
         else if (filter.equals("CurseForge")) Curseforge.addProjectsToRecycler(modAdapter, selectedInstance.getGameVersion(), offset, query);
         else if (filter.equals("Installed")) {
             ArrayList<ModData> mods = ModManager.listInstalledMods(selectedInstance.getName());
-            if (mods.size() != 0) modAdapter.addMods(mods);
+            if (mods.size() == 0) return;
+            ArrayList<ModData> filtered = (ArrayList<ModData>) mods.stream().filter(mod -> mod.title.substring(0, query.length()).equalsIgnoreCase(query)).collect(Collectors.toList());
+            modAdapter.addMods(filtered);
         }
         else if (filter.equals("Core")) {
             ArrayList<ModData> mods = ModManager.listCoreMods(selectedInstance.getGameVersion());
-            if (mods.size() != 0) modAdapter.addMods(mods);
+            if (mods.size() == 0) return;
+            ArrayList<ModData> filtered = (ArrayList<ModData>) mods.stream().filter(mod -> mod.title.substring(0, query.length()).equalsIgnoreCase(query)).collect(Collectors.toList());
+            modAdapter.addMods(filtered);
         }
     }
 
