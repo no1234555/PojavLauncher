@@ -376,8 +376,6 @@ public class PojavLoginActivity extends BaseActivity {
             Tools.copyAssetFile(this, "titleworlds/TitleWorlds/level.dat_old", DIR_GAME_NEW + "/titleworlds/TitleWorlds", false);
             Tools.copyAssetFile(this, "titleworlds/TitleWorlds/session.lock", DIR_GAME_NEW + "/titleworlds/TitleWorlds", false);
 
-            //Tools.copyAssetFile(this, "ModDescription.css", ModManager.getWorkDir(), false);
-
             AssetManager am = this.getAssets();
 
             unpackComponent(am, "caciocavallo");

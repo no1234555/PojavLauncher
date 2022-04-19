@@ -141,8 +141,6 @@ public class Curseforge {
 
             @Override
             public void onResponse(Call<List<Project>> call, Response<List<Project>> response) {
-                Log.d("CURSE", response.raw().toString());
-
                 List<Project> projects = response.body();
                 if (projects == null) return;
 
@@ -181,6 +179,7 @@ public class Curseforge {
                 try {
                     DescriptionInf descriptionInf = getClient().create(DescriptionInf.class);
                     String description = descriptionInf.getDescription(id).execute().body();
+                    Log.d("CURSE", description);
                     if (description != null) UiUitls.runOnUI(() -> view.loadMarkdown(description, "file:///android_asset/ModDescription.css"));
                 } catch (IOException e) {
                     e.printStackTrace();

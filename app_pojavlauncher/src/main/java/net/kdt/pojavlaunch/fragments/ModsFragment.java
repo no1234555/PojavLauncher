@@ -1,7 +1,5 @@
 package net.kdt.pojavlaunch.fragments;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,10 +12,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
 import net.kdt.pojavlaunch.R;
+import net.kdt.pojavlaunch.modmanager.ModData;
 import net.kdt.pojavlaunch.modmanager.ModManager;
 import net.kdt.pojavlaunch.modmanager.State;
 import net.kdt.pojavlaunch.modmanager.api.Curseforge;
-import net.kdt.pojavlaunch.modmanager.ModData;
 import net.kdt.pojavlaunch.modmanager.api.Fabric;
 import net.kdt.pojavlaunch.modmanager.api.Modrinth;
 import us.feras.mdv.MarkdownView;
@@ -48,13 +46,13 @@ public class ModsFragment extends Fragment {
         modSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
-                return false;
+                loadDataIntoList(modAdapter, s, 0, true);
+                return true;
             }
 
             @Override
             public boolean onQueryTextChange(String s) {
-                loadDataIntoList(modAdapter, s, 0, true);
-                return true;
+                return false;
             }
         });
 
@@ -98,8 +96,6 @@ public class ModsFragment extends Fragment {
             if (mods.size() != 0) modAdapter.addMods(mods);
         }
     }
-
-
 
     public static class ModViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
