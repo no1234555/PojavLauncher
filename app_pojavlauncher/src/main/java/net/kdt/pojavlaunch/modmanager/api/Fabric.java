@@ -73,15 +73,14 @@ public class Fabric {
     //Won't do anything if version is already installed
     public static void downloadJson(String gameVersion, String loaderVersion) {
         String profileName = String.format("%s-%s-%s", "fabric-loader", loaderVersion, gameVersion);
-        if (new File(Tools.DIR_HOME_VERSION + "/" + profileName + "/" + profileName + ".json").exists()) return;
+        File path = new File(Tools.DIR_HOME_VERSION + "/" + profileName);
+        if (new File(path.getPath() + "/" + profileName + ".json").exists()) return;
 
         try {
             FabricLoaderJsonInf jsonInf = getClient().create(FabricLoaderJsonInf.class);
             JsonObject json = jsonInf.getJson(gameVersion, loaderVersion).execute().body();
             if (json != null) {
-                File path = new File(Tools.DIR_HOME_VERSION + "/" + profileName);
                 if (!path.exists()) path.mkdirs();
-
                 json.addProperty("type", "fabric");
                 Tools.write(path.getPath() + "/" + profileName + ".json", json.toString());
             }

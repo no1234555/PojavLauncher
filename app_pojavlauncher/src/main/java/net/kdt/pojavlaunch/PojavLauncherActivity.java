@@ -164,7 +164,7 @@ public class PojavLauncherActivity extends BaseLauncherActivity
             }
         });
 
-        ModManager.init();
+        ModManager.init(this);
 
         // Setup the minecraft version list
         List<String> versions = new ArrayList<>();

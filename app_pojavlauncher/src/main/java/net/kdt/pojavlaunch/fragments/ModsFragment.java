@@ -123,7 +123,7 @@ public class ModsFragment extends Fragment {
 
             enableSwitch.setOnCheckedChangeListener((button, value) -> {
                 if (filter.equals("Core") || ModManager.isDownloading(modData.slug)) {
-                    button.setChecked(true);
+                    button.cancelPendingInputEvents();
                     return;
                 }
 
@@ -136,7 +136,7 @@ public class ModsFragment extends Fragment {
 
         public void setData(ModData modData) {
             ModData installedMod = ModManager.getMod("fabric-loader-" + Fabric.getLatestLoaderVersion() + "-1.18.2", modData.slug);
-            if (installedMod != null) modData = installedMod; //Check if mod in already installed and overwrite fetched data
+            if (installedMod != null) modData = installedMod; //Check if mod is already installed and overwrite fetched data
 
             this.modData = modData;
             title.setText(modData.title);

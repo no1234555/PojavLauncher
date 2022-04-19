@@ -7,27 +7,33 @@ import net.kdt.pojavlaunch.fragments.ModsFragment;
 import net.kdt.pojavlaunch.modmanager.ModData;
 import net.kdt.pojavlaunch.modmanager.ModManager;
 import net.kdt.pojavlaunch.utils.UiUitls;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import us.feras.mdv.MarkdownView;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Curseforge {
 
-    private static final String BASE_URL = "https://addons-ecs.forgesvc.net/api/v2/addon/";
+        private static final String BASE_URL = "https://addons-ecs.forgesvc.net/api/v2/addon/";
     private static Retrofit retrofit;
 
-    public static Retrofit getClient(){
+    public static Retrofit getClient() {
         if (retrofit == null) {
             retrofit = new Retrofit.Builder()
                     .baseUrl(BASE_URL)
@@ -57,7 +63,7 @@ public class Curseforge {
 
     public interface DescriptionInf {
         @GET("{id}/description")
-        Call<String> getDescription(@Query("id") String id);
+        Call<String> getDescription(@Path("id") String id);
     }
 
     public static class Project {
@@ -177,10 +183,18 @@ public class Curseforge {
             @Override
             public void run() {
                 try {
-                    DescriptionInf descriptionInf = getClient().create(DescriptionInf.class);
-                    String description = descriptionInf.getDescription(id).execute().body();
-                    Log.d("CURSE", description);
-                    if (description != null) UiUitls.runOnUI(() -> view.loadMarkdown(description, "file:///android_asset/ModDescription.css"));
+                    //Temp jank fix
+                    URL u = new URL(BASE_URL + id + "/description");
+                    URLConnection conn = u.openConnection();
+                    BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                    StringBuilder buffer = new StringBuilder();
+                    String inputLine;
+                    while ((inputLine = in.readLine()) != null) buffer.append(inputLine);
+                    in.close();
+
+                    /*DescriptionInf descriptionInf = getScalarClient().create(DescriptionInf.class);
+                    String description = descriptionInf.getDescription(id).execute().body();*/
+                    UiUitls.runOnUI(() -> view.loadMarkdown(String.valueOf(buffer), "file:///android_asset/ModDescription.css"));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

@@ -4,9 +4,11 @@ import android.util.Pair;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.kdt.pojavlaunch.PojavApplication;
+import net.kdt.pojavlaunch.PojavLauncherActivity;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.modmanager.State.Instance;
 import net.kdt.pojavlaunch.modmanager.api.*;
+import net.kdt.pojavlaunch.tasks.RefreshVersionListTask;
 import net.kdt.pojavlaunch.utils.DownloadUtils;
 
 import java.io.File;
@@ -26,7 +28,7 @@ public class ModManager {
     private static final ArrayList<String> currentDownloadSlugs = new ArrayList<>();
     private static boolean saveStateCalled = false;
 
-    public static void init() {
+    public static void init(PojavLauncherActivity activity) {
         Thread thread = new Thread() {
             @Override
             public void run() {
@@ -36,6 +38,7 @@ public class ModManager {
                     if (!modsJson.exists()) {
                         String gameVersion = Tools.getCompatibleVersions("releases").get(0);
                         Fabric.downloadJson(gameVersion, flVersion);
+                        new RefreshVersionListTask(activity);
 
                         String profileName = String.format("%s-%s-%s", "fabric-loader", flVersion, gameVersion);
                         Instance instance = new Instance();
