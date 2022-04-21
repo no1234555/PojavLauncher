@@ -1,6 +1,8 @@
 package net.kdt.pojavlaunch;
 
 import android.animation.ValueAnimator;
+import android.app.FragmentContainer;
+import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -11,6 +13,7 @@ import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.*;
+import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.Guideline;
 import androidx.fragment.app.Fragment;
@@ -54,9 +57,24 @@ public class PojavLauncherActivity extends BaseLauncherActivity
 
 
 
+
+
         @Override
         public int getItemCount() {
             return 3;
+        }
+    }
+
+    public static class MenuScreenAdapter extends FrameLayout {
+
+        public MenuScreenAdapter(@NonNull Context context) {
+            super(context);
+        }
+
+        public void doThing(int position) {
+            if (position == 0) {
+                
+            }
         }
     }
 
@@ -100,6 +118,7 @@ public class PojavLauncherActivity extends BaseLauncherActivity
 
         // Setup the viewPager to slide across fragments
         viewPager.setAdapter(new ScreenSlidePagerAdapter(this));
+        viewPager.setUserInputEnabled(false);
         viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
