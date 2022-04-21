@@ -122,16 +122,16 @@ public class ModsFragment extends Fragment {
             compat = view.findViewById(R.id.mod_details);
             enableSwitch = view.findViewById(R.id.mod_switch);
 
-            enableSwitch.setOnCheckedChangeListener((button, value) -> {
+            enableSwitch.setOnClickListener(view1 -> {
                 if (filter.equals("Core") || ModManager.isDownloading(modData.slug)) {
-                    button.cancelPendingInputEvents();
+                    enableSwitch.setChecked(false);
                     return;
                 }
 
                 State.Instance selectedInstance = ModManager.state.getInstance("fabric-loader-" + Fabric.getLatestLoaderVersion() + "-1.18.2");
                 ModData mod = ModManager.getMod(selectedInstance.getName(), modData.slug);
-                if (mod != null) ModManager.setModActive(selectedInstance.getName(), this.modData.slug, value);
-                else ModManager.addMod(selectedInstance.getName(), filter.toLowerCase(), this.modData.slug, selectedInstance.getGameVersion(), false);
+                if (mod != null) ModManager.setModActive(selectedInstance.getName(), modData.slug, enableSwitch.isChecked());
+                else ModManager.addMod(selectedInstance.getName(), filter.toLowerCase(), modData.slug, selectedInstance.getGameVersion(), false);
             });
         }
 
