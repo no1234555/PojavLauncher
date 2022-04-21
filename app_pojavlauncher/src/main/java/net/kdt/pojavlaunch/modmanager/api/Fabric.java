@@ -2,7 +2,9 @@ package net.kdt.pojavlaunch.modmanager.api;
 
 import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;
+import net.kdt.pojavlaunch.PojavLauncherActivity;
 import net.kdt.pojavlaunch.Tools;
+import net.kdt.pojavlaunch.tasks.RefreshVersionListTask;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -71,7 +73,7 @@ public class Fabric {
     }
 
     //Won't do anything if version is already installed
-    public static void downloadJson(String gameVersion, String loaderVersion) {
+    public static void downloadJson(PojavLauncherActivity activity, String gameVersion, String loaderVersion) {
         String profileName = String.format("%s-%s-%s", "fabric-loader", loaderVersion, gameVersion);
         File path = new File(Tools.DIR_HOME_VERSION + "/" + profileName);
         if (new File(path.getPath() + "/" + profileName + ".json").exists()) return;
@@ -83,6 +85,7 @@ public class Fabric {
                 if (!path.exists()) path.mkdirs();
                 json.addProperty("type", "fabric");
                 Tools.write(path.getPath() + "/" + profileName + ".json", json.toString());
+                new RefreshVersionListTask(activity);
             }
         } catch (IOException e) {
             e.printStackTrace();

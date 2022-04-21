@@ -18,6 +18,7 @@ import net.kdt.pojavlaunch.modmanager.ModManager;
 import net.kdt.pojavlaunch.modmanager.State;
 import net.kdt.pojavlaunch.modmanager.api.Curseforge;
 import net.kdt.pojavlaunch.modmanager.api.Fabric;
+import net.kdt.pojavlaunch.modmanager.api.Github;
 import net.kdt.pojavlaunch.modmanager.api.Modrinth;
 import us.feras.mdv.MarkdownView;
 
@@ -208,7 +209,8 @@ public class ModsFragment extends Fragment {
             titleMain.setText(modData.title);
 
             if (filter.equals("Modrinth")) Modrinth.loadProjectPage(bodyMain, modData.slug);
-            if (filter.equals("CurseForge")) Curseforge.loadProjectPage(bodyMain, modData.slug);
+            else if (filter.equals("CurseForge")) Curseforge.loadProjectPage(bodyMain, modData.slug);
+            else if (modData.platform.equals("github")) Github.loadProjectPage(bodyMain, modData.repo);
 
             if (icon != null) iconMain.setImageDrawable(icon.getDrawable());
             else Picasso.get().load(modData.iconUrl).into(iconMain);

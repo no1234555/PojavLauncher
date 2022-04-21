@@ -69,6 +69,7 @@ public class Github {
                             ModData modData = new ModData();
 
                             modData.platform = "github";
+                            modData.repo = repo.getAsString();
                             modData.title = slug;
                             modData.slug = slug;
                             modData.fileData.id = release.id;

@@ -1,19 +1,14 @@
 package net.kdt.pojavlaunch;
 
 import android.animation.ValueAnimator;
-import android.app.FragmentContainer;
-import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.os.Build;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
+import android.os.Process;
+import android.os.*;
 import android.util.Log;
 import android.view.View;
 import android.widget.*;
-import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.Guideline;
 import androidx.fragment.app.Fragment;
@@ -21,7 +16,8 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 import net.kdt.pojavlaunch.extra.ExtraCore;
 import net.kdt.pojavlaunch.extra.ExtraListener;
-import net.kdt.pojavlaunch.fragments.*;
+import net.kdt.pojavlaunch.fragments.LauncherFragment;
+import net.kdt.pojavlaunch.fragments.ModsFragment;
 import net.kdt.pojavlaunch.modmanager.ModManager;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.prefs.screens.LauncherPreferenceFragment;
@@ -54,30 +50,11 @@ public class PojavLauncherActivity extends BaseLauncherActivity
             return null;
         }
 
-
-
-
-
-
         @Override
         public int getItemCount() {
             return 3;
         }
     }
-
-    public static class MenuScreenAdapter extends FrameLayout {
-
-        public MenuScreenAdapter(@NonNull Context context) {
-            super(context);
-        }
-
-        public void doThing(int position) {
-            if (position == 0) {
-                
-            }
-        }
-    }
-
 
     private TextView tvConnectStatus;
     private Spinner accountSelector;
@@ -113,12 +90,11 @@ public class PojavLauncherActivity extends BaseLauncherActivity
         Tabs[2] = findViewById(R.id.btnTab3);
 
         if (BuildConfig.DEBUG) {
-            Toast.makeText(this, "Launcher process id: " + android.os.Process.myPid(), Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Launcher process id: " + Process.myPid(), Toast.LENGTH_LONG).show();
         }
 
         // Setup the viewPager to slide across fragments
         viewPager.setAdapter(new ScreenSlidePagerAdapter(this));
-        viewPager.setUserInputEnabled(false);
         viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {

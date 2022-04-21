@@ -144,7 +144,7 @@ public class Modrinth {
                 }
 
                 adapter.addMods((ArrayList<ModData>) result.hits);
-                adapter.loadProjectPage(result.hits.get(0), null);
+                if (offset == 0) adapter.loadProjectPage(result.hits.get(0), null);
             }
 
             @Override

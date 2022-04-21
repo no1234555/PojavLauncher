@@ -37,8 +37,7 @@ public class ModManager {
                     String flVersion = Fabric.getLatestLoaderVersion(); //Init outside to cache version (see Fabric.java)
                     if (!modsJson.exists()) {
                         String gameVersion = Tools.getCompatibleVersions("releases").get(0);
-                        Fabric.downloadJson(gameVersion, flVersion);
-                        new RefreshVersionListTask(activity);
+                        Fabric.downloadJson(activity, gameVersion, flVersion);
 
                         String profileName = String.format("%s-%s-%s", "fabric-loader", flVersion, gameVersion);
                         Instance instance = new Instance();
@@ -112,12 +111,12 @@ public class ModManager {
         return currentDownloadSlugs.contains(slug);
     }
 
-    public static void createInstance(String name, String gameVersion) {
+    public static void createInstance(PojavLauncherActivity activity, String name, String gameVersion) {
         Thread thread = new Thread() {
             @Override
             public void run() {
                 String flVersion = Fabric.getLatestLoaderVersion();
-                Fabric.downloadJson(gameVersion, flVersion);
+                Fabric.downloadJson(activity, gameVersion, flVersion);
 
                 String profileName = String.format("%s-%s-%s", "fabric-loader", flVersion, gameVersion);
                 Instance instance = new Instance();

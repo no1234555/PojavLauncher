@@ -11,6 +11,7 @@ public class ModData {
     public String iconUrl;
 
     public String platform;
+    public String repo;
     public boolean isActive;
     public FileData fileData;
 
