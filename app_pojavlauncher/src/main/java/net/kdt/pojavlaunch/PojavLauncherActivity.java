@@ -1,6 +1,7 @@
 package net.kdt.pojavlaunch;
 
 import android.animation.ValueAnimator;
+import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -9,11 +10,13 @@ import android.os.*;
 import android.util.Log;
 import android.view.View;
 import android.widget.*;
+import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.Guideline;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
+import com.google.android.material.tabs.TabLayout;
 import net.kdt.pojavlaunch.extra.ExtraCore;
 import net.kdt.pojavlaunch.extra.ExtraListener;
 import net.kdt.pojavlaunch.fragments.LauncherFragment;
@@ -53,6 +56,25 @@ public class PojavLauncherActivity extends BaseLauncherActivity
         @Override
         public int getItemCount() {
             return 3;
+        }
+    }
+
+    public static class LockableTabLayout extends TabLayout {
+
+        private boolean canScroll;
+
+        public LockableTabLayout(@NonNull Context context) {
+            super(context);
+        }
+
+        public void setCanScroll(boolean canScroll) {
+            this.canScroll = canScroll;
+        }
+
+        @Override
+        public boolean canScrollHorizontally(int direction) {
+            if (canScroll) return super.canScrollHorizontally(direction);
+            return false;
         }
     }
 

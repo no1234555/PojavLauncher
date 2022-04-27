@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -173,7 +175,6 @@ public class ModsFragment extends Fragment {
         private final ModsFragment fragment;
         private final ArrayList<ModData> mods = new ArrayList<>();
         private String filter;
-        //private int lastPosition = -1;
 
         public ModAdapter(ModsFragment fragment) {
             this.fragment = fragment;
@@ -232,17 +233,8 @@ public class ModsFragment extends Fragment {
         public void onBindViewHolder(@NonNull ModViewHolder holder, int position) {
             if (mods.size() > position) {
                 holder.setData(mods.get(position));
-                //setAnimation(holder.itemView, position);
             }
         }
-
-        /*private void setAnimation(View viewToAnimate, int position) {
-            if (position > lastPosition) {
-                Animation animation = AnimationUtils.loadAnimation(fragment.getContext(), android.R.anim.slide_in_left);
-                viewToAnimate.startAnimation(animation);
-                lastPosition = position;
-            }
-        }*/
 
         @Override
         public int getItemCount() {
