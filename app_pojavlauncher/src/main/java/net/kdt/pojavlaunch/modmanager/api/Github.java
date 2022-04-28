@@ -61,7 +61,7 @@ public class Github {
         repoList = r.toArray(new String[]{});
     }
 
-    public static ModData getModFileData(String slug, String gameVersion) throws IOException {
+    public static ModData getModData(String slug, String gameVersion) throws IOException {
         for (String repo : repoList) {
             String[] repoData = repo.split("/");
 
@@ -95,6 +95,7 @@ public class Github {
     }
 
     public static void loadProjectPage(MarkdownView view, String repo) {
+        view.loadMarkdown("", "file:///android_asset/ModDescription.css");
         UiUitls.runOnUI(() -> view.loadMarkdownFile("https://raw.githubusercontent.com/" + repo + "/master/README.md", "file:///android_asset/ModDescription.css"));
     }
 }

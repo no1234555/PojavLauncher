@@ -85,7 +85,7 @@ public class Modrinth {
         public List<ModData> hits;
     }
 
-    public static ModData getModFileData(String slug, String gameVersion) throws IOException {
+    public static ModData getModData(String slug, String gameVersion) throws IOException {
         ProjectInf projectInf = getClient().create(ProjectInf.class);
         Project project = projectInf.getProject(slug).execute().body();
 
@@ -137,9 +137,14 @@ public class Modrinth {
                     return false;
                 });
 
-                for (ModData installedMod : ModManager.listInstalledMods("Default")) {
-                    for (ModData mod : result.hits) {
-                        if (installedMod.isActive && installedMod.slug.equals(mod.slug)) mod.isActive = true;
+                ArrayList<ModData> installedMods = ModManager.listInstalledMods("Default");
+                for (ModData mod : result.hits) {
+                    mod.platform = "modrinth";
+                    for (ModData installedMod : installedMods) {
+                        if (installedMod.isActive && installedMod.slug.equals(mod.slug)) {
+                            mod.isActive = true;
+                            break;
+                        }
                     }
                 }
 
@@ -155,7 +160,7 @@ public class Modrinth {
     }
 
     public static void loadProjectPage(MarkdownView view, String slug) {
-        view.loadMarkdown("");
+        view.loadMarkdown("", "file:///android_asset/ModDescription.css");
         Thread thread = new Thread() {
             @Override
             public void run() {

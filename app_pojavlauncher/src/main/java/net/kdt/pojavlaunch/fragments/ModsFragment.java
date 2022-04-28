@@ -5,8 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,7 +17,6 @@ import net.kdt.pojavlaunch.modmanager.ModData;
 import net.kdt.pojavlaunch.modmanager.ModManager;
 import net.kdt.pojavlaunch.modmanager.State;
 import net.kdt.pojavlaunch.modmanager.api.Curseforge;
-import net.kdt.pojavlaunch.modmanager.api.Fabric;
 import net.kdt.pojavlaunch.modmanager.api.Github;
 import net.kdt.pojavlaunch.modmanager.api.Modrinth;
 import us.feras.mdv.MarkdownView;
@@ -191,7 +188,6 @@ public class ModsFragment extends Fragment {
             this.notifyDataSetChanged();
         }
 
-        //Needs testing - might need + or - 1
         public int getOffset() {
             return mods.size();
         }
@@ -209,8 +205,8 @@ public class ModsFragment extends Fragment {
             MarkdownView bodyMain = view.findViewById(R.id.mod_description);
             titleMain.setText(modData.title);
 
-            if (filter.equals("Modrinth")) Modrinth.loadProjectPage(bodyMain, modData.slug);
-            else if (filter.equals("CurseForge")) Curseforge.loadProjectPage(bodyMain, modData.slug);
+            if (modData.platform.equals("modrinth")) Modrinth.loadProjectPage(bodyMain, modData.slug);
+            else if (modData.platform.equals("curseforge")) Curseforge.loadProjectPage(bodyMain, modData.slug);
             else if (modData.platform.equals("github")) Github.loadProjectPage(bodyMain, modData.repo);
 
             if (icon != null) iconMain.setImageDrawable(icon.getDrawable());

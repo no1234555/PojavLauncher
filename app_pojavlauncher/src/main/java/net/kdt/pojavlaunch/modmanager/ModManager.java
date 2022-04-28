@@ -7,7 +7,10 @@ import net.kdt.pojavlaunch.PojavApplication;
 import net.kdt.pojavlaunch.PojavLauncherActivity;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.modmanager.State.Instance;
-import net.kdt.pojavlaunch.modmanager.api.*;
+import net.kdt.pojavlaunch.modmanager.api.Curseforge;
+import net.kdt.pojavlaunch.modmanager.api.Fabric;
+import net.kdt.pojavlaunch.modmanager.api.Github;
+import net.kdt.pojavlaunch.modmanager.api.Modrinth;
 import net.kdt.pojavlaunch.utils.DownloadUtils;
 
 import java.io.File;
@@ -17,7 +20,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.List;
 
 public class ModManager {
 
@@ -144,9 +146,9 @@ public class ModManager {
 
                 try {
                     ModData modData = null;
-                    if (platform.equals("modrinth")) modData = Modrinth.getModFileData(slug, gameVersion);
-                    else if (platform.equals("curseforge")) modData = Curseforge.getModFileData(slug, gameVersion);
-                    else if (platform.equals("github")) modData = Github.getModFileData(slug, gameVersion);
+                    if (platform.equals("modrinth")) modData = Modrinth.getModData(slug, gameVersion);
+                    else if (platform.equals("curseforge")) modData = Curseforge.getModData(slug, gameVersion);
+                    else if (platform.equals("github")) modData = Github.getModData(slug, gameVersion);
                     if (modData == null) return;
                     modData.isActive = true;
 
@@ -211,9 +213,9 @@ public class ModManager {
             Instance instance = state.getInstance(instanceName);
             for (ModData mod : instance.getMods()) {
                 ModData modData = null;
-                if (mod.platform.equals("modrinth")) modData = Modrinth.getModFileData(mod.slug, instance.getGameVersion());
-                else if (mod.platform.equals("curseforge")) modData = Curseforge.getModFileData(mod.slug, instance.getGameVersion());
-                else if (mod.platform.equals("github")) modData = Github.getModFileData(mod.slug, instance.getGameVersion());
+                if (mod.platform.equals("modrinth")) modData = Modrinth.getModData(mod.slug, instance.getGameVersion());
+                else if (mod.platform.equals("curseforge")) modData = Curseforge.getModData(mod.slug, instance.getGameVersion());
+                else if (mod.platform.equals("github")) modData = Github.getModData(mod.slug, instance.getGameVersion());
                 if (modData != null && !mod.fileData.id.equals(modData.fileData.id)) mods.add(mod);
             }
         } catch (IOException e) {

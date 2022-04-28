@@ -93,7 +93,7 @@ public class Curseforge {
         public List<Project> data;
     }
 
-    public static ModData getModFileData(String id, String gameVersion) throws IOException {
+    public static ModData getModData(String id, String gameVersion) throws IOException {
         ProjectInf projectInf = getClient().create(ProjectInf.class);
         ProjectResult projectResult = projectInf.getProject(id).execute().body();
         if (projectResult == null) return null;
@@ -130,6 +130,7 @@ public class Curseforge {
                 ArrayList<ModData> mods = new ArrayList<>();
                 for (Project project : searchResult.data) {
                     ModData modData = new ModData();
+                    modData.platform = "curseforge";
                     modData.title = project.name;
                     modData.slug = String.valueOf(project.id);
                     if (project.logo != null) modData.iconUrl = project.logo.thumbnailUrl;
@@ -156,7 +157,7 @@ public class Curseforge {
     }
 
     public static void loadProjectPage(MarkdownView view, String id) {
-        view.loadMarkdown("");
+        view.loadMarkdown("", "file:///android_asset/ModDescription.css");
         DescriptionInf descriptionInf = getClient().create(DescriptionInf.class);
         descriptionInf.getDescription(id).enqueue(new Callback<Description>() {
             @Override

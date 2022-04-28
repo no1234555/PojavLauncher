@@ -63,14 +63,13 @@
                 android:layout_marginTop="12dp"
                 android:layout_marginStart="12dp"
                 app:layout_constraintStart_toStartOf="@+id/mod_info_panel"
-                app:layout_constraintTop_toTopOf="@+id/mod_info_panel"
-                app:srcCompat="@drawable/fabric_logo"/>
+                app:layout_constraintTop_toTopOf="@+id/mod_info_panel"/>
         <TextView
                 android:id="@+id/mod_title_main"
-                android:text="Title"
+                android:text=""
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="30sp"
+                android:textSize="25sp"
                 app:layout_constraintTop_toTopOf="@+id/mod_icon_main"
                 app:layout_constraintStart_toEndOf="@+id/mod_icon_main"
                 app:layout_constraintEnd_toEndOf="parent"

@@ -122,17 +122,6 @@ jobs:
         run: |
           rm -rf app_pojavlauncher/main/src/assets/artifacts/*
 
-      - name: Collect TitleWorlds
-        uses: dawidd6/action-download-artifact@v2
-        with:
-          github_token: ${{secrets.GITHUB_TOKEN}}
-          workflow: build.yml
-          path: app_pojavlauncher/src/main/assets/artifacts
-          workflow_conclusion: success
-          repo: QuestCraftPlusPlus/TitleWorlds
-          branch: master
-          name: title-worlds
-
       - name: Build APK with Gradle
         run: |
           chmod +x scripts/languagelist_updater.sh
@@ -160,13 +149,3 @@ jobs:
         with:
           name: app-debug
           path: out/app-debug.apk
-
-      - name: Upload onto the Google Play testing track
-        if: github.ref == 'refs/heads/v3_openjdk'
-        uses: r0adkll/upload-google-play@v1.0.15
-        with:
-          serviceAccountJsonPlainText: ${{ secrets.GPLAY_SERVICE_JSON }}
-          packageName: net.kdt.pojavlaunch
-          releaseFiles: out/app-gplay.aab
-          track: internal
-          inAppUpdatePriority: 5
