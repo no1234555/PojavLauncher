@@ -146,7 +146,7 @@ public class Curseforge {
                     mods.add(modData);
                 }
                 adapter.addMods(mods);
-                if (offset == 0) adapter.loadProjectPage(mods.get(0), null);
+                if (offset == 0 && mods.size() > 0) adapter.loadProjectPage(mods.get(0), null);
             }
 
             @Override
