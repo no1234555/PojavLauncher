@@ -65,7 +65,7 @@ public class ModsFragment extends Fragment {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                if ((filter.equals("Modrinth") || filter.equals("CurseForge")) && !recyclerView.canScrollVertically(1)) {
+                if ((filter.equals("Modrinth") || filter.equals("CurseForge")) && !recyclerView.canScrollVertically(1) && modAdapter.mods.size() > 0) {
                     modAdapter.setFilter(filter);
                     loadDataIntoList(modAdapter, "", modAdapter.getOffset(), false);
                 }

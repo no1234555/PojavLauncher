@@ -132,7 +132,8 @@ public class Curseforge {
                     ModData modData = new ModData();
                     modData.title = project.name;
                     modData.slug = String.valueOf(project.id);
-                    modData.iconUrl = project.logo.thumbnailUrl;
+                    if (project.logo != null) modData.iconUrl = project.logo.thumbnailUrl;
+                    else modData.iconUrl = "";
 
                     for (ModData installedMod : ModManager.listInstalledMods("Default")) {
                         if (installedMod.isActive && String.valueOf(project.id).equals(installedMod.slug)) {

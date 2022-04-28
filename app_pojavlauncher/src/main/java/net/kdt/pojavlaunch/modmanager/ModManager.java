@@ -17,6 +17,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ModManager {
 
@@ -203,23 +204,22 @@ public class ModManager {
         return null;
     }
 
-    //Will return modData if there is an update, otherwise null
-    public static ModData checkModForUpdate(String instanceName, String slug) {
+    //Returns a list of mods that need to be updated
+    public static ArrayList<ModData> checkModsForUpdate(String instanceName) {
+        ArrayList<ModData> mods = new ArrayList<>();
         try {
             Instance instance = state.getInstance(instanceName);
             for (ModData mod : instance.getMods()) {
-                if (mod.slug.equals(slug)) {
-                    ModData modData = null;
-                    if (mod.platform.equals("modrinth")) modData = Modrinth.getModFileData(slug, instance.getGameVersion());
-                    else if (mod.platform.equals("curseforge")) modData = Curseforge.getModFileData(slug, instance.getGameVersion());
-                    else if (mod.platform.equals("github")) modData = Github.getModFileData(slug, instance.getGameVersion());
-                    if (modData != null && !mod.fileData.id.equals(modData.fileData.id)) return modData;
-                }
+                ModData modData = null;
+                if (mod.platform.equals("modrinth")) modData = Modrinth.getModFileData(mod.slug, instance.getGameVersion());
+                else if (mod.platform.equals("curseforge")) modData = Curseforge.getModFileData(mod.slug, instance.getGameVersion());
+                else if (mod.platform.equals("github")) modData = Github.getModFileData(mod.slug, instance.getGameVersion());
+                if (modData != null && !mod.fileData.id.equals(modData.fileData.id)) mods.add(mod);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return null;
+        return mods;
     }
 
     public static void setModActive(String instanceName, String slug, boolean active) {
