@@ -13,12 +13,14 @@ import retrofit2.http.Path;
 import us.feras.mdv.MarkdownView;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Github {
 
     private static final String BASE_URL = "https://api.github.com/repos/";
     private static Retrofit retrofit;
+    private static String[] repoList;
 
     public static Retrofit getClient(){
         if (retrofit == null) {
@@ -51,9 +53,17 @@ public class Github {
         public String url;
     }
 
-    public static ModData getModFileData(JsonArray repoList, String slug, String gameVersion) throws IOException {
-        for (JsonElement repo : repoList) {
-            String[] repoData = repo.getAsString().split("/");
+    public static void setRepoList(JsonArray repos) {
+        ArrayList<String> r = new ArrayList<>();
+        for (JsonElement repo : repos) {
+            r.add(repo.getAsString());
+        }
+        repoList = r.toArray(new String[]{});
+    }
+
+    public static ModData getModFileData(String slug, String gameVersion) throws IOException {
+        for (String repo : repoList) {
+            String[] repoData = repo.split("/");
 
             GithubReleasesInf releasesInf = getClient().create(GithubReleasesInf.class);
             List<Release> releases = releasesInf.getReleases(repoData[0], repoData[1]).execute().body();
@@ -69,7 +79,7 @@ public class Github {
                             ModData modData = new ModData();
 
                             modData.platform = "github";
-                            modData.repo = repo.getAsString();
+                            modData.repo = repo;
                             modData.title = slug;
                             modData.slug = slug;
                             modData.fileData.id = release.id;

@@ -32,8 +32,15 @@ public class ModManager {
             @Override
             public void run() {
                 try {
+                    InputStream modManagerFile = PojavApplication.assetManager.open("jsons/modmanager.json");
+                    modManagerJson = Tools.GLOBAL_GSON.fromJson(Tools.read(modManagerFile), JsonObject.class);
+                    InputStream compatFile = PojavApplication.assetManager.open("jsons/mod-compat.json");
+                    modCompats = Tools.GLOBAL_GSON.fromJson(Tools.read(compatFile), JsonObject.class);
+
                     File modsJson = new File(workDir + "/mods.json");
                     String flVersion = Fabric.getLatestLoaderVersion(); //Init outside to cache version (see Fabric.java)
+                    Github.setRepoList(modManagerJson.getAsJsonArray("repos"));
+
                     if (!modsJson.exists()) {
                         String gameVersion = Tools.getCompatibleVersions("releases").get(0);
                         Fabric.downloadJson(activity, gameVersion, flVersion);
@@ -46,11 +53,6 @@ public class ModManager {
                         state.addInstance(instance);
                         Tools.write(modsJson.getPath(), Tools.GLOBAL_GSON.toJson(state)); //Cant use save state cause async issues
                     } else state = Tools.GLOBAL_GSON.fromJson(Tools.read(modsJson.getPath()), net.kdt.pojavlaunch.modmanager.State.class);
-
-                    InputStream modManagerFile = PojavApplication.assetManager.open("jsons/modmanager.json");
-                    modManagerJson = Tools.GLOBAL_GSON.fromJson(Tools.read(modManagerFile), JsonObject.class);
-                    InputStream compatFile = PojavApplication.assetManager.open("jsons/mod-compat.json");
-                    modCompats = Tools.GLOBAL_GSON.fromJson(Tools.read(compatFile), JsonObject.class);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -143,7 +145,7 @@ public class ModManager {
                     ModData modData = null;
                     if (platform.equals("modrinth")) modData = Modrinth.getModFileData(slug, gameVersion);
                     else if (platform.equals("curseforge")) modData = Curseforge.getModFileData(slug, gameVersion);
-                    else if (platform.equals("github")) modData = Github.getModFileData(modManagerJson.getAsJsonArray("repos"), slug, gameVersion);
+                    else if (platform.equals("github")) modData = Github.getModFileData(slug, gameVersion);
                     if (modData == null) return;
                     modData.isActive = true;
 
@@ -207,7 +209,10 @@ public class ModManager {
             Instance instance = state.getInstance(instanceName);
             for (ModData mod : instance.getMods()) {
                 if (mod.slug.equals(slug)) {
-                    ModData modData = Modrinth.getModFileData(slug, instance.getGameVersion());
+                    ModData modData = null;
+                    if (mod.platform.equals("modrinth")) modData = Modrinth.getModFileData(slug, instance.getGameVersion());
+                    else if (mod.platform.equals("curseforge")) modData = Curseforge.getModFileData(slug, instance.getGameVersion());
+                    else if (mod.platform.equals("github")) modData = Github.getModFileData(slug, instance.getGameVersion());
                     if (modData != null && !mod.fileData.id.equals(modData.fileData.id)) return modData;
                 }
             }
