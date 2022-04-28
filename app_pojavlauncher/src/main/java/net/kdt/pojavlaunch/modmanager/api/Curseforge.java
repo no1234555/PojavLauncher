@@ -42,7 +42,7 @@ public class Curseforge {
 
     public interface SearchInf {
         @GET("searchMods")
-        Call<List<Project>> searchMods(@Query("gameId") int gameId, @Query("gameVersion") String gameVersion, @Query("searchFilter") String searchFilter,
+        Call<SearchResult> searchMods(@Query("gameId") int gameId, @Query("gameVersion") String gameVersion, @Query("searchFilter") String searchFilter,
                                        @Query("modLoaderType") int modLoaderType, @Query("index") int index, @Query("pageSize") int pageSize);
     }
 
@@ -83,6 +83,11 @@ public class Curseforge {
         public String data;
     }
 
+    public static class SearchResult {
+        @SerializedName("data")
+        public List<Project> data;
+    }
+
     public static ModData getModFileData(String id, String gameVersion) throws IOException {
         ProjectInf projectInf = getClient().create(ProjectInf.class);
         Project project = projectInf.getProject(id).execute().body();
@@ -107,15 +112,17 @@ public class Curseforge {
 
     public static void addProjectsToRecycler(ModsFragment.ModAdapter adapter, String version, int offset, String query) {
         SearchInf searchInf = getClient().create(SearchInf.class);
-        searchInf.searchMods(432, version, query, 4, offset, 50).enqueue(new Callback<List<Project>>() {
+        searchInf.searchMods(432, version, query, 4, offset, 50).enqueue(new Callback<SearchResult>() {
 
             @Override
-            public void onResponse(Call<List<Project>> call, Response<List<Project>> response) {
-                List<Project> projects = response.body();
-                if (projects == null) return;
+            public void onResponse(Call<SearchResult> call, Response<SearchResult> response) {
+                Log.d("CURSE", response.raw().toString());
+
+                SearchResult searchResult = response.body();
+                if (searchResult == null) return;
 
                 ArrayList<ModData> mods = new ArrayList<>();
-                for (Project project : projects) {
+                for (Project project : searchResult.data) {
                     ModData modData = new ModData();
                     modData.title = project.name;
                     modData.slug = String.valueOf(project.id);
@@ -135,7 +142,7 @@ public class Curseforge {
             }
 
             @Override
-            public void onFailure(Call<List<Project>> call, Throwable t) {
+            public void onFailure(Call<SearchResult> call, Throwable t) {
                 Log.d("CURSE", String.valueOf(t));
             }
         });
