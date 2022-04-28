@@ -163,15 +163,5 @@ public class Curseforge {
                 Log.d("CURSE", String.valueOf(t));
             }
         });
-
-
-        /*Thread thread = new Thread() {
-            @Override
-            public void run() {
-                String description = APIUtil.getRaw("https://addons-ecs.forgesvc.net/api/v2/addon/" + id + "/description");
-                UiUitls.runOnUI(() -> view.loadMarkdown(String.valueOf(description), "file:///android_asset/ModDescription.css"));
-            }
-        };
-        thread.start();*/
     }
 }

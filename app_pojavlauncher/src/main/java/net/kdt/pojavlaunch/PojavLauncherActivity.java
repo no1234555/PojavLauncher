@@ -11,9 +11,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.*;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.Guideline;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentContainer;
+import androidx.fragment.app.FragmentContainerView;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 import com.google.android.material.tabs.TabLayout;
@@ -35,58 +38,20 @@ import static net.kdt.pojavlaunch.Tools.ignoreNotch;
 import static net.kdt.pojavlaunch.prefs.LauncherPreferences.PREF_HIDE_SIDEBAR;
 import static net.kdt.pojavlaunch.prefs.LauncherPreferences.PREF_NOTCH_SIZE;
 
-public class PojavLauncherActivity extends BaseLauncherActivity
-{
-
-    // An equivalent ViewPager2 adapter class
-    private static class ScreenSlidePagerAdapter extends FragmentStateAdapter {
-
-        public ScreenSlidePagerAdapter(PojavLauncherActivity fa) {
-            super(fa);
-        }
-
-        @Override
-        public Fragment createFragment(int position) {
-            if (position == 0) return new LauncherFragment();
-            if (position == 1) return new ModsFragment();
-            if (position == 2) return new LauncherPreferenceFragment();
-            return null;
-        }
-
-        @Override
-        public int getItemCount() {
-            return 3;
-        }
-    }
-
-    public static class LockableTabLayout extends TabLayout {
-
-        private boolean canScroll;
-
-        public LockableTabLayout(@NonNull Context context) {
-            super(context);
-        }
-
-        public void setCanScroll(boolean canScroll) {
-            this.canScroll = canScroll;
-        }
-
-        @Override
-        public boolean canScrollHorizontally(int direction) {
-            if (canScroll) return super.canScrollHorizontally(direction);
-            return false;
-        }
-    }
+public class PojavLauncherActivity extends BaseLauncherActivity {
 
     private TextView tvConnectStatus;
     private Spinner accountSelector;
-    private ViewPager2 viewPager;
     private final Button[] Tabs = new Button[3];
     private View selectedTab;
     private ImageView accountFaceImageView;
 
     private Button logoutBtn; // MineButtons
     private ExtraListener backPreferenceListener;
+
+    private final LauncherFragment launcherFragment = new LauncherFragment();
+    private final ModsFragment modsFragment = new ModsFragment();
+    private final LauncherPreferenceFragment launcherPreferenceFragment = new LauncherPreferenceFragment();
 
     public PojavLauncherActivity() {
     }
@@ -97,7 +62,6 @@ public class PojavLauncherActivity extends BaseLauncherActivity
         setContentView(R.layout.activity_pojav_launcher);
 
         //Boilerplate linking/initialisation
-        viewPager = findViewById(R.id.launchermainTabPager);
         selectedTab = findViewById(R.id.viewTabSelected);
         tvConnectStatus = findViewById(R.id.launchermain_text_accountstatus);
         accountFaceImageView = findViewById(R.id.launchermain_account_image);
@@ -115,14 +79,6 @@ public class PojavLauncherActivity extends BaseLauncherActivity
             Toast.makeText(this, "Launcher process id: " + Process.myPid(), Toast.LENGTH_LONG).show();
         }
 
-        // Setup the viewPager to slide across fragments
-        viewPager.setAdapter(new ScreenSlidePagerAdapter(this));
-        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-            @Override
-            public void onPageSelected(int position) {
-                setTabActive(position);
-            }
-        });
         initTabs(0);
 
         //Setup listener to the backPreference system
@@ -228,7 +184,9 @@ public class PojavLauncherActivity extends BaseLauncherActivity
     }
 
     public void selectTabPage(int pageIndex){
-        viewPager.setCurrentItem(pageIndex);
+        if (pageIndex == 0) getSupportFragmentManager().beginTransaction().replace(R.id.launchermainTabPager, launcherFragment).commit();
+        if (pageIndex == 1) getSupportFragmentManager().beginTransaction().replace(R.id.launchermainTabPager, modsFragment).commit();
+        if (pageIndex == 2) getSupportFragmentManager().beginTransaction().replace(R.id.launchermainTabPager, launcherPreferenceFragment).commit();
         setTabActive(pageIndex);
     }
 
@@ -342,16 +300,18 @@ public class PojavLauncherActivity extends BaseLauncherActivity
      */
     @Override
     public void onBackPressed() {
-        int count = getSupportFragmentManager().getBackStackEntryCount();
+        //int count = getSupportFragmentManager().getBackStackEntryCount();
 
-        if(count > 0 && viewPager.getCurrentItem() == 3){
+        getSupportFragmentManager().beginTransaction().replace(R.id.launchermainTabPager, launcherPreferenceFragment).commit();
+
+        /*if(count > 0 && viewPager.getCurrentItem() == 3){
             getSupportFragmentManager().popBackStack();
         }else{
             super.onBackPressed();
             //additional code
             ExtraCore.removeExtraListenerFromValue("back_preference", backPreferenceListener);
             finish();
-        }
+        }*/
     }
 }
 

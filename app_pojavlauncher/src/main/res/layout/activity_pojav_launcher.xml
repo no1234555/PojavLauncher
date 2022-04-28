@@ -141,7 +141,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guidelineBottom" />
 
-    <androidx.viewpager2.widget.ViewPager2
+    <androidx.fragment.app.FragmentContainerView
             android:id="@+id/launchermainTabPager"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -151,6 +151,8 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintVertical_bias="1.0"/>
+
+
     <ProgressBar
         android:id="@+id/progressDownloadBar"
         style="?android:attr/progressBarStyleHorizontal"
