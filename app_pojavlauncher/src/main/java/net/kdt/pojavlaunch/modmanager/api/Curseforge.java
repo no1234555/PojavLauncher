@@ -37,7 +37,7 @@ public class Curseforge {
 
     public interface ProjectInf {
         @GET("getMod/{id}")
-        Call<Project> getProject(@Path("id") String id);
+        Call<ProjectResult> getProject(@Path("id") String id);
     }
 
     public interface SearchInf {
@@ -78,6 +78,11 @@ public class Curseforge {
         public int modLoader;
     }
 
+    public static class ProjectResult {
+        @SerializedName("data")
+        public Project data;
+    }
+
     public static class Description {
         @SerializedName("data")
         public String data;
@@ -90,20 +95,23 @@ public class Curseforge {
 
     public static ModData getModFileData(String id, String gameVersion) throws IOException {
         ProjectInf projectInf = getClient().create(ProjectInf.class);
-        Project project = projectInf.getProject(id).execute().body();
-        if (project == null) return null;
+        ProjectResult projectResult = projectInf.getProject(id).execute().body();
+        if (projectResult == null) return null;
 
+        Project project = projectResult.data;
         for (FileIndex file : project.latestFilesIndexes) {
             if (file.modLoader == 4 && file.gameVersion.equals(gameVersion)) {
                 ModData modData = new ModData();
-                modData.platform = "curse";
+                modData.platform = "curseforge";
                 modData.title = project.name;
                 modData.slug = String.valueOf(project.id);
                 modData.iconUrl = project.logo.thumbnailUrl;
 
                 modData.fileData.id = String.valueOf(file.fileId);
-                modData.fileData.url = APIUtil.getRaw("https://addons-ecs.forgesvc.net/api/v2/addon/" + project.id + "/file/" + file.fileId + "/download-url");
                 modData.fileData.filename = file.filename;
+
+                //Work around for curse restricting mods outside CurseForge platform
+                modData.fileData.url = APIUtil.getRaw("https://addons-ecs.forgesvc.net/api/v2/addon/" + project.id + "/file/" + file.fileId + "/download-url");
                 return modData;
             }
         }
@@ -116,8 +124,6 @@ public class Curseforge {
 
             @Override
             public void onResponse(Call<SearchResult> call, Response<SearchResult> response) {
-                Log.d("CURSE", response.raw().toString());
-
                 SearchResult searchResult = response.body();
                 if (searchResult == null) return;
 
@@ -128,7 +134,7 @@ public class Curseforge {
                     modData.slug = String.valueOf(project.id);
                     modData.iconUrl = project.logo.thumbnailUrl;
 
-                    for (ModData installedMod : ModManager.listInstalledMods("fabric-loader-" + Fabric.getLatestLoaderVersion() + "-1.18.2")) {
+                    for (ModData installedMod : ModManager.listInstalledMods("Default")) {
                         if (installedMod.isActive && String.valueOf(project.id).equals(installedMod.slug)) {
                             modData.isActive = true;
                             break;

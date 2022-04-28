@@ -137,7 +137,7 @@ public class Modrinth {
                     return false;
                 });
 
-                for (ModData installedMod : ModManager.listInstalledMods("fabric-loader-" + Fabric.getLatestLoaderVersion() + "-1.18.2")) {
+                for (ModData installedMod : ModManager.listInstalledMods("Default")) {
                     for (ModData mod : result.hits) {
                         if (installedMod.isActive && installedMod.slug.equals(mod.slug)) mod.isActive = true;
                     }
