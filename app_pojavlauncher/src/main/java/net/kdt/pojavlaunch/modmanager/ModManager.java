@@ -8,7 +8,6 @@ import net.kdt.pojavlaunch.PojavLauncherActivity;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.modmanager.State.Instance;
 import net.kdt.pojavlaunch.modmanager.api.*;
-import net.kdt.pojavlaunch.tasks.RefreshVersionListTask;
 import net.kdt.pojavlaunch.utils.DownloadUtils;
 
 import java.io.File;
@@ -24,7 +23,7 @@ public class ModManager {
     public static final String workDir = Tools.DIR_GAME_NEW + "/modmanager";
     public static State state = new State();
     private static JsonObject modCompats = new JsonObject();
-    private static JsonObject modmanagerJson = new JsonObject();
+    private static JsonObject modManagerJson = new JsonObject();
     private static final ArrayList<String> currentDownloadSlugs = new ArrayList<>();
     private static boolean saveStateCalled = false;
 
@@ -41,15 +40,15 @@ public class ModManager {
 
                         String profileName = String.format("%s-%s-%s", "fabric-loader", flVersion, gameVersion);
                         Instance instance = new Instance();
-                        instance.setName("fabric-loader-0.13.3-1.18.2");
+                        instance.setName("Default");
                         instance.setGameVersion(gameVersion);
                         instance.setFabricLoaderVersion(profileName);
                         state.addInstance(instance);
                         Tools.write(modsJson.getPath(), Tools.GLOBAL_GSON.toJson(state)); //Cant use save state cause async issues
                     } else state = Tools.GLOBAL_GSON.fromJson(Tools.read(modsJson.getPath()), net.kdt.pojavlaunch.modmanager.State.class);
 
-                    InputStream modmanagerFile = PojavApplication.assetManager.open("jsons/modmanager.json");
-                    modmanagerJson = Tools.GLOBAL_GSON.fromJson(Tools.read(modmanagerFile), JsonObject.class);
+                    InputStream modManagerFile = PojavApplication.assetManager.open("jsons/modmanager.json");
+                    modManagerJson = Tools.GLOBAL_GSON.fromJson(Tools.read(modManagerFile), JsonObject.class);
                     InputStream compatFile = PojavApplication.assetManager.open("jsons/mod-compat.json");
                     modCompats = Tools.GLOBAL_GSON.fromJson(Tools.read(compatFile), JsonObject.class);
                 } catch (IOException e) {
@@ -62,7 +61,7 @@ public class ModManager {
 
     public static ArrayList<Pair<String, String>> getCoreModsFromJson(String version) {
         ArrayList<Pair<String, String>> mods = new ArrayList<>();
-        for (JsonElement element : modmanagerJson.get("core_mods").getAsJsonObject().getAsJsonArray(version)) {
+        for (JsonElement element : modManagerJson.get("core_mods").getAsJsonObject().getAsJsonArray(version)) {
             JsonObject mod = element.getAsJsonObject();
             mods.add(new Pair<>(mod.get("slug").getAsString(), mod.get("platform").getAsString()));
         }
@@ -144,7 +143,7 @@ public class ModManager {
                     ModData modData = null;
                     if (platform.equals("modrinth")) modData = Modrinth.getModFileData(slug, gameVersion);
                     else if (platform.equals("curseforge")) modData = Curseforge.getModFileData(slug, gameVersion);
-                    else if (platform.equals("github")) modData = Github.getModFileData(modmanagerJson.getAsJsonArray("repos"), slug, gameVersion);
+                    else if (platform.equals("github")) modData = Github.getModFileData(modManagerJson.getAsJsonArray("repos"), slug, gameVersion);
                     if (modData == null) return;
                     modData.isActive = true;
 
