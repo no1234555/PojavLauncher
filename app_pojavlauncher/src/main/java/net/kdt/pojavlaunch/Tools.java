@@ -44,7 +44,7 @@ public final class Tools {
     public static String APP_NAME = "null";
 
     public static final Gson GLOBAL_GSON = new GsonBuilder().setPrettyPrinting().create();
-
+    
     public static final String URL_HOME = "https://quest-craft.com/changelog/";
 
     public static String DIR_DATA; //Initialized later to get context

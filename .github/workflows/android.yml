@@ -143,7 +143,7 @@ jobs:
           ./gradlew :app_pojavlauncher:assembleDebug
           mv app_pojavlauncher/build/outputs/apk/debug/app_pojavlauncher-debug.apk out/app-debug.apk
           # mv app_pojavlauncher/build/intermediates/merged_native_libs/debug/out/lib out/debug_lib
-
+          
       - name: Upload APK
         uses: actions/upload-artifact@v2
         with:
