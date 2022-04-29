@@ -1,5 +1,6 @@
 package net.kdt.pojavlaunch.modmanager;
 
+import android.os.Build;
 import android.util.Pair;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -24,7 +25,7 @@ import java.util.ArrayList;
 public class ModManager {
 
     public static final String workDir = Tools.DIR_GAME_NEW + "/modmanager";
-    public static State state = new State();
+    public static final State state = new State();
     private static JsonObject modCompats = new JsonObject();
     private static JsonObject modManagerJson = new JsonObject();
     private static final ArrayList<String> currentDownloadSlugs = new ArrayList<>();
@@ -48,14 +49,37 @@ public class ModManager {
                         String gameVersion = Tools.getCompatibleVersions("releases").get(0);
                         Fabric.downloadJson(activity, gameVersion, flVersion);
 
-                        String profileName = String.format("%s-%s-%s", "fabric-loader", flVersion, gameVersion);
+                        String fabricLoaderName = String.format("%s-%s-%s", "fabric-loader", flVersion, gameVersion);
                         Instance instance = new Instance();
                         instance.setName("Default");
                         instance.setGameVersion(gameVersion);
-                        instance.setFabricLoaderVersion(profileName);
+                        instance.setFabricLoaderVersion(fabricLoaderName);
                         state.addInstance(instance);
                         Tools.write(modsJson.getPath(), Tools.GLOBAL_GSON.toJson(state)); //Cant use save state cause async issues
-                    } else state = Tools.GLOBAL_GSON.fromJson(Tools.read(modsJson.getPath()), net.kdt.pojavlaunch.modmanager.State.class);
+                    } else state.overwrite(Tools.GLOBAL_GSON.fromJson(Tools.read(modsJson.getPath()), net.kdt.pojavlaunch.modmanager.State.class));
+
+                    //Remove mod metadata if they were deleted manually
+                    if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.N) return;
+                    for (Instance instance : state.getInstances()) {
+                        ArrayList<String> purgeList = new ArrayList<>();
+                        File[] modFiles = new File(workDir + "/" + instance.getName()).listFiles();
+                        if (modFiles == null) {
+                            for (ModData mod : instance.getMods()) purgeList.add(mod.slug);
+                            continue;
+                        }
+
+                        for (ModData mod : instance.getMods()) {
+                            boolean foundMod = false;
+                            for (File modFile : modFiles) {
+                                if (modFile.getName().equals(mod.fileData.filename)) {
+                                    foundMod = true;
+                                    break;
+                                }
+                            }
+                            if (!foundMod) purgeList.add(mod.slug);
+                        }
+                        instance.getMods().removeIf(mod -> purgeList.contains(mod.slug));
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
