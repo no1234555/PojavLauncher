@@ -86,5 +86,12 @@ public class State {
         public List<ModData> getMods() {
             return mods;
         }
+
+        public ModData getMod(String slug) {
+            for (ModData mod : mods) {
+                if (mod.slug.equals(slug)) return mod;
+            }
+            return null;
+        }
     }
 }

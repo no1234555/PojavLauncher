@@ -158,14 +158,14 @@ public class ModManager {
         thread.start();
     }
 
-    public static void addMod(String instanceName, String platform, String slug, String gameVersion, boolean isCoreMod) {
+    public static void addMod(Instance instance, String platform, String slug, String gameVersion, boolean isCoreMod) {
         Thread thread = new Thread() {
             public void run() {
                 currentDownloadSlugs.add(slug);
 
                 File path;
                 if (isCoreMod) path = new File(workDir + "/core/" + gameVersion);
-                else path = new File(workDir + "/instances/" + instanceName);
+                else path = new File(workDir + "/instances/" + instance.getName());
                 if (!path.exists()) path.mkdir();
 
                 try {
@@ -183,7 +183,6 @@ public class ModManager {
                         }
                         state.addCoreMod(gameVersion, modData);
                     } else {
-                        Instance instance = state.getInstance(instanceName);
                         for (ModData mod : instance.getMods()) {
                             if (mod.slug.equals(modData.slug)) return;
                         }
@@ -206,28 +205,16 @@ public class ModManager {
     }
 
     public static void removeMod(String instanceName, String slug) {
-        Thread thread = new Thread() {
-            public void run() {
-                Instance instance = state.getInstance(instanceName);
-                ModData modData = getMod(instanceName, slug);
-                if (modData == null) return;
-
-                File modJar = new File(workDir + "/instances/" + instanceName + "/" + modData.fileData.filename);
-                if (modJar.delete()) {
-                    instance.getMods().remove(modData);
-                    saveState();
-                }
-            }
-        };
-        if (!isDownloading(slug)) thread.start();
+        Instance instance = state.getInstance(instanceName);
+        removeMod(instance, instance.getMod(slug));
     }
 
-    public static ModData getMod(String instanceName, String slug) {
-        Instance instance = state.getInstance(instanceName);
-        for (ModData mod : instance.getMods()) {
-            if (mod.slug.equals(slug)) return mod;
+    public static void removeMod(Instance instance, ModData modData) {
+        File modJar = new File(workDir + "/instances/" + instance.getName() + "/" + modData.fileData.filename);
+        if (modJar.delete()) {
+            instance.getMods().remove(modData);
+            saveState();
         }
-        return null;
     }
 
     //Returns a list of mods that need to be updated
@@ -248,12 +235,21 @@ public class ModManager {
         return mods;
     }
 
+    public static void updateMods(String instanceName, ArrayList<ModData> modsToUpdate) {
+        Instance instance = state.getInstance(instanceName);
+        for (ModData mod : modsToUpdate) {
+            removeMod(instance, mod);
+            addMod(instance, mod.platform, mod.slug, instance.getGameVersion(), false);
+        }
+    }
+
     public static void setModActive(String instanceName, String slug, boolean active) {
         Thread thread = new Thread() {
             public void run() {
                 if (android.os.Build.VERSION.SDK_INT <= android.os.Build.VERSION_CODES.O) return;
 
-                ModData modData = getMod(instanceName, slug);
+                Instance instance = state.getInstance(instanceName);
+                ModData modData = instance.getMod(slug);
                 if (modData == null) return;
 
                 modData.isActive = active;
