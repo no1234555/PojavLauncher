@@ -1,5 +1,6 @@
 package net.kdt.pojavlaunch.modmanager.api;
 
+import android.os.Build;
 import com.google.gson.annotations.SerializedName;
 import net.kdt.pojavlaunch.fragments.ModsFragment;
 import net.kdt.pojavlaunch.modmanager.ModData;
@@ -94,7 +95,7 @@ public class Curseforge {
                 queries.put("pageSize", 50);
 
                 SearchResult searchResult = handler.get("searchMods", queries, SearchResult.class);
-                if (searchResult == null) return;
+                if (searchResult == null || Build.VERSION.SDK_INT <= Build.VERSION_CODES.N) return;
 
                 ArrayList<ModData> mods = new ArrayList<>();
                 for (Project project : searchResult.data) {
@@ -113,6 +114,13 @@ public class Curseforge {
                     }
                     mods.add(modData);
                 }
+
+                mods.removeIf(modData -> {
+                    for (ModData coreMod : ModManager.listCoreMods(version)) {
+                        if (coreMod.slug.equals(modData.slug)) return true;
+                    }
+                    return false;
+                });
 
                 UiUitls.runOnUI(() -> {
                     adapter.addMods(mods);
