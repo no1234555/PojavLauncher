@@ -12,6 +12,11 @@ public class State {
     @SerializedName("core_mods")
     private HashMap<String, List<ModData>> coreMods;
 
+    public State() {
+        instances = new ArrayList<>();
+        coreMods = new HashMap<>();
+    }
+
     public void overwrite(State state) {
         this.instances = state.instances;
         this.coreMods = state.coreMods;
@@ -53,7 +58,11 @@ public class State {
         @SerializedName("LoaderVersion")
         private String LoaderVersion;
         @SerializedName("mods")
-        private List<ModData> mods;
+        private final List<ModData> mods;
+
+        public Instance() {
+            mods = new ArrayList<>();
+        }
 
         public void setName(String name) {
             this.name = name;
