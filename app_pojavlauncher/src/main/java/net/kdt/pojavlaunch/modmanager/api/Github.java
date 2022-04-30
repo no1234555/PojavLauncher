@@ -1,5 +1,6 @@
 package net.kdt.pojavlaunch.modmanager.api;
 
+import android.util.Log;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.annotations.SerializedName;
@@ -51,6 +52,7 @@ public class Github {
             }
 
             for (Release release : releases) {
+                Log.d("GITHUB", release.name);
                 if (release.name.split("-")[1].equals(gameVersion)) {
                     for (Asset asset : release.assets) {
                         if (asset.name.replace(".jar", "").equals(slug)) {
