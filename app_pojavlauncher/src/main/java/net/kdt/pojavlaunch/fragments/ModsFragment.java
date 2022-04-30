@@ -151,7 +151,7 @@ public class ModsFragment extends Fragment {
 
             this.modData = modData;
             title.setText(modData.title);
-            if (!modData.iconUrl.isEmpty()) Picasso.get().load(modData.iconUrl).into(icon);
+            if (modData.iconUrl != null && !modData.iconUrl.isEmpty()) Picasso.get().load(modData.iconUrl).into(icon);
             enableSwitch.setChecked(modData.isActive);
 
             String modCompat = ModManager.getModCompat(modData.slug);
