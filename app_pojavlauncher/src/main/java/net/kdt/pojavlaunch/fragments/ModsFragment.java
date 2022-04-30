@@ -94,15 +94,19 @@ public class ModsFragment extends Fragment {
             ArrayList<ModData> mods = ModManager.listInstalledMods(selectedInstance.getName());
             if (mods.size() == 0) return;
             ArrayList<ModData> filtered = (ArrayList<ModData>) mods.stream().filter(mod -> mod.title.substring(0, query.length()).equalsIgnoreCase(query)).collect(Collectors.toList());
-            modAdapter.addMods(filtered);
-            modAdapter.loadProjectPage(filtered.get(0), null);
+            if (filtered.size() > 0) {
+                modAdapter.addMods(filtered);
+                modAdapter.loadProjectPage(filtered.get(0), null);
+            }
         }
         else if (filter.equals("Core")) {
             ArrayList<ModData> mods = ModManager.listCoreMods(selectedInstance.getGameVersion());
             if (mods.size() == 0) return;
             ArrayList<ModData> filtered = (ArrayList<ModData>) mods.stream().filter(mod -> mod.title.substring(0, query.length()).equalsIgnoreCase(query)).collect(Collectors.toList());
-            modAdapter.addMods(filtered);
-            modAdapter.loadProjectPage(filtered.get(0), null);
+            if (filtered.size() > 0) {
+                modAdapter.addMods(filtered);
+                modAdapter.loadProjectPage(filtered.get(0), null);
+            }
         }
     }
 
