@@ -123,17 +123,23 @@ public class ModsFragment extends Fragment {
             compat = view.findViewById(R.id.mod_details);
             enableSwitch = view.findViewById(R.id.mod_switch);
 
-            enableSwitch.setOnClickListener(view1 -> {
-                if (filter.equals("Core") || ModManager.isDownloading(modData.slug)) {
-                    enableSwitch.setChecked(false);
-                    return;
-                }
-
-                State.Instance selectedInstance = ModManager.state.getInstance("Default");
-                ModData mod = selectedInstance.getMod(modData.slug);
-                if (mod != null) ModManager.setModActive(selectedInstance.getName(), modData.slug, enableSwitch.isChecked());
-                else ModManager.addMod(selectedInstance, filter.toLowerCase(), modData.slug, selectedInstance.getGameVersion(), false);
+            enableSwitch.setOnClickListener(view1 -> installMod(filter));
+            enableSwitch.setOnDragListener((view1, dragEvent) -> {
+                installMod(filter);
+                return true;
             });
+        }
+
+        public void installMod(String filter) {
+            if (filter.equals("Core") || ModManager.isDownloading(modData.slug)) {
+                enableSwitch.setChecked(false);
+                return;
+            }
+
+            State.Instance selectedInstance = ModManager.state.getInstance("Default");
+            ModData mod = selectedInstance.getMod(modData.slug);
+            if (mod != null) ModManager.setModActive(selectedInstance.getName(), modData.slug, enableSwitch.isChecked());
+            else ModManager.addMod(selectedInstance, filter.toLowerCase(), modData.slug, selectedInstance.getGameVersion(), false);
         }
 
         public void setData(ModData modData) {

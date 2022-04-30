@@ -17,7 +17,7 @@ import java.util.List;
 
 public class Quilt {
 
-    private static final String BASE_URL = "https://meta.quiltmc.org/v2/";
+    private static final String BASE_URL = "https://meta.quiltmc.org/v3/";
     private static Retrofit retrofit;
     private static String quiltLoaderVersion; //Store so we don't need to ask the api every time
 
@@ -55,15 +55,7 @@ public class Quilt {
         try {
             QuiltLoaderVersionsInf inf = getClient().create(QuiltLoaderVersionsInf.class);
             List<Version> versions = inf.getVersions().execute().body();
-
-            if (versions != null) {
-                for (Version version : versions) {
-                    if (version.stable) {
-                        quiltLoaderVersion = version.version;
-                        return version.version;
-                    }
-                }
-            }
+            if (versions != null && versions.size() > 0) return versions.get(0).version;
         } catch (IOException e) {
             return "0.16.0-beta.15"; //Known latest as backup
         }
