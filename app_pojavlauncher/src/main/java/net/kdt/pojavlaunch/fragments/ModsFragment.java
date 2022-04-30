@@ -48,13 +48,14 @@ public class ModsFragment extends Fragment {
         modSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
-                loadDataIntoList(modAdapter, s, 0, true);
-                return true;
+
+                return false;
             }
 
             @Override
             public boolean onQueryTextChange(String s) {
-                return false;
+                loadDataIntoList(modAdapter, s, 0, true);
+                return true;
             }
         });
 
