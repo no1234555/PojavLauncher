@@ -130,14 +130,15 @@ public class ModsFragment extends Fragment {
                 }
 
                 State.Instance selectedInstance = ModManager.state.getInstance("Default");
-                ModData mod = ModManager.getMod(selectedInstance.getName(), modData.slug);
+                ModData mod = selectedInstance.getMod(modData.slug);
                 if (mod != null) ModManager.setModActive(selectedInstance.getName(), modData.slug, enableSwitch.isChecked());
-                else ModManager.addMod(selectedInstance.getName(), filter.toLowerCase(), modData.slug, selectedInstance.getGameVersion(), false);
+                else ModManager.addMod(selectedInstance, filter.toLowerCase(), modData.slug, selectedInstance.getGameVersion(), false);
             });
         }
 
         public void setData(ModData modData) {
-            ModData installedMod = ModManager.getMod("Default", modData.slug);
+            State.Instance selectedInstance = ModManager.state.getInstance("Default");
+            ModData installedMod = selectedInstance.getMod(modData.slug);
             if (installedMod != null) modData = installedMod; //Check if mod is already installed and overwrite fetched data
 
             this.modData = modData;

@@ -251,7 +251,13 @@ public final class Tools {
         if (versionInfo.logging != null) {
             javaArgList.add("-Dlog4j.configurationFile=" + Tools.DIR_GAME_NEW + "/" + versionInfo.logging.client.file.id);
         }
+
+        //Fabric
         javaArgList.add("-Dfabric.addMods=" + ModManager.getWorkDir() + "/core/" + versionInfo.id + ":" + ModManager.getWorkDir() + "/instances/Default");
+
+        //Quilt
+        //javaArgList.add("-Dloader.addMods=" + ModManager.getWorkDir() + "/core/" + versionInfo.id + ":" + ModManager.getWorkDir() + "/instances/Default");
+
         javaArgList.add("-Djna.library.path=" + activity.getApplicationInfo().nativeLibraryDir + "/libjnadispatch.so");
         javaArgList.add("-cp");
         javaArgList.add(getLWJGL3ClassPath() + ":" + launchClassPath);

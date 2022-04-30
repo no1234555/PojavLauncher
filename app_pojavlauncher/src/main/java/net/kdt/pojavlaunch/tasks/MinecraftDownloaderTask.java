@@ -500,7 +500,7 @@ public class MinecraftDownloaderTask extends AsyncTask<String, String, Throwable
 
     public void downloadCoreMods(String version) {
         for (Pair<String, String> mod : ModManager.getCoreModsFromJson(version)) {
-            ModManager.addMod("core", mod.second, mod.first, version, true);
+            ModManager.addMod(null, mod.second, mod.first, version, true);
         }
     }
 
