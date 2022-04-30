@@ -238,12 +238,7 @@ public class ModsFragment extends Fragment {
             if (mods.size() > position) {
                 holder.enableSwitch.setOnCheckedChangeListener(null);
                 holder.setData(mods.get(position));
-                holder.enableSwitch.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        holder.installMod(filter);
-                    }
-                });
+                holder.enableSwitch.setOnCheckedChangeListener((compoundButton, b) -> holder.installMod(filter));
             }
         }
 
