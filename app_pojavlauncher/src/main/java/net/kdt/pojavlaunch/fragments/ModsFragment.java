@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 
 public class ModsFragment extends Fragment {
 
-    private String filter = "Modrinth";
+    private static String filter = "Modrinth";
 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
@@ -36,7 +36,6 @@ public class ModsFragment extends Fragment {
         RecyclerView modRecycler = view.findViewById(R.id.mods_recycler);
         modRecycler.setLayoutManager(new LinearLayoutManager(modRecycler.getContext()));
         modRecycler.setAdapter(modAdapter);
-        modAdapter.setFilter(filter);
 
         String[] filters = new String[] {"Modrinth", "CurseForge", "Installed", "Core"};
         ArrayAdapter<String> filterAdapter = new ArrayAdapter<>(this.getActivity(), android.R.layout.simple_spinner_item, filters);
@@ -63,7 +62,6 @@ public class ModsFragment extends Fragment {
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 if ((filter.equals("Modrinth") || filter.equals("CurseForge")) && !recyclerView.canScrollVertically(1) && modAdapter.mods.size() > 0) {
-                    modAdapter.setFilter(filter);
                     loadDataIntoList(modAdapter, "", modAdapter.getOffset(), false);
                 }
             }
@@ -134,9 +132,9 @@ public class ModsFragment extends Fragment {
             });*/
         }
 
-        public void installMod(String filter) {
+        public void installMod() {
             if (filter.equals("Core") || ModManager.isDownloading(modData.slug)) {
-                enableSwitch.setChecked(false);
+                enableSwitch.setChecked(true);
                 return;
             }
 
@@ -183,7 +181,6 @@ public class ModsFragment extends Fragment {
 
         private final ModsFragment fragment;
         private final ArrayList<ModData> mods = new ArrayList<>();
-        private String filter;
 
         public ModAdapter(ModsFragment fragment) {
             this.fragment = fragment;
@@ -202,10 +199,6 @@ public class ModsFragment extends Fragment {
 
         public int getOffset() {
             return mods.size();
-        }
-
-        public void setFilter(String filter) {
-            this.filter = filter;
         }
 
         public void loadProjectPage(ModData modData, ImageView icon) {
@@ -242,7 +235,7 @@ public class ModsFragment extends Fragment {
             if (mods.size() > position) {
                 holder.enableSwitch.setOnCheckedChangeListener(null);
                 holder.setData(mods.get(position));
-                holder.enableSwitch.setOnCheckedChangeListener((compoundButton, b) -> holder.installMod(filter));
+                holder.enableSwitch.setOnCheckedChangeListener((compoundButton, b) -> holder.installMod());
             }
         }
 

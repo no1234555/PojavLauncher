@@ -79,6 +79,7 @@ public class PojavLauncherActivity extends BaseLauncherActivity {
             Toast.makeText(this, "Launcher process id: " + Process.myPid(), Toast.LENGTH_LONG).show();
         }
 
+
         initTabs(0);
 
         //Setup listener to the backPreference system
@@ -136,8 +137,6 @@ public class PojavLauncherActivity extends BaseLauncherActivity {
                 // TODO: Implement this method
             }
         });
-
-        ModManager.init(this);
 
         // Setup the minecraft version list
         List<String> versions = new ArrayList<>();

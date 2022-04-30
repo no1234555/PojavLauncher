@@ -8,19 +8,9 @@ import java.util.List;
 
 public class State {
     @SerializedName("instances")
-    private List<Instance> instances;
+    private final List<Instance> instances = new ArrayList<>();
     @SerializedName("core_mods")
-    private HashMap<String, List<ModData>> coreMods;
-
-    public State() {
-        instances = new ArrayList<>();
-        coreMods = new HashMap<>();
-    }
-
-    public void overwrite(State state) {
-        this.instances = state.instances;
-        this.coreMods = state.coreMods;
-    }
+    private final HashMap<String, List<ModData>> coreMods = new HashMap<>();
 
     public List<Instance> getInstances() {
         return instances;
@@ -58,11 +48,8 @@ public class State {
         @SerializedName("LoaderVersion")
         private String LoaderVersion;
         @SerializedName("mods")
-        private final List<ModData> mods;
+        private final List<ModData> mods = new ArrayList<>();
 
-        public Instance() {
-            mods = new ArrayList<>();
-        }
 
         public void setName(String name) {
             this.name = name;

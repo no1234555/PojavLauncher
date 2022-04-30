@@ -24,6 +24,10 @@ public class APIUtils {
             this.baseUrl = baseUrl;
         }
 
+        public String getBaseUrl() {
+            return baseUrl;
+        }
+
         private String parseQueries(HashMap<String, Object> query) {
             StringBuilder params = new StringBuilder("?");
             for (String param : query.keySet()) {

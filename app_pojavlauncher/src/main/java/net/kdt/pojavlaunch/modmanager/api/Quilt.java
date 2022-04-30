@@ -1,10 +1,7 @@
 package net.kdt.pojavlaunch.modmanager.api;
 
-import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;
-import net.kdt.pojavlaunch.PojavLauncherActivity;
 import net.kdt.pojavlaunch.Tools;
-import net.kdt.pojavlaunch.tasks.RefreshVersionListTask;
 import net.kdt.pojavlaunch.utils.APIUtils;
 
 import java.io.File;
@@ -31,18 +28,16 @@ public class Quilt {
     }
 
     //Won't do anything if version is already installed
-    public static void downloadJson(PojavLauncherActivity activity, String gameVersion, String loaderVersion) {
+    public static void downloadJson(String gameVersion, String loaderVersion) {
         String profileName = String.format("%s-%s-%s", "quilt-loader", loaderVersion, gameVersion);
         File path = new File(Tools.DIR_HOME_VERSION + "/" + profileName);
         if (new File(path.getPath() + "/" + profileName + ".json").exists()) return;
 
         try {
-            JsonObject json = handler.get(String.format("versions/loader/%s/%s/profile/json", gameVersion, loaderVersion), JsonObject.class);
+            String json = APIUtils.getRaw(String.format(handler.getBaseUrl() + "/versions/loader/%s/%s/profile/json", gameVersion, loaderVersion));
             if (json != null) {
                 if (!path.exists()) path.mkdirs();
-                json.addProperty("type", "fabric");
-                Tools.write(path.getPath() + "/" + profileName + ".json", json.toString());
-                new RefreshVersionListTask(activity);
+                Tools.write(path.getPath() + "/" + profileName + ".json", json);
             }
         } catch (IOException e) {
             e.printStackTrace();
