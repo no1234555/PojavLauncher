@@ -346,13 +346,23 @@ public class PojavLoginActivity extends BaseActivity {
             Tools.copyAssetFile(this,"resolv.conf",Tools.DIR_DATA, true);
             Tools.copyAssetFile(this,"arc_dns_injector.jar",Tools.DIR_DATA, true);
 
+            // Remove old versions
+            File[] files = new File(DIR_GAME_NEW + "mods").listFiles((dir, name) ->
+                    name.contains("mcxr-") || name.contains("titleworlds") || name.contains("lazydfu") || name.contains("fabric-api"));
+
+            for(File file : files) {
+                if(file.exists()) {
+                    file.delete();
+                }
+            }
+            
             // Install Mods
-            Tools.copyAssetFile(this, "artifacts/mcxr-core-0.2.0+null.jar", DIR_GAME_NEW + "/mods", false);
-            Tools.copyAssetFile(this, "artifacts/mcxr-play-0.2.0+null.jar", DIR_GAME_NEW + "/mods", false);
+            Tools.copyAssetFile(this, "artifacts/mcxr-core-0.2.1+null.jar", DIR_GAME_NEW + "/mods", false);
+            Tools.copyAssetFile(this, "artifacts/mcxr-play-0.2.1+null.jar", DIR_GAME_NEW + "/mods", false);
             Tools.copyAssetFile(this, "artifacts/titleworlds-0.0.2.jar", DIR_GAME_NEW + "/mods", false);
             Tools.copyAssetFile(this, "artifacts/lazydfu-0.1.3-SNAPSHOT.jar", DIR_GAME_NEW + "/mods", false);
             Tools.copyAssetFile(this, "artifacts/fabric-api-0.48.0+1.18.2.jar", DIR_GAME_NEW + "/mods", false);
-
+            
             // Install Resource Pack
             Tools.copyAssetFile(this, "assets-v0.zip", DIR_GAME_NEW + "/resourcepacks", false);
 
