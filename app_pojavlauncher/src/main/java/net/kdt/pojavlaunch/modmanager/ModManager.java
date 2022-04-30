@@ -8,10 +8,7 @@ import net.kdt.pojavlaunch.PojavApplication;
 import net.kdt.pojavlaunch.PojavLauncherActivity;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.modmanager.State.Instance;
-import net.kdt.pojavlaunch.modmanager.api.Curseforge;
-import net.kdt.pojavlaunch.modmanager.api.Fabric;
-import net.kdt.pojavlaunch.modmanager.api.Github;
-import net.kdt.pojavlaunch.modmanager.api.Modrinth;
+import net.kdt.pojavlaunch.modmanager.api.*;
 import net.kdt.pojavlaunch.utils.DownloadUtils;
 
 import java.io.File;
@@ -42,12 +39,16 @@ public class ModManager {
                     modCompats = Tools.GLOBAL_GSON.fromJson(Tools.read(compatFile), JsonObject.class);
 
                     File modsJson = new File(workDir + "/mods.json");
-                    String flVersion = Fabric.getLatestLoaderVersion(); //Init outside to cache version (see Fabric.java)
                     Github.setRepoList(modManagerJson.getAsJsonArray("repos"));
+
+                    //Init outside to cache version (see Fabric/Quilt.java)
+                    String flVersion = Fabric.getLatestLoaderVersion();
+                    String qlVersion = Quilt.getLatestLoaderVersion();
 
                     if (!modsJson.exists()) {
                         String gameVersion = Tools.getCompatibleVersions("releases").get(0);
                         Fabric.downloadJson(activity, gameVersion, flVersion);
+                        Quilt.downloadJson(activity, gameVersion, qlVersion);
 
                         String fabricLoaderName = String.format("%s-%s-%s", "fabric-loader", flVersion, gameVersion);
                         Instance instance = new Instance();
