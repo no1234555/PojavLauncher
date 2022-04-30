@@ -1,55 +1,22 @@
 package net.kdt.pojavlaunch.modmanager.api;
 
 import android.os.Build;
-import android.util.Log;
 import com.google.gson.annotations.SerializedName;
 import net.kdt.pojavlaunch.fragments.ModsFragment;
 import net.kdt.pojavlaunch.modmanager.ModData;
 import net.kdt.pojavlaunch.modmanager.ModManager;
+import net.kdt.pojavlaunch.utils.APIUtils;
 import net.kdt.pojavlaunch.utils.UiUitls;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.http.GET;
-import retrofit2.http.Path;
-import retrofit2.http.Query;
 import us.feras.mdv.MarkdownView;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class Modrinth {
 
-    private static final String BASE_URL = "https://api.modrinth.com/v2/";
-    private static Retrofit retrofit;
-
-    public static Retrofit getClient(){
-        if (retrofit == null) {
-            retrofit = new Retrofit.Builder()
-                    .baseUrl(BASE_URL)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
-        }
-        return retrofit;
-    }
-
-    public interface ProjectInf {
-        @GET("project/{slug}")
-        Call<Project> getProject(@Path("slug") String slug);
-    }
-
-    public interface VersionsInf {
-        @GET("project/{slug}/version")
-        Call<List<Version>> getVersions(@Path("slug") String slug);
-    }
-
-    public interface SearchInf {
-        @GET("search")
-        Call<SearchResult> searchMods(@Query("query") String query, @Query("offset") int offset, @Query("limit") int limit, @Query("facets") String facets);
-    }
+    private static final APIUtils.APIHandler handler = new APIUtils.APIHandler("https://api.modrinth.com/v2");
 
     public static class Project {
         @SerializedName("title")
@@ -86,11 +53,8 @@ public class Modrinth {
     }
 
     public static ModData getModData(String slug, String gameVersion) throws IOException {
-        ProjectInf projectInf = getClient().create(ProjectInf.class);
-        Project project = projectInf.getProject(slug).execute().body();
-
-        VersionsInf versionsInf = getClient().create(VersionsInf.class);
-        List<Version> versions = versionsInf.getVersions(slug).execute().body();
+        Project project = handler.get("project/" + slug, Project.class);
+        Version[] versions = handler.get("project/" + slug + "/version", Version[].class);
 
         if (project == null || versions == null) {
             return null;
@@ -121,11 +85,16 @@ public class Modrinth {
     }
 
     public static void addProjectsToRecycler(ModsFragment.ModAdapter adapter, String version, int offset, String query) {
-        SearchInf searchInf = getClient().create(SearchInf.class);
-        searchInf.searchMods(query, offset, 50, "[[\"categories:fabric\"], [\"versions:" + version + "\"]]").enqueue(new Callback<SearchResult>() {
+        Thread thread = new Thread() {
             @Override
-            public void onResponse(Call<SearchResult> call, Response<SearchResult> response) {
-                SearchResult result = response.body();
+            public void run() {
+                HashMap<String, Object> queries = new HashMap<>();
+                queries.put("query", query);
+                queries.put("offset", offset);
+                queries.put("limit", 50);
+                queries.put("facets", "[[\"categories:fabric\"], [\"versions:" + version + "\"]]");
+
+                SearchResult result = handler.get("search", queries, SearchResult.class);
                 if (result == null || Build.VERSION.SDK_INT <= Build.VERSION_CODES.N) {
                     return;
                 }
@@ -148,15 +117,13 @@ public class Modrinth {
                     }
                 }
 
-                adapter.addMods((ArrayList<ModData>) result.hits);
-                if (offset == 0 && result.hits.size() > 0) adapter.loadProjectPage(result.hits.get(0), null);
+                UiUitls.runOnUI(() -> {
+                    adapter.addMods((ArrayList<ModData>) result.hits);
+                    if (offset == 0 && result.hits.size() > 0) adapter.loadProjectPage(result.hits.get(0), null);
+                });
             }
-
-            @Override
-            public void onFailure(Call<SearchResult> call, Throwable t) {
-                Log.d("MODRINTH", String.valueOf(t));
-            }
-        });
+        };
+        thread.start();
     }
 
     public static void loadProjectPage(MarkdownView view, String slug) {
@@ -164,13 +131,8 @@ public class Modrinth {
         Thread thread = new Thread() {
             @Override
             public void run() {
-                try {
-                    ProjectInf projectInf = getClient().create(ProjectInf.class);
-                    Project project = projectInf.getProject(slug).execute().body();
-                    if (project != null) UiUitls.runOnUI(() -> view.loadMarkdown(project.body, "file:///android_asset/ModDescription.css"));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                Project project = handler.get("project/" + slug, Project.class);
+                if (project != null) UiUitls.runOnUI(() -> view.loadMarkdown(project.body, "file:///android_asset/ModDescription.css"));
             }
         };
         thread.start();

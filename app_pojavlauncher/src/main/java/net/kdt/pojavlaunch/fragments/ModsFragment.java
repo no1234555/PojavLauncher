@@ -48,7 +48,6 @@ public class ModsFragment extends Fragment {
         modSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
-
                 return false;
             }
 
