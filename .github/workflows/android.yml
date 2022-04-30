@@ -108,10 +108,10 @@ jobs:
           git push
 
       - name: Get JRE17
-        uses: dawidd6/action-download-artifact@v2
+        uses: dawidd6/action-download-artifact@v2.19.0
         with:
           github_token: ${{secrets.GITHUB_TOKEN}}
-          workflow: download.yml
+          workflow: build.yml
           path: app_pojavlauncher/src/main/assets/components/jre
           workflow_conclusion: success
           repo: QuestCraftPlusPlus/android-openjdk-build-multiarch
