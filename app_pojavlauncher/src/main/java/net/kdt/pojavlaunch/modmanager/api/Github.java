@@ -52,7 +52,6 @@ public class Github {
             }
 
             for (Release release : releases) {
-                Log.d("GITHUB", release.name);
                 if (release.name.split("-")[1].equals(gameVersion)) {
                     for (Asset asset : release.assets) {
                         if (asset.name.replace(".jar", "").equals(slug)) {
