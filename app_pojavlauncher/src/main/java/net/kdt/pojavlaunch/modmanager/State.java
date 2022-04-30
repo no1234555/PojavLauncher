@@ -50,8 +50,8 @@ public class State {
         private String name;
         @SerializedName("gameVersion")
         private String gameVersion;
-        @SerializedName("fabricLoaderVersion")
-        private String fabricLoaderVersion;
+        @SerializedName("LoaderVersion")
+        private String LoaderVersion;
         @SerializedName("mods")
         private List<ModData> mods;
 
@@ -63,8 +63,8 @@ public class State {
             this.gameVersion = gameVersion;
         }
 
-        public void setFabricLoaderVersion(String fabricLoaderVersion) {
-            this.fabricLoaderVersion = fabricLoaderVersion;
+        public void setLoaderVersion(String fabricLoaderVersion) {
+            this.LoaderVersion = fabricLoaderVersion;
         }
 
         public void addMod(ModData modData) {
@@ -79,8 +79,8 @@ public class State {
             return gameVersion;
         }
 
-        public String getFabricLoaderVersion() {
-            return fabricLoaderVersion;
+        public String getLoaderVersion() {
+            return LoaderVersion;
         }
 
         public List<ModData> getMods() {

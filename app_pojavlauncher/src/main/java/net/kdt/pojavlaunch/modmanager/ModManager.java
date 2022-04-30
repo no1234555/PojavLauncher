@@ -54,7 +54,7 @@ public class ModManager {
                         Instance instance = new Instance();
                         instance.setName("Default");
                         instance.setGameVersion(gameVersion);
-                        instance.setFabricLoaderVersion(fabricLoaderName);
+                        instance.setLoaderVersion(fabricLoaderName);
                         state.addInstance(instance);
                         Tools.write(modsJson.getPath(), Tools.GLOBAL_GSON.toJson(state)); //Cant use save state cause async issues
                     } else state.overwrite(Tools.GLOBAL_GSON.fromJson(Tools.read(modsJson.getPath()), net.kdt.pojavlaunch.modmanager.State.class));
@@ -140,18 +140,25 @@ public class ModManager {
         return currentDownloadSlugs.contains(slug);
     }
 
-    public static void createInstance(PojavLauncherActivity activity, String name, String gameVersion) {
+    public static void createInstance(PojavLauncherActivity activity, String name, String gameVersion, String loaderType) {
         Thread thread = new Thread() {
             @Override
             public void run() {
-                String flVersion = Fabric.getLatestLoaderVersion();
-                Fabric.downloadJson(activity, gameVersion, flVersion);
+                String loaderVersion;
+                if (loaderType.equals("fabric")) {
+                    loaderVersion = Fabric.getLatestLoaderVersion();
+                    Fabric.downloadJson(activity, gameVersion, loaderVersion);
+                }
+                if (loaderType.equals("quilt")) {
+                    loaderVersion = Quilt.getLatestLoaderVersion();
+                    Quilt.downloadJson(activity, gameVersion, loaderVersion);
+                }
 
-                String profileName = String.format("%s-%s-%s", "fabric-loader", flVersion, gameVersion);
+                String profileName = String.format("%s-%s-%s", loaderType + "-loader", loaderType, gameVersion);
                 Instance instance = new Instance();
                 instance.setName(name);
                 instance.setGameVersion(gameVersion);
-                instance.setFabricLoaderVersion(profileName);
+                instance.setLoaderVersion(profileName);
                 state.addInstance(instance);
                 saveState();
             }
