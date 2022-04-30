@@ -114,7 +114,7 @@ public class ModsFragment extends Fragment {
         private final Switch enableSwitch;
         private ModData modData;
 
-        public ModViewHolder(View view, String filter, ModAdapter adapter) {
+        public ModViewHolder(View view, ModAdapter adapter) {
             super(view);
             this.adapter = adapter;
             view.setOnClickListener(this);
@@ -123,11 +123,11 @@ public class ModsFragment extends Fragment {
             compat = view.findViewById(R.id.mod_details);
             enableSwitch = view.findViewById(R.id.mod_switch);
 
-            enableSwitch.setOnClickListener(view1 -> installMod(filter));
+            /*enableSwitch.setOnClickListener(view1 -> installMod(filter));
             enableSwitch.setOnDragListener((view1, dragEvent) -> {
                 installMod(filter);
                 return true;
-            });
+            });*/
         }
 
         public void installMod(String filter) {
@@ -150,6 +150,7 @@ public class ModsFragment extends Fragment {
             this.modData = modData;
             title.setText(modData.title);
             if (!modData.iconUrl.isEmpty()) Picasso.get().load(modData.iconUrl).into(icon);
+            enableSwitch.setChecked(modData.isActive);
 
             String modCompat = ModManager.getModCompat(modData.slug);
             compat.setText("  " + modCompat + "  ");
@@ -157,8 +158,6 @@ public class ModsFragment extends Fragment {
             if (modCompat.equals("Perfect")) compat.setBackgroundResource(R.drawable.marker_green);
             if (modCompat.equals("Good")) compat.setBackgroundResource(R.drawable.marker_yellow);
             if (modCompat.equals("Unusable") || modCompat.equals("Not Working")) compat.setBackgroundResource(R.drawable.marker_red);
-
-            enableSwitch.setChecked(modData.isActive);
         }
 
         @Override
@@ -231,13 +230,20 @@ public class ModsFragment extends Fragment {
         @Override
         public ModViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext()).inflate(viewType, parent, false);
-            return new ModViewHolder(view, filter, this);
+            return new ModViewHolder(view, this);
         }
 
         @Override
         public void onBindViewHolder(@NonNull ModViewHolder holder, int position) {
             if (mods.size() > position) {
+                holder.enableSwitch.setOnCheckedChangeListener(null);
                 holder.setData(mods.get(position));
+                holder.enableSwitch.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        holder.installMod(filter);
+                    }
+                });
             }
         }
 
