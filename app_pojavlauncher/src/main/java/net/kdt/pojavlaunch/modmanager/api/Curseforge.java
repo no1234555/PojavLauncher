@@ -90,9 +90,11 @@ public class Curseforge {
                 queries.put("gameId", 432);
                 queries.put("gameVersion", version);
                 queries.put("searchFilter", query);
-                queries.put("modLoaderType", 4);
+                queries.put("modLoaderType", 4); //4 = fabric
                 queries.put("index", offset);
                 queries.put("pageSize", 50);
+                queries.put("sortField", 6); //sort by most downloads
+                queries.put("sortOrder", "desc");
 
                 SearchResult searchResult = handler.get("searchMods", queries, SearchResult.class);
                 if (searchResult == null || Build.VERSION.SDK_INT <= Build.VERSION_CODES.N) return;
