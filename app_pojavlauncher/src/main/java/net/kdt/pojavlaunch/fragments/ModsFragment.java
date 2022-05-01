@@ -164,7 +164,12 @@ public class ModsFragment extends Fragment {
 
         @Override
         public void onClick(View view) {
-           adapter.loadProjectPage(modData, icon);
+            adapter.selectViewHolder(this);
+            adapter.loadProjectPage(modData, icon);
+        }
+
+        public void doMarquee(boolean value) {
+            title.setSelected(value);
         }
 
         /*@Override
@@ -181,6 +186,7 @@ public class ModsFragment extends Fragment {
 
         private final ModsFragment fragment;
         private final ArrayList<ModData> mods = new ArrayList<>();
+        private ModViewHolder selectedHolder;
 
         public ModAdapter(ModsFragment fragment) {
             this.fragment = fragment;
@@ -195,6 +201,12 @@ public class ModsFragment extends Fragment {
         public void reset() {
             mods.clear();
             this.notifyDataSetChanged();
+        }
+
+        public void selectViewHolder(ModViewHolder holder) {
+            if (selectedHolder != null) selectedHolder.doMarquee(false);
+            selectedHolder = holder;
+            holder.doMarquee(true);
         }
 
         public int getOffset() {
