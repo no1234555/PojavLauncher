@@ -22,13 +22,13 @@ import java.util.ArrayList;
 public class ModManager {
 
     public static final String workDir = Tools.DIR_GAME_NEW + "/modmanager";
-    public static final State state = new State();
+    public static State state = new State();
     private static JsonObject modCompats = new JsonObject();
     private static JsonObject modManagerJson = new JsonObject();
     private static final ArrayList<String> currentDownloadSlugs = new ArrayList<>();
     private static boolean saveStateCalled = false;
 
-    public static void init(PojavLauncherActivity activity) {
+    public static void init() {
         Thread thread = new Thread() {
             @Override
             public void run() {
@@ -47,8 +47,8 @@ public class ModManager {
 
                     if (!modsJson.exists()) {
                         String gameVersion = Tools.getCompatibleVersions("releases").get(0);
-                        Fabric.downloadJson(activity, gameVersion, flVersion);
-                        Quilt.downloadJson(activity, gameVersion, qlVersion);
+                        Fabric.downloadJson(gameVersion, flVersion);
+                        Quilt.downloadJson(gameVersion, qlVersion);
 
                         String fabricLoaderName = String.format("%s-%s-%s", "fabric-loader", flVersion, gameVersion);
                         Instance instance = new Instance();
@@ -57,7 +57,7 @@ public class ModManager {
                         instance.setLoaderVersion(fabricLoaderName);
                         state.addInstance(instance);
                         Tools.write(modsJson.getPath(), Tools.GLOBAL_GSON.toJson(state)); //Cant use save state cause async issues
-                    } else state.overwrite(Tools.GLOBAL_GSON.fromJson(Tools.read(modsJson.getPath()), net.kdt.pojavlaunch.modmanager.State.class));
+                    } else state = Tools.GLOBAL_GSON.fromJson(Tools.read(modsJson.getPath()), net.kdt.pojavlaunch.modmanager.State.class);
 
                     //Remove mod metadata if they were deleted manually
                     if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.N) return;
@@ -147,11 +147,11 @@ public class ModManager {
                 String loaderVersion;
                 if (loaderType.equals("fabric")) {
                     loaderVersion = Fabric.getLatestLoaderVersion();
-                    Fabric.downloadJson(activity, gameVersion, loaderVersion);
+                    Fabric.downloadJson(gameVersion, loaderVersion);
                 }
                 if (loaderType.equals("quilt")) {
                     loaderVersion = Quilt.getLatestLoaderVersion();
-                    Quilt.downloadJson(activity, gameVersion, loaderVersion);
+                    Quilt.downloadJson(gameVersion, loaderVersion);
                 }
 
                 String profileName = String.format("%s-%s-%s", loaderType + "-loader", loaderType, gameVersion);

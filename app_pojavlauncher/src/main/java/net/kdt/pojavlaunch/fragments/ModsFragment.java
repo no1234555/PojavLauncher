@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 
 public class ModsFragment extends Fragment {
 
-    private String filter = "Modrinth";
+    private static String filter = "Modrinth";
 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
@@ -36,7 +36,6 @@ public class ModsFragment extends Fragment {
         RecyclerView modRecycler = view.findViewById(R.id.mods_recycler);
         modRecycler.setLayoutManager(new LinearLayoutManager(modRecycler.getContext()));
         modRecycler.setAdapter(modAdapter);
-        modAdapter.setFilter(filter);
 
         String[] filters = new String[] {"Modrinth", "CurseForge", "Installed", "Core"};
         ArrayAdapter<String> filterAdapter = new ArrayAdapter<>(this.getActivity(), android.R.layout.simple_spinner_item, filters);
@@ -48,13 +47,13 @@ public class ModsFragment extends Fragment {
         modSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
-                loadDataIntoList(modAdapter, s, 0, true);
-                return true;
+                return false;
             }
 
             @Override
             public boolean onQueryTextChange(String s) {
-                return false;
+                loadDataIntoList(modAdapter, s, 0, true);
+                return true;
             }
         });
 
@@ -63,7 +62,6 @@ public class ModsFragment extends Fragment {
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 if ((filter.equals("Modrinth") || filter.equals("CurseForge")) && !recyclerView.canScrollVertically(1) && modAdapter.mods.size() > 0) {
-                    modAdapter.setFilter(filter);
                     loadDataIntoList(modAdapter, "", modAdapter.getOffset(), false);
                 }
             }
@@ -93,15 +91,19 @@ public class ModsFragment extends Fragment {
             ArrayList<ModData> mods = ModManager.listInstalledMods(selectedInstance.getName());
             if (mods.size() == 0) return;
             ArrayList<ModData> filtered = (ArrayList<ModData>) mods.stream().filter(mod -> mod.title.substring(0, query.length()).equalsIgnoreCase(query)).collect(Collectors.toList());
-            modAdapter.addMods(filtered);
-            modAdapter.loadProjectPage(filtered.get(0), null);
+            if (filtered.size() > 0) {
+                modAdapter.addMods(filtered);
+                modAdapter.loadProjectPage(filtered.get(0), null);
+            }
         }
         else if (filter.equals("Core")) {
             ArrayList<ModData> mods = ModManager.listCoreMods(selectedInstance.getGameVersion());
             if (mods.size() == 0) return;
             ArrayList<ModData> filtered = (ArrayList<ModData>) mods.stream().filter(mod -> mod.title.substring(0, query.length()).equalsIgnoreCase(query)).collect(Collectors.toList());
-            modAdapter.addMods(filtered);
-            modAdapter.loadProjectPage(filtered.get(0), null);
+            if (filtered.size() > 0) {
+                modAdapter.addMods(filtered);
+                modAdapter.loadProjectPage(filtered.get(0), null);
+            }
         }
     }
 
@@ -114,7 +116,7 @@ public class ModsFragment extends Fragment {
         private final Switch enableSwitch;
         private ModData modData;
 
-        public ModViewHolder(View view, String filter, ModAdapter adapter) {
+        public ModViewHolder(View view, ModAdapter adapter) {
             super(view);
             this.adapter = adapter;
             view.setOnClickListener(this);
@@ -123,17 +125,23 @@ public class ModsFragment extends Fragment {
             compat = view.findViewById(R.id.mod_details);
             enableSwitch = view.findViewById(R.id.mod_switch);
 
-            enableSwitch.setOnClickListener(view1 -> {
-                if (filter.equals("Core") || ModManager.isDownloading(modData.slug)) {
-                    enableSwitch.setChecked(false);
-                    return;
-                }
+            /*enableSwitch.setOnClickListener(view1 -> installMod(filter));
+            enableSwitch.setOnDragListener((view1, dragEvent) -> {
+                installMod(filter);
+                return true;
+            });*/
+        }
 
-                State.Instance selectedInstance = ModManager.state.getInstance("Default");
-                ModData mod = selectedInstance.getMod(modData.slug);
-                if (mod != null) ModManager.setModActive(selectedInstance.getName(), modData.slug, enableSwitch.isChecked());
-                else ModManager.addMod(selectedInstance, filter.toLowerCase(), modData.slug, selectedInstance.getGameVersion(), false);
-            });
+        public void installMod() {
+            if (filter.equals("Core") || ModManager.isDownloading(modData.slug)) {
+                enableSwitch.setChecked(true);
+                return;
+            }
+
+            State.Instance selectedInstance = ModManager.state.getInstance("Default");
+            ModData mod = selectedInstance.getMod(modData.slug);
+            if (mod != null) ModManager.setModActive(selectedInstance.getName(), modData.slug, enableSwitch.isChecked());
+            else ModManager.addMod(selectedInstance, filter.toLowerCase(), modData.slug, selectedInstance.getGameVersion(), false);
         }
 
         public void setData(ModData modData) {
@@ -143,7 +151,8 @@ public class ModsFragment extends Fragment {
 
             this.modData = modData;
             title.setText(modData.title);
-            if (!modData.iconUrl.isEmpty()) Picasso.get().load(modData.iconUrl).into(icon);
+            if (modData.iconUrl != null && !modData.iconUrl.isEmpty()) Picasso.get().load(modData.iconUrl).into(icon);
+            enableSwitch.setChecked(modData.isActive);
 
             String modCompat = ModManager.getModCompat(modData.slug);
             compat.setText("  " + modCompat + "  ");
@@ -151,13 +160,16 @@ public class ModsFragment extends Fragment {
             if (modCompat.equals("Perfect")) compat.setBackgroundResource(R.drawable.marker_green);
             if (modCompat.equals("Good")) compat.setBackgroundResource(R.drawable.marker_yellow);
             if (modCompat.equals("Unusable") || modCompat.equals("Not Working")) compat.setBackgroundResource(R.drawable.marker_red);
-
-            enableSwitch.setChecked(modData.isActive);
         }
 
         @Override
         public void onClick(View view) {
-           adapter.loadProjectPage(modData, icon);
+            adapter.selectViewHolder(this);
+            adapter.loadProjectPage(modData, icon);
+        }
+
+        public void doMarquee(boolean value) {
+            title.setSelected(value);
         }
 
         /*@Override
@@ -174,7 +186,7 @@ public class ModsFragment extends Fragment {
 
         private final ModsFragment fragment;
         private final ArrayList<ModData> mods = new ArrayList<>();
-        private String filter;
+        private ModViewHolder selectedHolder;
 
         public ModAdapter(ModsFragment fragment) {
             this.fragment = fragment;
@@ -191,12 +203,14 @@ public class ModsFragment extends Fragment {
             this.notifyDataSetChanged();
         }
 
-        public int getOffset() {
-            return mods.size();
+        public void selectViewHolder(ModViewHolder holder) {
+            if (selectedHolder != null) selectedHolder.doMarquee(false);
+            selectedHolder = holder;
+            holder.doMarquee(true);
         }
 
-        public void setFilter(String filter) {
-            this.filter = filter;
+        public int getOffset() {
+            return mods.size();
         }
 
         public void loadProjectPage(ModData modData, ImageView icon) {
@@ -225,13 +239,15 @@ public class ModsFragment extends Fragment {
         @Override
         public ModViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext()).inflate(viewType, parent, false);
-            return new ModViewHolder(view, filter, this);
+            return new ModViewHolder(view, this);
         }
 
         @Override
         public void onBindViewHolder(@NonNull ModViewHolder holder, int position) {
             if (mods.size() > position) {
+                holder.enableSwitch.setOnCheckedChangeListener(null);
                 holder.setData(mods.get(position));
+                holder.enableSwitch.setOnCheckedChangeListener((compoundButton, b) -> holder.installMod());
             }
         }
 

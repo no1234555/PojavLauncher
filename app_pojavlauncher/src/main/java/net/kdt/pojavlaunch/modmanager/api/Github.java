@@ -1,15 +1,12 @@
 package net.kdt.pojavlaunch.modmanager.api;
 
+import android.util.Log;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.annotations.SerializedName;
 import net.kdt.pojavlaunch.modmanager.ModData;
+import net.kdt.pojavlaunch.utils.APIUtils;
 import net.kdt.pojavlaunch.utils.UiUitls;
-import retrofit2.Call;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.http.GET;
-import retrofit2.http.Path;
 import us.feras.mdv.MarkdownView;
 
 import java.io.IOException;
@@ -18,24 +15,8 @@ import java.util.List;
 
 public class Github {
 
-    private static final String BASE_URL = "https://api.github.com/repos/";
-    private static Retrofit retrofit;
+    private static final APIUtils.APIHandler handler = new APIUtils.APIHandler("https://api.github.com/repos");
     private static String[] repoList;
-
-    public static Retrofit getClient(){
-        if (retrofit == null) {
-            retrofit = new Retrofit.Builder()
-                    .baseUrl(BASE_URL)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
-        }
-        return retrofit;
-    }
-
-    public interface GithubReleasesInf {
-        @GET("{user}/{repo}/releases")
-        Call<List<Release>> getReleases(@Path("user") String user, @Path("repo") String repo);
-    }
 
     public static class Release {
         @SerializedName("name")
@@ -64,9 +45,7 @@ public class Github {
     public static ModData getModData(String slug, String gameVersion) throws IOException {
         for (String repo : repoList) {
             String[] repoData = repo.split("/");
-
-            GithubReleasesInf releasesInf = getClient().create(GithubReleasesInf.class);
-            List<Release> releases = releasesInf.getReleases(repoData[0], repoData[1]).execute().body();
+            Release[] releases = handler.get(String.format("%s/%s/releases", repoData[0], repoData[1]), Release[].class);
 
             if (releases == null) {
                 return null;

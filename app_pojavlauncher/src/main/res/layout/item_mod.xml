@@ -20,18 +20,23 @@
 
     <TextView
             android:id="@+id/mod_title"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:ellipsize="marquee"
             tools:text="Epic Mod"
+            android:marqueeRepeatLimit="marquee_forever"
             android:textSize="13sp"
             android:textColor="#FFFFFF"
             app:layout_constraintTop_toTopOf="@+id/mod_icon"
             app:layout_constraintStart_toEndOf="@+id/mod_icon"
+            app:layout_constraintEnd_toStartOf="@id/mod_switch"
             android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toTopOf="@+id/mod_details"
-            app:layout_constraintVertical_bias="0.0"/>
-
+            app:layout_constraintVertical_bias="0.0"
+            app:layout_constraintHorizontal_bias="0.0"
+            android:singleLine="true"/>
     <TextView
             android:id="@+id/mod_details"
             android:layout_width="wrap_content"
