@@ -20,6 +20,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.zip.*;
+
+import net.kdt.pojavlaunch.modmanager.ModManager;
 import net.kdt.pojavlaunch.prefs.*;
 import net.kdt.pojavlaunch.utils.*;
 import net.kdt.pojavlaunch.value.*;
@@ -40,7 +42,7 @@ import static net.kdt.pojavlaunch.prefs.LauncherPreferences.PREF_NOTCH_SIZE;
 
 public final class Tools {
     public static String APP_NAME = "null";
-    
+
     public static final Gson GLOBAL_GSON = new GsonBuilder().setPrettyPrinting().create();
     
     public static final String URL_HOME = "https://quest-craft.com/changelog/";
@@ -56,7 +58,7 @@ public final class Tools {
     public static String DIR_GAME_HOME = Environment.getExternalStorageDirectory().getAbsolutePath() + "/games/PojavLauncher";
     public static String DIR_GAME_NEW;
     public static String DIR_GAME_OLD = Environment.getExternalStorageDirectory().getAbsolutePath() + "/games/.minecraft";
-    
+
     // New since 3.0.0
     public static String DIR_HOME_JRE;
     public static String DIRNAME_HOME_JRE = "lib";
@@ -71,7 +73,7 @@ public final class Tools {
     public static String OBSOLETE_RESOURCES_PATH;
     public static String CTRLMAP_PATH;
     public static String CTRLDEF_FILE;
-    
+
     public static final String LIBNAME_OPTIFINE = "optifine:OptiFine";
 
     /**
@@ -249,15 +251,23 @@ public final class Tools {
         if (versionInfo.logging != null) {
             javaArgList.add("-Dlog4j.configurationFile=" + Tools.DIR_GAME_NEW + "/" + versionInfo.logging.client.file.id);
         }
+
+        //Fabric
+        javaArgList.add("-Dfabric.addMods=" + ModManager.getWorkDir() + "/core/" + versionInfo.id + ":" + ModManager.getWorkDir() + "/instances/Default");
+
+        //Quilt
+        //javaArgList.add("-Dloader.addMods=" + ModManager.getWorkDir() + "/core/" + versionInfo.id + ":" + ModManager.getWorkDir() + "/instances/Default");
+
         javaArgList.add("-Djna.library.path=" + activity.getApplicationInfo().nativeLibraryDir + "/libjnadispatch.so");
         javaArgList.add("-cp");
         javaArgList.add(getLWJGL3ClassPath() + ":" + launchClassPath);
         javaArgList.add(versionInfo.mainClass);
         javaArgList.addAll(Arrays.asList(launchArgs));
-        // ctx.appendlnToLog("full args: "+javaArgList.toString());
+        ///ctx.appendlnToLog("full args: "+javaArgList.toString());
+        Log.d("GAME", "Full args: " + javaArgList);
         JREUtils.launchJavaVM(activity, javaArgList);
     }
-    
+
     public static void getCacioJavaArgs(List<String> javaArgList, boolean isHeadless) {
         javaArgList.add("-Djava.awt.headless="+isHeadless);
         // Caciocavallo config AWT-enabled version
@@ -288,7 +298,7 @@ public final class Tools {
         if (versionInfo.inheritsFrom != null) {
             versionName = versionInfo.inheritsFrom;
         }
-        
+
         String userType = "msa";
 
         File gameDir = new File(strGameDir);
@@ -319,12 +329,12 @@ public final class Tools {
                     if (argv.values != null) {
                         minecraftArgs.add(argv.values[0]);
                     } else {
-                        
+
                          for (JMinecraftVersionList.Arguments.ArgValue.ArgRules rule : arg.rules) {
                          // rule.action = allow
                          // TODO implement this
                          }
-                         
+
                     }
                     */
                 }
@@ -338,16 +348,33 @@ public final class Tools {
         minecraftArgs.add(Integer.toString(CallbackBridge.windowWidth));
         minecraftArgs.add("--fullscreenHeight");
         minecraftArgs.add(Integer.toString(CallbackBridge.windowHeight));
-        
+
         String[] argsFromJson = JSONUtils.insertJSONValueList(
-            splitAndFilterEmpty(
-                versionInfo.minecraftArguments == null ?
-                fromStringArray(minecraftArgs.toArray(new String[0])):
-                versionInfo.minecraftArguments
-            ), varArgMap
+                splitAndFilterEmpty(
+                        versionInfo.minecraftArguments == null ?
+                                fromStringArray(minecraftArgs.toArray(new String[0])):
+                                versionInfo.minecraftArguments
+                ), varArgMap
         );
         // Tools.dialogOnUiThread(this, "Result args", Arrays.asList(argsFromJson).toString());
         return argsFromJson;
+    }
+
+    //Returns a list of minecraft versions that are compatible with quest craft
+    //Tag must be either "releases" or "snapshots"
+    public static ArrayList<String> getCompatibleVersions(String tag) {
+        ArrayList<String> versions = new ArrayList<>();
+        try {
+            InputStream stream = PojavApplication.assetManager.open("jsons/modmanager.json");
+            JsonObject versionsJson = GLOBAL_GSON.fromJson(read(stream), JsonObject.class);
+
+            for (JsonElement version : versionsJson.get("compatible_versions").getAsJsonObject().getAsJsonArray(tag)) {
+                versions.add(version.getAsString());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return versions;
     }
 
     public static String fromStringArray(String[] strArr) {
@@ -441,14 +468,14 @@ public final class Tools {
         DisplayMetrics displayMetrics = new DisplayMetrics();
 
         if(SDK_INT >= Build.VERSION_CODES.N && (activity.isInMultiWindowMode() || activity.isInPictureInPictureMode())
-        || PREF_NOTCH_SIZE == -1 ){
+                || PREF_NOTCH_SIZE == -1 ){
             //For devices with free form/split screen, we need window size, not screen size.
             displayMetrics = activity.getResources().getDisplayMetrics();
         }else{
             if (SDK_INT >= Build.VERSION_CODES.R) {
                 activity.getDisplay().getRealMetrics(displayMetrics);
             } else {
-                 activity.getWindowManager().getDefaultDisplay().getRealMetrics(displayMetrics);
+                activity.getWindowManager().getDefaultDisplay().getRealMetrics(displayMetrics);
             }
             if(!PREF_IGNORE_NOTCH){
                 //Remove notch width when it isn't ignored.
@@ -463,18 +490,18 @@ public final class Tools {
     public static void setFullscreen(Activity act) {
         final View decorView = act.getWindow().getDecorView();
         decorView.setOnSystemUiVisibilityChangeListener (new View.OnSystemUiVisibilityChangeListener() {
-                @Override
-                public void onSystemUiVisibilityChange(int visibility) {
-                    if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) {
-                        decorView.setSystemUiVisibility(
+            @Override
+            public void onSystemUiVisibilityChange(int visibility) {
+                if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) {
+                    decorView.setSystemUiVisibility(
                             View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-                    }
+                                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
                 }
-            });
+            }
+        });
     }
 
     public static DisplayMetrics currentDisplayMetrics;
@@ -526,34 +553,34 @@ public final class Tools {
 
     private static void showError(final Context ctx, final int titleId, final Throwable e, final boolean exitIfOk, final boolean showMore) {
         e.printStackTrace();
-        
+
         Runnable runnable = () -> {
             final String errMsg = showMore ? Log.getStackTraceString(e): e.getMessage();
             AlertDialog.Builder builder = new AlertDialog.Builder((Context) ctx)
-                .setTitle(titleId)
-                .setMessage(errMsg)
-                .setPositiveButton(android.R.string.ok, (DialogInterface.OnClickListener) (p1, p2) -> {
-                    if(exitIfOk) {
-                        if (ctx instanceof BaseMainActivity) {
-                            BaseMainActivity.fullyExit();
-                        } else if (ctx instanceof Activity) {
-                            ((Activity) ctx).finish();
+                    .setTitle(titleId)
+                    .setMessage(errMsg)
+                    .setPositiveButton(android.R.string.ok, (DialogInterface.OnClickListener) (p1, p2) -> {
+                        if(exitIfOk) {
+                            if (ctx instanceof BaseMainActivity) {
+                                BaseMainActivity.fullyExit();
+                            } else if (ctx instanceof Activity) {
+                                ((Activity) ctx).finish();
+                            }
                         }
-                    }
-                })
-                .setNegativeButton(showMore ? R.string.error_show_less : R.string.error_show_more, (DialogInterface.OnClickListener) (p1, p2) -> showError(ctx, titleId, e, exitIfOk, !showMore))
-                .setNeutralButton(android.R.string.copy, (DialogInterface.OnClickListener) (p1, p2) -> {
-                    ClipboardManager mgr = (ClipboardManager) ctx.getSystemService(Context.CLIPBOARD_SERVICE);
-                    mgr.setPrimaryClip(ClipData.newPlainText("error", Log.getStackTraceString(e)));
-                    if(exitIfOk) {
-                        if (ctx instanceof BaseMainActivity) {
-                            BaseMainActivity.fullyExit();
-                        } else {
-                            ((Activity) ctx).finish();
+                    })
+                    .setNegativeButton(showMore ? R.string.error_show_less : R.string.error_show_more, (DialogInterface.OnClickListener) (p1, p2) -> showError(ctx, titleId, e, exitIfOk, !showMore))
+                    .setNeutralButton(android.R.string.copy, (DialogInterface.OnClickListener) (p1, p2) -> {
+                        ClipboardManager mgr = (ClipboardManager) ctx.getSystemService(Context.CLIPBOARD_SERVICE);
+                        mgr.setPrimaryClip(ClipData.newPlainText("error", Log.getStackTraceString(e)));
+                        if(exitIfOk) {
+                            if (ctx instanceof BaseMainActivity) {
+                                BaseMainActivity.fullyExit();
+                            } else {
+                                ((Activity) ctx).finish();
+                            }
                         }
-                    }
-                })
-                .setCancelable(!exitIfOk);
+                    })
+                    .setCancelable(!exitIfOk);
             try {
                 builder.show();
             } catch (Throwable th) {
@@ -570,10 +597,10 @@ public final class Tools {
 
     public static void dialogOnUiThread(final Activity activity, final CharSequence title, final CharSequence message) {
         activity.runOnUiThread(() -> new AlertDialog.Builder(activity)
-            .setTitle(title)
-            .setMessage(message)
-            .setPositiveButton(android.R.string.ok, null)
-            .show());
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton(android.R.string.ok, null)
+                .show());
     }
 
     public static void moveInside(String from, String to) {
@@ -636,17 +663,17 @@ public final class Tools {
                         }
                     }
                 }//If it won't download, just search for it
-                   try{
-                      inheritsVer = Tools.GLOBAL_GSON.fromJson(read(DIR_HOME_VERSION + "/" + customVer.inheritsFrom + "/" + customVer.inheritsFrom + ".json"), JMinecraftVersionList.Version.class);
-                   }catch(IOException e) {
-                       throw new RuntimeException("Can't find the source version for "+ versionName +" (req version="+customVer.inheritsFrom+")");
-                   }
+                try{
+                    inheritsVer = Tools.GLOBAL_GSON.fromJson(read(DIR_HOME_VERSION + "/" + customVer.inheritsFrom + "/" + customVer.inheritsFrom + ".json"), JMinecraftVersionList.Version.class);
+                }catch(IOException e) {
+                    throw new RuntimeException("Can't find the source version for "+ versionName +" (req version="+customVer.inheritsFrom+")");
+                }
                 //inheritsVer.inheritsFrom = inheritsVer.id;
                 insertSafety(inheritsVer, customVer,
-                             "assetIndex", "assets", "id",
-                             "mainClass", "minecraftArguments",
-                             "optifineLib", "releaseTime", "time", "type"
-                             );
+                        "assetIndex", "assets", "id",
+                        "mainClass", "minecraftArguments",
+                        "optifineLib", "releaseTime", "time", "type"
+                );
 
                 List<DependentLibrary> libList = new ArrayList<DependentLibrary>(Arrays.asList(inheritsVer.libraries));
                 try {
@@ -656,11 +683,11 @@ public final class Tools {
                         for (int i = 0; i < libList.size(); i++) {
                             DependentLibrary libAdded = libList.get(i);
                             String libAddedName = libAdded.name.substring(0, libAdded.name.lastIndexOf(":"));
-                            
+
                             if (libAddedName.equals(libName)) {
-                                Log.d(APP_NAME, "Library " + libName + ": Replaced version " + 
-                                    libName.substring(libName.lastIndexOf(":") + 1) + " with " +
-                                    libAddedName.substring(libAddedName.lastIndexOf(":") + 1));
+                                Log.d(APP_NAME, "Library " + libName + ": Replaced version " +
+                                        libName.substring(libName.lastIndexOf(":") + 1) + " with " +
+                                        libAddedName.substring(libAddedName.lastIndexOf(":") + 1));
                                 libList.set(i, lib);
                                 continue loop_1;
                             }
@@ -676,14 +703,14 @@ public final class Tools {
                 if (inheritsVer.arguments != null && customVer.arguments != null) {
                     List totalArgList = new ArrayList();
                     totalArgList.addAll(Arrays.asList(inheritsVer.arguments.game));
-                    
+
                     int nskip = 0;
                     for (int i = 0; i < customVer.arguments.game.length; i++) {
                         if (nskip > 0) {
                             nskip--;
                             continue;
                         }
-                        
+
                         Object perCustomArg = customVer.arguments.game[i];
                         if (perCustomArg instanceof String) {
                             String perCustomArgStr = (String) perCustomArg;
@@ -731,11 +758,11 @@ public final class Tools {
             }
         }
     }
-    
+
     public static String convertStream(InputStream inputStream) throws IOException {
         return convertStream(inputStream, Charset.forName("UTF-8"));
     }
-    
+
     public static String convertStream(InputStream inputStream, Charset charset) throws IOException {
         StringBuilder out = new StringBuilder();
         int len;
@@ -842,7 +869,7 @@ public final class Tools {
         try {
             String sha1_dst;
             try (InputStream is = new FileInputStream(f)) {
-                 sha1_dst = new String(Hex.encodeHex(org.apache.commons.codec.digest.DigestUtils.sha1(is)));
+                sha1_dst = new String(Hex.encodeHex(org.apache.commons.codec.digest.DigestUtils.sha1(is)));
             }
             if(sha1_dst != null && sourceSHA != null) {
                 return sha1_dst.equalsIgnoreCase(sourceSHA);

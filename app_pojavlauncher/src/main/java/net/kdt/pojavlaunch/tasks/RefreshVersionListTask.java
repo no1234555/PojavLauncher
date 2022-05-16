@@ -1,25 +1,23 @@
 package net.kdt.pojavlaunch.tasks;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.os.*;
-import androidx.appcompat.widget.*;
-
+import android.os.AsyncTask;
 import android.util.Log;
-import android.view.*;
-import android.widget.*;
-import android.widget.AdapterView.*;
-
-import java.io.*;
-import java.util.*;
-import net.kdt.pojavlaunch.*;
-import net.kdt.pojavlaunch.multirt.MultiRTUtils;
-import net.kdt.pojavlaunch.multirt.RTSpinnerAdapter;
-import net.kdt.pojavlaunch.prefs.*;
-import net.kdt.pojavlaunch.utils.*;
-import net.kdt.pojavlaunch.value.PerVersionConfig;
-
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
 import androidx.appcompat.widget.PopupMenu;
+import net.kdt.pojavlaunch.*;
+import net.kdt.pojavlaunch.modmanager.ModManager;
+import net.kdt.pojavlaunch.prefs.LauncherPreferences;
+import net.kdt.pojavlaunch.prefs.PerVersionConfigDialog;
+import net.kdt.pojavlaunch.utils.DownloadUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class RefreshVersionListTask extends AsyncTask<Void, Void, ArrayList<String>>
 {
@@ -27,7 +25,7 @@ public class RefreshVersionListTask extends AsyncTask<Void, Void, ArrayList<Stri
     public RefreshVersionListTask(BaseLauncherActivity activity) {
         mActivity = activity;
     }
-    
+
     @Override
     protected ArrayList<String> doInBackground(Void[] p1)
     {
@@ -41,7 +39,7 @@ public class RefreshVersionListTask extends AsyncTask<Void, Void, ArrayList<Stri
                     Log.i("ExtVL", "Syncing to external: " + url);
                     list = Tools.GLOBAL_GSON.fromJson(DownloadUtils.downloadString(url), JMinecraftVersionList.class);
                     Log.i("ExtVL","Downloaded the version list, len="+list.versions.length);
-                    Collections.addAll(versions,list.versions);
+                    Collections.addAll(versions, list.versions);
                 }
                 mActivity.mVersionList = new JMinecraftVersionList();
                 mActivity.mVersionList.versions = versions.toArray(new JMinecraftVersionList.Version[versions.size()]);
@@ -60,8 +58,8 @@ public class RefreshVersionListTask extends AsyncTask<Void, Void, ArrayList<Stri
     protected void onPostExecute(ArrayList<String> result)
     {
         super.onPostExecute(result);
-        final PopupMenu popup = new PopupMenu(mActivity, mActivity.mVersionSelector);  
-        popup.getMenuInflater().inflate(R.menu.menu_versionopt, popup.getMenu());  
+        final PopupMenu popup = new PopupMenu(mActivity, mActivity.mVersionSelector);
+        popup.getMenuInflater().inflate(R.menu.menu_versionopt, popup.getMenu());
 
         if(result != null && result.size() > 0) {
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(mActivity, android.R.layout.simple_spinner_item, result);
@@ -74,35 +72,33 @@ public class RefreshVersionListTask extends AsyncTask<Void, Void, ArrayList<Stri
         PerVersionConfigDialog dialog = new PerVersionConfigDialog(this.mActivity);
         mActivity.mVersionSelector.setOnLongClickListener((v)->dialog.openConfig(mActivity.mProfile.selectedVersion));
         mActivity.mVersionSelector.setOnItemSelectedListener(new OnItemSelectedListener(){
-                @Override
-                public void onItemSelected(AdapterView<?> p1, View p2, int p3, long p4)
-                {
-                    mActivity.mProfile.selectedVersion = p1.getItemAtPosition(p3).toString();
+            @Override
+            public void onItemSelected(AdapterView<?> p1, View p2, int p3, long p4)
+            {
+                mActivity.mProfile.selectedVersion = p1.getItemAtPosition(p3).toString();
 
-                    PojavProfile.setCurrentProfile(mActivity, mActivity.mProfile);
-                    if (PojavProfile.isFileType(mActivity)) {
-                        try {
-                            PojavProfile.setCurrentProfile(mActivity, mActivity.mProfile.save());
-                        } catch (IOException e) {
-                            Tools.showError(mActivity, e);
-                        }
+                PojavProfile.setCurrentProfile(mActivity, mActivity.mProfile);
+                if (PojavProfile.isFileType(mActivity)) {
+                    try {
+                        PojavProfile.setCurrentProfile(mActivity, mActivity.mProfile.save());
+                    } catch (IOException e) {
+                        Tools.showError(mActivity, e);
                     }
-
                 }
 
-                @Override
-                public void onNothingSelected(AdapterView<?> p1)
-                {
-                    // TODO: Implement this method
-                }
-            });
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> p1)
+            {
+                // TODO: Implement this method
+            }
+        });
         /*mActivity.mVersionSelector.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener(){
                 @Override
                 public boolean onItemLongClick(AdapterView<?> p1, View p2, int p3, long p4)
                 {
                     // Implement copy, remove, reinstall,...
-
-
                     return true;
                 }
             });
@@ -110,16 +106,16 @@ public class RefreshVersionListTask extends AsyncTask<Void, Void, ArrayList<Stri
         popup.setOnMenuItemClickListener(item -> true);
 
     }
-    
+
     private ArrayList<String> filter(JMinecraftVersionList.Version[] list1, File[] list2) {
         ArrayList<String> output = new ArrayList<String>();
 
         for (JMinecraftVersionList.Version value1: list1) {
             if ((value1.type.equals("release") && LauncherPreferences.PREF_VERTYPE_RELEASE) ||
-                (value1.type.equals("snapshot") && LauncherPreferences.PREF_VERTYPE_SNAPSHOT) ||
-                (value1.type.equals("old_alpha") && LauncherPreferences.PREF_VERTYPE_OLDALPHA) ||
-                (value1.type.equals("old_beta") && LauncherPreferences.PREF_VERTYPE_OLDBETA) ||
-                (value1.type.equals("modified"))) {
+                    (value1.type.equals("snapshot") && LauncherPreferences.PREF_VERTYPE_SNAPSHOT) ||
+                    (value1.type.equals("old_alpha") && LauncherPreferences.PREF_VERTYPE_OLDALPHA) ||
+                    (value1.type.equals("old_beta") && LauncherPreferences.PREF_VERTYPE_OLDBETA) ||
+                    (value1.type.equals("modified"))) {
                 output.add(value1.id);
             }
         }
@@ -132,7 +128,7 @@ public class RefreshVersionListTask extends AsyncTask<Void, Void, ArrayList<Stri
 
         return output;
     }
-    
+
     private int selectAt(String[] strArr, String select) {
         int count = 0;
         for(String str : strArr){
@@ -142,5 +138,5 @@ public class RefreshVersionListTask extends AsyncTask<Void, Void, ArrayList<Stri
             count++;
         }
         return -1;
-	}
+    }
 }

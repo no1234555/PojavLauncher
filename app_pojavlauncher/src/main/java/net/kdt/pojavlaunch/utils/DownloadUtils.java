@@ -1,15 +1,17 @@
 package net.kdt.pojavlaunch.utils;
 
-import android.util.*;
+import net.kdt.pojavlaunch.Tools;
+import org.apache.commons.io.IOUtils;
+
 import java.io.*;
-import java.net.*;
-import java.nio.charset.*;
-import net.kdt.pojavlaunch.*;
-import org.apache.commons.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 public class DownloadUtils {
     public static final String USER_AGENT = Tools.APP_NAME;
-    public static final Charset utf8 = Charset.forName("UTF-8");
+    public static final Charset utf8 = StandardCharsets.UTF_8;
 
     public static void download(String url, OutputStream os) throws IOException {
         download(new URL(url), os);
@@ -31,7 +33,7 @@ public class DownloadUtils {
             is = conn.getInputStream();
 			IOUtils.copy(is, os);
         } catch (IOException e) {
-            throw new IOException("Unable to download from " + url.toString(), e);
+            throw new IOException("Unable to download from " + url, e);
         } finally {
 			if (is != null) {
                 try {
@@ -75,7 +77,7 @@ public class DownloadUtils {
                 throw th2;
             }
         } catch (IOException th3) {
-         
+
             if (bos != null) {
                 bos.close();
             }

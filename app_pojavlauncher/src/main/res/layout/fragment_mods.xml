@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:gravity="start"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="#44000000"
+        android:orientation="horizontal"
+        android:nestedScrollingEnabled="false"
+        android:keepScreenOn="false">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/mod_selector_panel"
+            android:layout_width="250dp"
+            android:layout_height="match_parent">
+
+        <Spinner
+                android:id="@+id/filter_spinner"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+        <SearchView
+                android:id="@+id/mods_search"
+                android:layout_width="250dp"
+                android:layout_height="30dp"
+                app:layout_constraintBottom_toTopOf="@+id/mods_recycler"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/filter_spinner"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/mods_recycler"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.523"
+                app:layout_constraintTop_toBottomOf="@+id/mods_search"
+                tools:itemCount="24"
+                tools:listitem="@layout/item_mod"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <View
+                android:id="@+id/mod_info_panel"
+                android:layout_width="match_parent"
+                android:layout_height="125dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+        <ImageView
+                android:id="@+id/mod_icon_main"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginStart="12dp"
+                app:layout_constraintStart_toStartOf="@+id/mod_info_panel"
+                app:layout_constraintTop_toTopOf="@+id/mod_info_panel"/>
+        <TextView
+                android:id="@+id/mod_title_main"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textSize="25sp"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintTop_toTopOf="@+id/mod_icon_main"
+                app:layout_constraintStart_toEndOf="@+id/mod_icon_main"
+                app:layout_constraintEnd_toEndOf="@id/mod_info_panel"
+                android:layout_marginStart="16dp"
+                app:layout_constraintHorizontal_bias="0.0"/>
+
+        <us.feras.mdv.MarkdownView
+                android:id="@+id/mod_description"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:background="@color/design_default_color_primary_dark"
+                app:layout_constraintTop_toBottomOf="@id/mod_info_panel"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>

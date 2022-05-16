@@ -31,7 +31,7 @@ public abstract class BaseLauncherActivity extends BaseActivity {
 	public MultiRTConfigDialog mRuntimeConfigDialog;
 	public TextView mLaunchTextStatus;
     
-    public JMinecraftVersionList mVersionList;
+    public JMinecraftVersionList mVersionList = new JMinecraftVersionList();
 	public MinecraftDownloaderTask mTask;
 	public MinecraftAccount mProfile;
 	public String[] mAvailableVersions;
@@ -107,15 +107,15 @@ public abstract class BaseLauncherActivity extends BaseActivity {
             // TODO: better check!!!
             if (mProfile.accessToken.equals("0")) {
                 File verJsonFile = new File(Tools.DIR_HOME_VERSION,
-                  mProfile.selectedVersion + "/" + mProfile.selectedVersion + ".json");
+                        mProfile.selectedVersion + "/" + mProfile.selectedVersion + ".json");
                 if (verJsonFile.exists()) {
                     mTask.onPostExecute(null);
                 } else {
                     new AlertDialog.Builder(this)
-                        .setTitle(R.string.global_error)
-                        .setMessage(R.string.mcl_launch_error_localmode)
-                        .setPositiveButton(android.R.string.ok, null)
-                        .show();
+                            .setTitle(R.string.global_error)
+                            .setMessage(R.string.mcl_launch_error_localmode)
+                            .setPositiveButton(android.R.string.ok, null)
+                            .show();
                 }
             } else {
                 mTask.execute(mProfile.selectedVersion);
@@ -154,11 +154,10 @@ public abstract class BaseLauncherActivity extends BaseActivity {
     protected void onResumeFragments() {
         super.onResumeFragments();
         if(listRefreshListener == null) {
-            final BaseLauncherActivity thiz = this;
             listRefreshListener = (sharedPreferences, key) -> {
                 if(key.startsWith("vertype_")) {
                     System.out.println("Verlist update needed!");
-                    new RefreshVersionListTask(thiz).execute();
+                    new RefreshVersionListTask(this).execute();
                 }
             };
         }

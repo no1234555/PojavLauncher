@@ -1,17 +1,17 @@
 package net.kdt.pojavlaunch.tasks;
 
+import android.annotation.SuppressLint;
 import android.app.*;
 import android.content.*;
 import android.os.*;
 import android.util.*;
 
 import java.io.*;
-import java.nio.ByteOrder;
-import java.nio.MappedByteBuffer;
-import java.nio.channels.FileChannel;
 import java.util.*;
 import java.util.concurrent.*;
+
 import net.kdt.pojavlaunch.*;
+import net.kdt.pojavlaunch.modmanager.ModManager;
 import net.kdt.pojavlaunch.multirt.MultiRTUtils;
 import net.kdt.pojavlaunch.multirt.Runtime;
 import net.kdt.pojavlaunch.prefs.*;
@@ -25,10 +25,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class MinecraftDownloaderTask extends AsyncTask<String, String, Throwable>
  {
-    private BaseLauncherActivity mActivity;
+    private final BaseLauncherActivity mActivity;
     private boolean launchWithError = false;
-    MinecraftDownloaderTask thiz = this;
-    public MinecraftDownloaderTask(BaseLauncherActivity activity) {
+
+     public MinecraftDownloaderTask(BaseLauncherActivity activity) {
         mActivity = activity;
     }
     
@@ -39,6 +39,7 @@ public class MinecraftDownloaderTask extends AsyncTask<String, String, Throwable
     }
 
     private JMinecraftVersionList.Version verInfo;
+    @SuppressLint("StringFormatInvalid")
     @Override
     protected Throwable doInBackground(final String[] p1) {
         Throwable throwable = null;
@@ -158,6 +159,11 @@ public class MinecraftDownloaderTask extends AsyncTask<String, String, Throwable
                     }
                 }
 
+                String v = Tools.getCompatibleVersions("releases").get(0);
+                setMax(ModManager.getCoreModsFromJson(v).size());
+                zeroProgress();
+                downloadCoreMods(v);
+
                 setMax(verInfo.libraries.length);
                 zeroProgress();
                 for (final DependentLibrary libItem : verInfo.libraries) {
@@ -263,17 +269,21 @@ public class MinecraftDownloaderTask extends AsyncTask<String, String, Throwable
             } finally {
                 mActivity.mIsAssetsProcessing = false;
             }
+
         } catch (Throwable th){
             throwable = th;
         } finally {
             return throwable;
         }
     }
+
     private int addProgress = 0;
     public static class SilentException extends Exception{}
+
     public void zeroProgress() {
         addProgress = 0;
     }
+
     protected void downloadLibrary(DependentLibrary libItem,String libArtifact,File outLib) throws Throwable{
         publishProgress("1", mActivity.getString(R.string.mcl_launch_downloading, libItem.name));
         String libPathURL;
@@ -334,6 +344,7 @@ public class MinecraftDownloaderTask extends AsyncTask<String, String, Throwable
             });
     }
     
+    @SuppressLint("StringFormatMatches")
     private void publishDownloadProgress(String target, int curr, int max) {
         // array length > 2 ignores append log on dev console
         publishProgress("0", mActivity.getString(R.string.mcl_launch_downloading_progress, target,
@@ -488,16 +499,22 @@ public class MinecraftDownloaderTask extends AsyncTask<String, String, Throwable
         }
     }
 
-    private JMinecraftVersionList.Version findVersion(String version) {
-        if (mActivity.mVersionList != null) {
-            for (JMinecraftVersionList.Version valueVer: mActivity.mVersionList.versions) {
-                if (valueVer.id.equals(version)) {
-                    return valueVer;
-                }
-            }
+    public void downloadCoreMods(String version) {
+        for (Pair<String, String> mod : ModManager.getCoreModsFromJson(version)) {
+            ModManager.addMod(null, mod.second, mod.first, version, true);
         }
+    }
 
-        // Custom version, inherits from base.
-        return Tools.getVersionInfo(mActivity,version);
+    private JMinecraftVersionList.Version findVersion(String version) {
+         if (mActivity.mVersionList != null) {
+             for (JMinecraftVersionList.Version valueVer: mActivity.mVersionList.versions) {
+                 if (valueVer.id.equals(version)) {
+                     return valueVer;
+                 }
+             }
+         }
+
+         // Custom version, inherits from base.
+         return Tools.getVersionInfo(mActivity,version);
     }
 }
