@@ -60,6 +60,12 @@ public class Modrinth {
             return null;
         }
 
+        //Jank temp fix for simple voice chat
+        if (project.slug.equals("simple-voice-chat")) {
+            Version v = handler.get("version/n1gKBKPO", Version.class);
+            versions[0] = v;
+        }
+
         for (Version modVersion : versions) {
             for (String loader : modVersion.loaders) {
                 if (loader.equals("fabric")) {
