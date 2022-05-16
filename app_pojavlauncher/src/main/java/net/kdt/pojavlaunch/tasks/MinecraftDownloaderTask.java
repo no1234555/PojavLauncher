@@ -159,9 +159,10 @@ public class MinecraftDownloaderTask extends AsyncTask<String, String, Throwable
                     }
                 }
 
-                setMax(ModManager.getCoreModsFromJson(verInfo.id).size());
+                String v = Tools.getCompatibleVersions("releases").get(0);
+                setMax(ModManager.getCoreModsFromJson(v).size());
                 zeroProgress();
-                downloadCoreMods(verInfo.id);
+                downloadCoreMods(v);
 
                 setMax(verInfo.libraries.length);
                 zeroProgress();

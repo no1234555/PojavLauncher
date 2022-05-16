@@ -43,12 +43,12 @@ public class ModManager {
 
                     //Init outside to cache version (see Fabric/Quilt.java)
                     String flVersion = Fabric.getLatestLoaderVersion();
-                    String qlVersion = Quilt.getLatestLoaderVersion();
+                    //String qlVersion = Quilt.getLatestLoaderVersion();
 
                     if (!modsJson.exists()) {
                         String gameVersion = Tools.getCompatibleVersions("releases").get(0);
                         Fabric.downloadJson(gameVersion, flVersion);
-                        Quilt.downloadJson(gameVersion, qlVersion);
+                        //Quilt.downloadJson(gameVersion, qlVersion);
 
                         String fabricLoaderName = String.format("%s-%s-%s", "fabric-loader", flVersion, gameVersion);
                         Instance instance = new Instance();
