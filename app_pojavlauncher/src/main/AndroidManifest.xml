@@ -25,7 +25,8 @@
         android:resizeableActivity="true"
         android:hasFragileUserData="true"
         android:allowNativeHeapPointerTagging="false"
-        tools:replace="android:label">
+        tools:replace="android:label"
+        android:extractNativeLibs="true">
 
         <meta-data 
             android:name="android.max_aspect"
