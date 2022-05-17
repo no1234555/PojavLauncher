@@ -51,10 +51,10 @@ android {
             keyAlias "androiddebugkey"
             keyPassword "android"
         }
-        googlePlayBuild {
+        release {
             storeFile file("qcxrPojav")
             storePassword System.getenv("SIGNING_KEY_PASSWORD")
-            keyAlias System.getEnv("SIGNING_KEY_ALIAS")
+            keyAlias System.getenv("SIGNING_KEY_ALIAS")
             keyPassword System.getenv("SIGNING_KEY_PASSWORD")
         }
     }
@@ -91,6 +91,7 @@ android {
             // multiDexEnabled = true
            // debuggable = true
             resValue 'string', 'storageProviderAuthorities', 'net.kdt.pojavlaunch.scoped.gamefolder'
+	    signingConfig signingConfigs.release
         }
         gplay {
             initWith release
