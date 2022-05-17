@@ -13,7 +13,8 @@ jobs:
   build:
     runs-on: ubuntu-20.04
     env:
-      GPLAY_KEYSTORE_PASSWORD: "questcraft"
+      SIGNING_KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
+      SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
     steps:
       - uses: actions/checkout@v2
         with:
