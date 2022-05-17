@@ -334,7 +334,6 @@ public class PojavLoginActivity extends BaseActivity {
         mkdirs(Tools.CTRLMAP_PATH);
 
         mkdirs(ModManager.getWorkDir());
-        ModManager.init();
 
         try {
             new CustomControls(this).save(Tools.CTRLDEF_FILE);
@@ -349,6 +348,10 @@ public class PojavLoginActivity extends BaseActivity {
             
             // Install Resource Pack
             Tools.copyAssetFile(this, "assets-v0.zip", DIR_GAME_NEW + "/resourcepacks", false);
+
+            // Install Mod Manager Jsons
+            Tools.copyAssetFile(this, "jsons/mod-compat.json", ModManager.getWorkDir(), false);
+            Tools.copyAssetFile(this, "jsons/modmanager.json", ModManager.getWorkDir(), false);
 
             // Install TitleWorlds
             Tools.copyAssetFile(this, "titleworlds/TitleWorlds/advancements/6b404275-563a-4c56-8f46-c1c0c23df5c8.json", DIR_GAME_NEW + "/titleworlds/TitleWorlds/advancements", false);
@@ -406,6 +409,8 @@ public class PojavLoginActivity extends BaseActivity {
         catch(Throwable e){
             Tools.showError(this, e);
         }
+
+        ModManager.init();
 
         if (ContextCompat.checkSelfPermission(this,
                     Manifest.permission.RECORD_AUDIO)

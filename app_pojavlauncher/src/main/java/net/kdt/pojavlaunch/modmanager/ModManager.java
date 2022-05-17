@@ -33,10 +33,8 @@ public class ModManager {
             @Override
             public void run() {
                 try {
-                    InputStream modManagerFile = PojavApplication.assetManager.open("jsons/modmanager.json");
-                    modManagerJson = Tools.GLOBAL_GSON.fromJson(Tools.read(modManagerFile), JsonObject.class);
-                    InputStream compatFile = PojavApplication.assetManager.open("jsons/mod-compat.json");
-                    modCompats = Tools.GLOBAL_GSON.fromJson(Tools.read(compatFile), JsonObject.class);
+                    modManagerJson = Tools.GLOBAL_GSON.fromJson(Tools.read(workDir + "/modmanager.json"), JsonObject.class);
+                    modCompats = Tools.GLOBAL_GSON.fromJson(Tools.read(workDir + "/mod-compat.json"), JsonObject.class);
 
                     File modsJson = new File(workDir + "/mods.json");
                     Github.setRepoList(modManagerJson.getAsJsonArray("repos"));
