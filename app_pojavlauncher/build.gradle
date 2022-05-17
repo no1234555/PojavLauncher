@@ -52,10 +52,10 @@ android {
             keyPassword "android"
         }
         googlePlayBuild {
-            storeFile file("upload.jks")
-            storePassword System.getenv("GPLAY_KEYSTORE_PASSWORD")
-            keyAlias "upload"
-            keyPassword System.getenv("GPLAY_KEYSTORE_PASSWORD")
+            storeFile file("qcxrPojav")
+            storePassword System.getenv("SIGNING_KEY_PASSWORD")
+            keyAlias System.getEnv("SIGNING_KEY_ALIAS")
+            keyPassword System.getenv("SIGNING_KEY_PASSWORD")
         }
     }
 	
