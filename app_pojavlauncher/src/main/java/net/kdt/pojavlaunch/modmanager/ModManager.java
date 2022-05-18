@@ -24,7 +24,6 @@ public class ModManager {
     public static final String workDir = Tools.DIR_GAME_NEW + "/modmanager";
     public static State state = new State();
     private static JsonObject modCompats = new JsonObject();
-    private static JsonObject modManagerJson = new JsonObject();
     private static final ArrayList<String> currentDownloadSlugs = new ArrayList<>();
     private static boolean saveStateCalled = false;
 
@@ -33,7 +32,7 @@ public class ModManager {
             @Override
             public void run() {
                 try {
-                    modManagerJson = Tools.GLOBAL_GSON.fromJson(Tools.read(workDir + "/modmanager.json"), JsonObject.class);
+                    JsonObject modManagerJson = Tools.GLOBAL_GSON.fromJson(Tools.read(workDir + "/modmanager.json"), JsonObject.class);
                     modCompats = Tools.GLOBAL_GSON.fromJson(Tools.read(workDir + "/mod-compat.json"), JsonObject.class);
 
                     File modsJson = new File(workDir + "/mods.json");
@@ -88,12 +87,19 @@ public class ModManager {
     }
 
     public static ArrayList<Pair<String, String>> getCoreModsFromJson(String version) {
-        ArrayList<Pair<String, String>> mods = new ArrayList<>();
-        for (JsonElement element : modManagerJson.get("core_mods").getAsJsonObject().getAsJsonArray(version)) {
-            JsonObject mod = element.getAsJsonObject();
-            mods.add(new Pair<>(mod.get("slug").getAsString(), mod.get("platform").getAsString()));
+        try {
+            ArrayList<Pair<String, String>> mods = new ArrayList<>();
+            JsonObject json = Tools.GLOBAL_GSON.fromJson(Tools.read(workDir + "/modmanager.json"), JsonObject.class);
+
+            for (JsonElement element : json.get("core_mods").getAsJsonObject().getAsJsonArray(version)) {
+                JsonObject mod = element.getAsJsonObject();
+                mods.add(new Pair<>(mod.get("slug").getAsString(), mod.get("platform").getAsString()));
+            }
+            return mods;
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        return mods;
+        return null;
     }
 
     public static String getModCompat(String slug) {
