@@ -337,27 +337,7 @@ public class PojavLoginActivity extends BaseActivity {
             new CustomControls(this).save(Tools.CTRLDEF_FILE);
             Tools.copyAssetFile(this, "jsons/fabric-loader-0.13.3.json", Tools.DIR_HOME_VERSION + "/fabric-loader-0.13.3", false);
 
-            Tools.copyAssetFile(this, "components/security/pro-grade.jar", Tools.DIR_DATA, true);
-            Tools.copyAssetFile(this, "components/security/java_sandbox.policy", Tools.DIR_DATA, true);
-            Tools.copyAssetFile(this, "options.txt", Tools.DIR_GAME_NEW, false);
-
-            // TODO: Remove after implement.
-            Tools.copyAssetFile(this, "launcher_profiles.json", Tools.DIR_GAME_NEW, false);
-            Tools.copyAssetFile(this,"resolv.conf",Tools.DIR_DATA, true);
-            Tools.copyAssetFile(this,"arc_dns_injector.jar",Tools.DIR_DATA, true);
-
-            AssetManager am = this.getAssets();
-
-            unpackComponent(am, "caciocavallo");
-            unpackComponent(am, "lwjgl3");
-            if(!installRuntimeAutomatically(am,MultiRTUtils.getRuntimes().size() > 0)) {
-                MultiRTConfigDialog.openRuntimeSelector(this, MultiRTConfigDialog.MULTIRT_PICK_RUNTIME_STARTUP);
-                synchronized (mLockSelectJRE) {
-                    mLockSelectJRE.wait();
-                }
-            }
-            if(Build.VERSION.SDK_INT > 28) runOnUiThread(this::showStorageDialog);
-            // Install Mods
+             // Install Mods
             Tools.copyAssetFile(this, "artifacts/mcxr-core-0.2.2+null.jar", DIR_GAME_NEW + "/mods", false);
             Tools.copyAssetFile(this, "artifacts/mcxr-play-0.2.2+null.jar", DIR_GAME_NEW + "/mods", false);
             Tools.copyAssetFile(this, "artifacts/titleworlds-0.0.2.jar", DIR_GAME_NEW + "/mods", false);
@@ -405,7 +385,28 @@ public class PojavLoginActivity extends BaseActivity {
             Tools.copyAssetFile(this, "titleworlds/TitleWorlds/stats/b22ca959-c8a3-4549-bd3e-e143b37fc7ab.json", DIR_GAME_NEW + "/titleworlds/TitleWorlds/stats", false);
             Tools.copyAssetFile(this, "titleworlds/TitleWorlds/level.dat", DIR_GAME_NEW + "/titleworlds/TitleWorlds", false);
             Tools.copyAssetFile(this, "titleworlds/TitleWorlds/level.dat_old", DIR_GAME_NEW + "/titleworlds/TitleWorlds", false);
-            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/session.lock", DIR_GAME_NEW + "/titleworlds/TitleWorlds", false);            
+            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/session.lock", DIR_GAME_NEW + "/titleworlds/TitleWorlds", false); 
+            
+            Tools.copyAssetFile(this, "components/security/pro-grade.jar", Tools.DIR_DATA, true);
+            Tools.copyAssetFile(this, "components/security/java_sandbox.policy", Tools.DIR_DATA, true);
+            Tools.copyAssetFile(this, "options.txt", Tools.DIR_GAME_NEW, false);
+
+            // TODO: Remove after implement.
+            Tools.copyAssetFile(this, "launcher_profiles.json", Tools.DIR_GAME_NEW, false);
+            Tools.copyAssetFile(this,"resolv.conf",Tools.DIR_DATA, true);
+            Tools.copyAssetFile(this,"arc_dns_injector.jar",Tools.DIR_DATA, true);
+
+            AssetManager am = this.getAssets();
+
+            unpackComponent(am, "caciocavallo");
+            unpackComponent(am, "lwjgl3");
+            if(!installRuntimeAutomatically(am,MultiRTUtils.getRuntimes().size() > 0)) {
+                MultiRTConfigDialog.openRuntimeSelector(this, MultiRTConfigDialog.MULTIRT_PICK_RUNTIME_STARTUP);
+                synchronized (mLockSelectJRE) {
+                    mLockSelectJRE.wait();
+                }
+            }
+            if(Build.VERSION.SDK_INT > 28) runOnUiThread(this::showStorageDialog);           
             LauncherPreferences.loadPreferences(getApplicationContext());
         }
         catch(Throwable e){
