@@ -346,16 +346,6 @@ public class PojavLoginActivity extends BaseActivity {
             Tools.copyAssetFile(this,"resolv.conf",Tools.DIR_DATA, true);
             Tools.copyAssetFile(this,"arc_dns_injector.jar",Tools.DIR_DATA, true);
 
-            // Remove old versions
-            File[] files = new File(DIR_GAME_NEW + "mods").listFiles((dir, name) ->
-                    name.contains("mcxr-") || name.contains("titleworlds") || name.contains("lazydfu") || name.contains("fabric-api"));
-
-            for(File file : files) {
-                if(file.exists()) {
-                    file.delete();
-                }
-            }
-
             AssetManager am = this.getAssets();
 
             unpackComponent(am, "caciocavallo");
