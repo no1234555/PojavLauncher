@@ -355,10 +355,21 @@ public class PojavLoginActivity extends BaseActivity {
                     file.delete();
                 }
             }
-            
+
+            AssetManager am = this.getAssets();
+
+            unpackComponent(am, "caciocavallo");
+            unpackComponent(am, "lwjgl3");
+            if(!installRuntimeAutomatically(am,MultiRTUtils.getRuntimes().size() > 0)) {
+                MultiRTConfigDialog.openRuntimeSelector(this, MultiRTConfigDialog.MULTIRT_PICK_RUNTIME_STARTUP);
+                synchronized (mLockSelectJRE) {
+                    mLockSelectJRE.wait();
+                }
+            }
+            if(Build.VERSION.SDK_INT > 28) runOnUiThread(this::showStorageDialog);
             // Install Mods
-            Tools.copyAssetFile(this, "artifacts/mcxr-core-0.2.1+null.jar", DIR_GAME_NEW + "/mods", false);
-            Tools.copyAssetFile(this, "artifacts/mcxr-play-0.2.1+null.jar", DIR_GAME_NEW + "/mods", false);
+            Tools.copyAssetFile(this, "artifacts/mcxr-core-0.2.2+null.jar", DIR_GAME_NEW + "/mods", false);
+            Tools.copyAssetFile(this, "artifacts/mcxr-play-0.2.2+null.jar", DIR_GAME_NEW + "/mods", false);
             Tools.copyAssetFile(this, "artifacts/titleworlds-0.0.2.jar", DIR_GAME_NEW + "/mods", false);
             Tools.copyAssetFile(this, "artifacts/lazydfu-0.1.3-SNAPSHOT.jar", DIR_GAME_NEW + "/mods", false);
             Tools.copyAssetFile(this, "artifacts/fabric-api-0.48.0+1.18.2.jar", DIR_GAME_NEW + "/mods", false);
@@ -404,20 +415,7 @@ public class PojavLoginActivity extends BaseActivity {
             Tools.copyAssetFile(this, "titleworlds/TitleWorlds/stats/b22ca959-c8a3-4549-bd3e-e143b37fc7ab.json", DIR_GAME_NEW + "/titleworlds/TitleWorlds/stats", false);
             Tools.copyAssetFile(this, "titleworlds/TitleWorlds/level.dat", DIR_GAME_NEW + "/titleworlds/TitleWorlds", false);
             Tools.copyAssetFile(this, "titleworlds/TitleWorlds/level.dat_old", DIR_GAME_NEW + "/titleworlds/TitleWorlds", false);
-            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/session.lock", DIR_GAME_NEW + "/titleworlds/TitleWorlds", false);
-
-
-            AssetManager am = this.getAssets();
-
-            unpackComponent(am, "caciocavallo");
-            unpackComponent(am, "lwjgl3");
-            if(!installRuntimeAutomatically(am,MultiRTUtils.getRuntimes().size() > 0)) {
-                MultiRTConfigDialog.openRuntimeSelector(this, MultiRTConfigDialog.MULTIRT_PICK_RUNTIME_STARTUP);
-                synchronized (mLockSelectJRE) {
-                    mLockSelectJRE.wait();
-                }
-            }
-            if(Build.VERSION.SDK_INT > 28) runOnUiThread(this::showStorageDialog);
+            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/session.lock", DIR_GAME_NEW + "/titleworlds/TitleWorlds", false);            
             LauncherPreferences.loadPreferences(getApplicationContext());
         }
         catch(Throwable e){
