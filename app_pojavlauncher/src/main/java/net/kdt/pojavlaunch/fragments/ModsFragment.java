@@ -156,13 +156,18 @@ public class ModsFragment extends Fragment {
 
             String name = modData.slug;
             if (filter.equals("CurseForge")) name = modData.title;
+            String modCompat = ModManager.getModCompat(modData.platform, name);
 
-            String modCompat = ModManager.getModCompat(filter.toLowerCase(), name);
-            compat.setText("  " + modCompat + "  ");
             if (modCompat.equals("Untested")) compat.setBackgroundResource(R.drawable.marker_gray);
             if (modCompat.equals("Perfect")) compat.setBackgroundResource(R.drawable.marker_green);
             if (modCompat.equals("Good")) compat.setBackgroundResource(R.drawable.marker_yellow);
             if (modCompat.equals("Unusable")) compat.setBackgroundResource(R.drawable.marker_red);
+            if (filter.equals("Core")) {
+                compat.setBackgroundResource(R.drawable.marker_green);
+                modCompat = "Core";
+            }
+
+            compat.setText("  " + modCompat + "  ");
         }
 
         @Override
