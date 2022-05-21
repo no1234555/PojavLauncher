@@ -40,12 +40,12 @@ public class ModManager {
                     File modsJson = new File(workDir + "/mods.json");
 
                     JsonArray repoList = modManagerJson.getAsJsonArray("repos");
-                    if (repoList == null) {
+                    /*if (repoList == null) {
                         Log.d("MOD Manager", "REPO LIST IS NULL!!");
                         repoList = new JsonArray();
                         repoList.add("QuestCraftPlusPlus/MCXR");
                         repoList.add("QuestCraftPlusPlus/TitleWorlds");
-                    }
+                    }*/
                     Github.setRepoList(repoList);
 
                     //Init outside to cache version (see Fabric/Quilt.java)
@@ -109,7 +109,7 @@ public class ModManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return null;
+        return new ArrayList<>();
     }
 
     public static String getModCompat(String slug) {
