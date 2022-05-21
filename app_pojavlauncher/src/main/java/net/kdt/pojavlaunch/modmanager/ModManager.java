@@ -25,6 +25,7 @@ public class ModManager {
 
     public static final String workDir = Tools.DIR_GAME_NEW + "/modmanager";
     public static State state = new State();
+    private static final File modsJson = new File(workDir + "/mods.json");
     private static JsonObject modCompats = new JsonObject();
     private static final ArrayList<String> currentDownloadSlugs = new ArrayList<>();
     private static boolean saveStateCalled = false;
@@ -37,7 +38,7 @@ public class ModManager {
                     //InputStream stream = PojavApplication.assetManager.open("jsons/modmanager.json");
                     JsonObject modManagerJson = Tools.GLOBAL_GSON.fromJson(Tools.read(workDir + "/modmanager.json"), JsonObject.class);
                     modCompats = Tools.GLOBAL_GSON.fromJson(Tools.read(workDir + "/mod-compat.json"), JsonObject.class);
-                    File modsJson = new File(workDir + "/mods.json");
+
 
                     JsonArray repoList = modManagerJson.getAsJsonArray("repos");
                     /*if (repoList == null) {
@@ -116,6 +117,20 @@ public class ModManager {
         JsonElement compatLevel = modCompats.get(slug);
         if (compatLevel != null) return compatLevel.getAsString();
         return "Untested";
+    }
+
+    public static Instance getInstance(String name) {
+        Instance instance = state.getInstance(name);
+
+        if (instance == null) {
+            try {
+                state = Tools.GLOBAL_GSON.fromJson(Tools.read(modsJson.getPath()), State.class);
+                instance = state.getInstance(name);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return instance;
     }
 
     public static String getWorkDir() {
@@ -296,7 +311,7 @@ public class ModManager {
     }
 
     public static ArrayList<ModData> listInstalledMods(String instanceName) {
-        return (ArrayList<ModData>) state.getInstance(instanceName).getMods();
+        return (ArrayList<ModData>) getInstance(instanceName).getMods();
     }
 
     public static ArrayList<ModData> listCoreMods(String gameVersion) {

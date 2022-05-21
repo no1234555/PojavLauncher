@@ -83,7 +83,7 @@ public class ModsFragment extends Fragment {
     private void loadDataIntoList(ModAdapter modAdapter, String query, int offset, boolean refresh) {
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.N) return;
         if (refresh) modAdapter.reset();
-        State.Instance selectedInstance = ModManager.state.getInstance("Default");
+        State.Instance selectedInstance = ModManager.getInstance("Default");
 
         if (filter.equals("Modrinth")) Modrinth.addProjectsToRecycler(modAdapter, selectedInstance.getGameVersion(), offset, query);
         else if (filter.equals("CurseForge")) Curseforge.addProjectsToRecycler(modAdapter, selectedInstance.getGameVersion(), offset, query);
@@ -138,7 +138,7 @@ public class ModsFragment extends Fragment {
                 return;
             }
 
-            State.Instance selectedInstance = ModManager.state.getInstance("Default");
+            State.Instance selectedInstance = ModManager.getInstance("Default");
             ModData mod = selectedInstance.getMod(modData.slug);
             if (mod != null) ModManager.setModActive(selectedInstance.getName(), modData.slug, enableSwitch.isChecked());
             else ModManager.addMod(selectedInstance, filter.toLowerCase(), modData.slug, selectedInstance.getGameVersion(), false);
