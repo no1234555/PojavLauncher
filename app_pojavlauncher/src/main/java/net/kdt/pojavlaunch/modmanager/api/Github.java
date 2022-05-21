@@ -1,6 +1,5 @@
 package net.kdt.pojavlaunch.modmanager.api;
 
-import android.util.Log;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.annotations.SerializedName;
@@ -47,9 +46,7 @@ public class Github {
             String[] repoData = repo.split("/");
             Release[] releases = handler.get(String.format("%s/%s/releases", repoData[0], repoData[1]), Release[].class);
 
-            if (releases == null) {
-                return null;
-            }
+            if (releases == null) return null;
 
             for (Release release : releases) {
                 if (release.name.split("-")[1].equals(gameVersion)) {
@@ -61,6 +58,7 @@ public class Github {
                             modData.repo = repo;
                             modData.title = slug;
                             modData.slug = slug;
+                            modData.iconUrl = "https://avatars.githubusercontent.com/u/21025855?s=280&v=4"; //Fabric Icon
                             modData.fileData.id = release.id;
                             modData.fileData.url = asset.url;
                             modData.fileData.filename = asset.name;
