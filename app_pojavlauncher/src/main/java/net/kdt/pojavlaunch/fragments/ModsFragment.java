@@ -154,7 +154,10 @@ public class ModsFragment extends Fragment {
             if (modData.iconUrl != null && !modData.iconUrl.isEmpty()) Picasso.get().load(modData.iconUrl).into(icon);
             enableSwitch.setChecked(modData.isActive);
 
-            String modCompat = ModManager.getModCompat(filter.toLowerCase(), modData.slug);
+            String name = modData.slug;
+            if (filter.equals("CurseForge")) name = modData.title;
+
+            String modCompat = ModManager.getModCompat(filter.toLowerCase(), name);
             compat.setText("  " + modCompat + "  ");
             if (modCompat.equals("Untested")) compat.setBackgroundResource(R.drawable.marker_gray);
             if (modCompat.equals("Perfect")) compat.setBackgroundResource(R.drawable.marker_green);
