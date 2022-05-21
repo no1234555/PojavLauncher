@@ -308,6 +308,7 @@ public class PojavLoginActivity extends BaseActivity {
         PojavMigrator.migrateAccountData(this);
 
         mkdirs(Tools.DIR_GAME_HOME);
+        mkdirs(ModManager.getWorkDir());
         mkdirs(Tools.DIR_GAME_HOME + "/lwjgl3");
         mkdirs(Tools.DIR_GAME_HOME + "/config");
         if (!PojavMigrator.migrateGameDir()) {
@@ -332,8 +333,6 @@ public class PojavLoginActivity extends BaseActivity {
         }
 
         mkdirs(Tools.CTRLMAP_PATH);
-
-        mkdirs(ModManager.getWorkDir());
 
         try {
             new CustomControls(this).save(Tools.CTRLDEF_FILE);

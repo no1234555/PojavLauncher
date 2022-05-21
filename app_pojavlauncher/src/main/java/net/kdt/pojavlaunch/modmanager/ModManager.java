@@ -1,7 +1,9 @@
 package net.kdt.pojavlaunch.modmanager;
 
 import android.os.Build;
+import android.util.Log;
 import android.util.Pair;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.kdt.pojavlaunch.PojavApplication;
@@ -32,12 +34,19 @@ public class ModManager {
             @Override
             public void run() {
                 try {
-                    InputStream stream = PojavApplication.assetManager.open("jsons/modmanager.json");
-                    JsonObject modManagerJson = Tools.GLOBAL_GSON.fromJson(Tools.read(stream), JsonObject.class);
+                    //InputStream stream = PojavApplication.assetManager.open("jsons/modmanager.json");
+                    JsonObject modManagerJson = Tools.GLOBAL_GSON.fromJson(Tools.read(workDir + "/modmanager.json"), JsonObject.class);
                     modCompats = Tools.GLOBAL_GSON.fromJson(Tools.read(workDir + "/mod-compat.json"), JsonObject.class);
-
                     File modsJson = new File(workDir + "/mods.json");
-                    Github.setRepoList(modManagerJson.getAsJsonArray("repos"));
+
+                    JsonArray repoList = modManagerJson.getAsJsonArray("repos");
+                    if (repoList == null) {
+                        Log.d("MOD Manager", "REPO LIST IS NULL!!");
+                        repoList = new JsonArray();
+                        repoList.add("QuestCraftPlusPlus/MCXR");
+                        repoList.add("QuestCraftPlusPlus/TitleWorlds");
+                    }
+                    Github.setRepoList(repoList);
 
                     //Init outside to cache version (see Fabric/Quilt.java)
                     String flVersion = Fabric.getLatestLoaderVersion();
