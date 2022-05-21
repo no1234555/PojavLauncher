@@ -1,12 +1,10 @@
 package net.kdt.pojavlaunch.modmanager;
 
 import android.os.Build;
-import android.util.Log;
 import android.util.Pair;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import net.kdt.pojavlaunch.PojavApplication;
 import net.kdt.pojavlaunch.PojavLauncherActivity;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.modmanager.State.Instance;
@@ -15,7 +13,6 @@ import net.kdt.pojavlaunch.utils.DownloadUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -26,7 +23,8 @@ public class ModManager {
     public static final String workDir = Tools.DIR_GAME_NEW + "/modmanager";
     public static State state = new State();
     private static final File modsJson = new File(workDir + "/mods.json");
-    private static JsonObject modCompats = new JsonObject();
+    private static JsonObject modrinthCompat = new JsonObject();
+    private static JsonObject curseforgeCompat = new JsonObject();
     private static final ArrayList<String> currentDownloadSlugs = new ArrayList<>();
     private static boolean saveStateCalled = false;
 
@@ -37,8 +35,8 @@ public class ModManager {
                 try {
                     //InputStream stream = PojavApplication.assetManager.open("jsons/modmanager.json");
                     JsonObject modManagerJson = Tools.GLOBAL_GSON.fromJson(Tools.read(workDir + "/modmanager.json"), JsonObject.class);
-                    modCompats = Tools.GLOBAL_GSON.fromJson(Tools.read(workDir + "/mod-compat.json"), JsonObject.class);
-
+                    modrinthCompat = Tools.GLOBAL_GSON.fromJson(Tools.read(workDir + "/modrinth-compat.json"), JsonObject.class);
+                    curseforgeCompat = Tools.GLOBAL_GSON.fromJson(Tools.read(workDir + "/curseforge-compat.json"), JsonObject.class);
 
                     JsonArray repoList = modManagerJson.getAsJsonArray("repos");
                     /*if (repoList == null) {
@@ -113,8 +111,11 @@ public class ModManager {
         return new ArrayList<>();
     }
 
-    public static String getModCompat(String slug) {
-        JsonElement compatLevel = modCompats.get(slug);
+    public static String getModCompat(String platform, String name) {
+        JsonElement compatLevel = null;
+        if (platform.equals("modrinth")) compatLevel = modrinthCompat.get(name);
+        if (platform.equals("curseforge")) compatLevel = curseforgeCompat.get(name);
+
         if (compatLevel != null) return compatLevel.getAsString();
         return "Untested";
     }

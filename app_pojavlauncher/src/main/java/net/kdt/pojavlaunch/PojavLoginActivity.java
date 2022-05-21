@@ -61,7 +61,6 @@ import top.defaults.checkerboarddrawable.BuildConfig;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -350,7 +349,8 @@ public class PojavLoginActivity extends BaseActivity {
             Tools.copyAssetFile(this, "assets-v0.zip", DIR_GAME_NEW + "/resourcepacks", false);
 
             // Install Mod Manager Jsons
-            Tools.copyAssetFile(this, "jsons/mod-compat.json", ModManager.getWorkDir(), false);
+            Tools.copyAssetFile(this, "jsons/modrinth-compat.json", ModManager.getWorkDir(), false);
+            Tools.copyAssetFile(this, "jsons/curseforge-compat.json", ModManager.getWorkDir(), false);
             Tools.copyAssetFile(this, "jsons/modmanager.json", ModManager.getWorkDir(), false);
 
             // Install TitleWorlds

@@ -154,12 +154,12 @@ public class ModsFragment extends Fragment {
             if (modData.iconUrl != null && !modData.iconUrl.isEmpty()) Picasso.get().load(modData.iconUrl).into(icon);
             enableSwitch.setChecked(modData.isActive);
 
-            String modCompat = ModManager.getModCompat(modData.slug);
+            String modCompat = ModManager.getModCompat(filter.toLowerCase(), modData.slug);
             compat.setText("  " + modCompat + "  ");
             if (modCompat.equals("Untested")) compat.setBackgroundResource(R.drawable.marker_gray);
             if (modCompat.equals("Perfect")) compat.setBackgroundResource(R.drawable.marker_green);
             if (modCompat.equals("Good")) compat.setBackgroundResource(R.drawable.marker_yellow);
-            if (modCompat.equals("Unusable") || modCompat.equals("Not Working")) compat.setBackgroundResource(R.drawable.marker_red);
+            if (modCompat.equals("Unusable")) compat.setBackgroundResource(R.drawable.marker_red);
         }
 
         @Override
