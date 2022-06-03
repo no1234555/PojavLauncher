@@ -7,6 +7,7 @@ import static net.kdt.pojavlaunch.Tools.getFileName;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -16,6 +17,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Looper;
 import android.text.Html;
 import android.text.SpannableString;
@@ -60,10 +62,12 @@ import top.defaults.checkerboarddrawable.BuildConfig;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.Locale;
 
@@ -315,78 +319,30 @@ public class PojavLoginActivity extends BaseActivity {
             mkdirs(Tools.DIR_GAME_NEW + "/mods/extra");
             mkdirs(DIR_GAME_NEW + "/resourcepacks");
 
-            // Add TitleWorlds Folders
-            mkdirs(DIR_GAME_NEW + "/titleworlds/TitleWorlds");
-            mkdirs(DIR_GAME_NEW + "/titleworlds/TitleWorlds/DIM1/data");
-            mkdirs(DIR_GAME_NEW + "/titleworlds/TitleWorlds/DIM-1/data");
-            mkdirs(DIR_GAME_NEW + "/titleworlds/TitleWorlds/advancements");
-            mkdirs(DIR_GAME_NEW + "/titleworlds/TitleWorlds/data");
-            mkdirs(DIR_GAME_NEW + "/titleworlds/TitleWorlds/datapacks");
-            mkdirs(DIR_GAME_NEW + "/titleworlds/TitleWorlds/entities");
-            mkdirs(DIR_GAME_NEW + "/titleworlds/TitleWorlds/poi");
-            mkdirs(DIR_GAME_NEW + "/titleworlds/TitleWorlds/region");
-            mkdirs(DIR_GAME_NEW + "/titleworlds/TitleWorlds/stats");
-            mkdirs(DIR_GAME_NEW + "/titleworlds/TitleWorlds/playerdata");
-
             mkdirs(Tools.DIR_HOME_VERSION);
             mkdirs(Tools.DIR_HOME_LIBRARY);
+            mkdirs(DIR_GAME_NEW + "titleworlds");
         }
 
         mkdirs(Tools.CTRLMAP_PATH);
 
         try {
+            File oldFabric = new File(Tools.DIR_HOME_VERSION + "/fabric-loader-0.13.3");
+            if(oldFabric.exists()) {
+                oldFabric.delete();
+            }
             new CustomControls(this).save(Tools.CTRLDEF_FILE);
-            Tools.copyAssetFile(this, "jsons/fabric-loader-0.13.3.json", Tools.DIR_HOME_VERSION + "/fabric-loader-0.13.3", false);
+            Tools.copyAssetFile(this, "jsons/fabric-loader-0.14.6.json", Tools.DIR_HOME_VERSION + "/fabric-loader-0.14.6", false);
 
              // Install Mods
             Tools.copyAssetFile(this, "artifacts/mcxr-core-0.2.2+null.jar", DIR_GAME_NEW + "/mods", false);
             Tools.copyAssetFile(this, "artifacts/mcxr-play-0.2.2+null.jar", DIR_GAME_NEW + "/mods", false);
             Tools.copyAssetFile(this, "artifacts/titleworlds-0.0.2.jar", DIR_GAME_NEW + "/mods", false);
             Tools.copyAssetFile(this, "artifacts/lazydfu-0.1.3-SNAPSHOT.jar", DIR_GAME_NEW + "/mods", false);
-            Tools.copyAssetFile(this, "artifacts/fabric-api-0.48.0+1.18.2.jar", DIR_GAME_NEW + "/mods", false);
-            
-            // Install Resource Pack
-            Tools.copyAssetFile(this, "assets-v0.zip", DIR_GAME_NEW + "/resourcepacks", false);
+            Tools.copyAssetFile(this, "artifacts/fabric-api-0.54.0+1.18.2.jar", DIR_GAME_NEW + "/mods", false);
 
             // Install TitleWorlds
-            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/advancements/6b404275-563a-4c56-8f46-c1c0c23df5c8.json", DIR_GAME_NEW + "/titleworlds/TitleWorlds/advancements", false);
-            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/advancements/7a9e9bdd-7198-414b-88b0-483f4f807b1f.json", DIR_GAME_NEW + "/titleworlds/TitleWorlds/advancements", false);
-            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/advancements/5159d2f9-9457-48fb-be3a-49758504d283.json", DIR_GAME_NEW + "/titleworlds/TitleWorlds/advancements", false);
-            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/advancements/9931de1b-d216-4d8f-a952-4b9d0a77249d.json", DIR_GAME_NEW + "/titleworlds/TitleWorlds/advancements", false);
-            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/advancements/b22ca959-c8a3-4549-bd3e-e143b37fc7ab.json", DIR_GAME_NEW + "/titleworlds/TitleWorlds/advancements", false);
-            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/data/raids.dat", DIR_GAME_NEW + "/titleworlds/TitleWorlds/data", false);
-            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/DIM1/data/raids_end.dat", DIR_GAME_NEW + "/titleworlds/TitleWorlds/DIM1/data", false);
-            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/DIM-1/data/raids.dat", DIR_GAME_NEW + "/titleworlds/TitleWorlds/DIM-1/data", false);
-            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/entities/r.0.0.mca", DIR_GAME_NEW + "/titleworlds/TitleWorlds/entities", false);
-            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/entities/r.0.-1.mca", DIR_GAME_NEW + "/titleworlds/TitleWorlds/entities", false);
-            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/entities/r.-1.0.mca", DIR_GAME_NEW + "/titleworlds/TitleWorlds/entities", false);
-            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/entities/r.-1.-1.mca", DIR_GAME_NEW + "/titleworlds/TitleWorlds/entities", false);
-            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/playerdata/6b404275-563a-4c56-8f46-c1c0c23df5c8.dat", DIR_GAME_NEW + "/titleworlds/TitleWorlds/playerdata", false);
-            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/playerdata/6b404275-563a-4c56-8f46-c1c0c23df5c8.dat_old", DIR_GAME_NEW + "/titleworlds/TitleWorlds/playerdata", false);
-            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/playerdata/7a9e9bdd-7198-414b-88b0-483f4f807b1f.dat", DIR_GAME_NEW + "/titleworlds/TitleWorlds/playerdata", false);
-            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/playerdata/7a9e9bdd-7198-414b-88b0-483f4f807b1f.dat_old", DIR_GAME_NEW + "/titleworlds/TitleWorlds/playerdata", false);
-            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/playerdata/5159d2f9-9457-48fb-be3a-49758504d283.dat", DIR_GAME_NEW + "/titleworlds/TitleWorlds/playerdata", false);
-            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/playerdata/5159d2f9-9457-48fb-be3a-49758504d283.dat_old", DIR_GAME_NEW + "/titleworlds/TitleWorlds/playerdata", false);
-            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/playerdata/9931de1b-d216-4d8f-a952-4b9d0a77249d.dat", DIR_GAME_NEW + "/titleworlds/TitleWorlds/playerdata", false);
-            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/playerdata/9931de1b-d216-4d8f-a952-4b9d0a77249d.dat_old", DIR_GAME_NEW + "/titleworlds/TitleWorlds/playerdata", false);
-            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/playerdata/b22ca959-c8a3-4549-bd3e-e143b37fc7ab.dat", DIR_GAME_NEW + "/titleworlds/TitleWorlds/playerdata", false);
-            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/playerdata/b22ca959-c8a3-4549-bd3e-e143b37fc7ab.dat_old", DIR_GAME_NEW + "/titleworlds/TitleWorlds/playerdata", false);
-            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/poi/r.0.0.mca", DIR_GAME_NEW + "/titleworlds/TitleWorlds/poi", false);
-            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/poi/r.0.-1.mca", DIR_GAME_NEW + "/titleworlds/TitleWorlds/poi", false);
-            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/poi/r.-1.0.mca", DIR_GAME_NEW + "/titleworlds/TitleWorlds/poi", false);
-            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/poi/r.-1.-1.mca", DIR_GAME_NEW + "/titleworlds/TitleWorlds/poi", false);
-            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/region/r.0.0.mca", DIR_GAME_NEW + "/titleworlds/TitleWorlds/region", false);
-            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/region/r.0.-1.mca", DIR_GAME_NEW + "/titleworlds/TitleWorlds/region", false);
-            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/region/r.-1.0.mca", DIR_GAME_NEW + "/titleworlds/TitleWorlds/region", false);
-            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/region/r.-1.-1.mca", DIR_GAME_NEW + "/titleworlds/TitleWorlds/region", false);
-            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/stats/6b404275-563a-4c56-8f46-c1c0c23df5c8.json", DIR_GAME_NEW + "/titleworlds/TitleWorlds/stats", false);
-            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/stats/7a9e9bdd-7198-414b-88b0-483f4f807b1f.json", DIR_GAME_NEW + "/titleworlds/TitleWorlds/stats", false);
-            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/stats/5159d2f9-9457-48fb-be3a-49758504d283.json", DIR_GAME_NEW + "/titleworlds/TitleWorlds/stats", false);
-            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/stats/9931de1b-d216-4d8f-a952-4b9d0a77249d.json", DIR_GAME_NEW + "/titleworlds/TitleWorlds/stats", false);
-            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/stats/b22ca959-c8a3-4549-bd3e-e143b37fc7ab.json", DIR_GAME_NEW + "/titleworlds/TitleWorlds/stats", false);
-            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/level.dat", DIR_GAME_NEW + "/titleworlds/TitleWorlds", false);
-            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/level.dat_old", DIR_GAME_NEW + "/titleworlds/TitleWorlds", false);
-            Tools.copyAssetFile(this, "titleworlds/TitleWorlds/session.lock", DIR_GAME_NEW + "/titleworlds/TitleWorlds", false); 
+            copyAssetFolder(this, "TitleWorld", DIR_GAME_NEW + "/titleworlds/TitleWorld");
             
             Tools.copyAssetFile(this, "components/security/pro-grade.jar", Tools.DIR_DATA, true);
             Tools.copyAssetFile(this, "components/security/java_sandbox.policy", Tools.DIR_DATA, true);
@@ -436,6 +392,48 @@ public class PojavLoginActivity extends BaseActivity {
                 }
             }
     }
+
+    public static boolean copyAssetFolder(Context context, String srcName, String dstName) {
+        try {
+            boolean result;
+            String fileList[] = context.getAssets().list(srcName);
+            if (fileList == null) return false;
+
+            if (fileList.length == 0) {
+                result = copyAssetFile(context, srcName, dstName);
+            } else {
+                File file = new File(dstName);
+                result = file.mkdirs();
+                for (String filename : fileList) {
+                    result &= copyAssetFolder(context, srcName + File.separator + filename, dstName + File.separator + filename);
+                }
+            }
+            return result;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public static boolean copyAssetFile(Context context, String srcName, String dstName) {
+        try {
+            InputStream in = context.getAssets().open(srcName);
+            File outFile = new File(dstName);
+            OutputStream out = new FileOutputStream(outFile);
+            byte[] buffer = new byte[1024];
+            int read;
+            while ((read = in.read(buffer)) != -1) {
+                out.write(buffer, 0, read);
+            }
+            in.close();
+            out.close();
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     private void showStorageDialog() {
         if(!firstLaunchPrefs.getBoolean("storageDialogShown",false)) {
             AlertDialog.Builder bldr = new AlertDialog.Builder(this);
