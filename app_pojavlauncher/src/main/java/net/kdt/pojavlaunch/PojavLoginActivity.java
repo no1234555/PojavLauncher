@@ -417,10 +417,10 @@ public class PojavLoginActivity extends BaseActivity {
         if (ContextCompat.checkSelfPermission(this,
                     Manifest.permission.RECORD_AUDIO)
                     != PackageManager.PERMISSION_GRANTED) {
-            Looper.prepare();
                 //When permission is not granted by user, show them message why this permission is needed.
                 if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                         Manifest.permission.RECORD_AUDIO)) {
+                    Looper.prepare();
                     Toast.makeText(this, "This permission is for voice chat.", Toast.LENGTH_LONG).show();
 
                     //Give user option to still opt-in the permissions
