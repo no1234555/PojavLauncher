@@ -17,6 +17,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Looper;
 import android.text.Html;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -423,6 +424,7 @@ public class PojavLoginActivity extends BaseActivity {
         if (ContextCompat.checkSelfPermission(this,
                     Manifest.permission.RECORD_AUDIO)
                     != PackageManager.PERMISSION_GRANTED) {
+                Looper.prepare();
 
                 //When permission is not granted by user, show them message why this permission is needed.
                 if (ActivityCompat.shouldShowRequestPermissionRationale(this,
