@@ -103,7 +103,7 @@ jobs:
           git commit -am "CI: Update vgpu"
           git push
       - name: Get JRE17
-        uses: dawidd6/action-download-artifact@v2.21.0
+        uses: dawidd6/action-download-artifact@v2
         with:
           github_token: ${{secrets.GITHUB_TOKEN}}
           workflow: build.yml
@@ -118,7 +118,7 @@ jobs:
           rm -rf app_pojavlauncher/main/src/assets/artifacts/*
           
       - name: Collect MCXR (mcxr-core)
-        uses: dawidd6/action-download-artifact@v2.21.0
+        uses: dawidd6/action-download-artifact@v2
         with:
           github_token: ${{secrets.GITHUB_TOKEN}}
           workflow: build.yml
@@ -129,7 +129,7 @@ jobs:
           name: mcxr-core
 
       - name: Collect MCXR (mcxr-play)
-        uses: dawidd6/action-download-artifact@v2.21.0
+        uses: dawidd6/action-download-artifact@v2
         with:
           github_token: ${{secrets.GITHUB_TOKEN}}
           workflow: build.yml
@@ -140,7 +140,7 @@ jobs:
           name: mcxr-play
 
       - name: Collect TitleWorlds
-        uses: dawidd6/action-download-artifact@v2.21.0
+        uses: dawidd6/action-download-artifact@v2
         with:
           github_token: ${{secrets.GITHUB_TOKEN}}
           workflow: build.yml
@@ -151,7 +151,7 @@ jobs:
           name: title-worlds
 
       - name: Collect lazydfu
-        uses: dawidd6/action-download-artifact@v2.21.0
+        uses: dawidd6/action-download-artifact@v2
         with:
           github_token: ${{secrets.GITHUB_TOKEN}}
           workflow: build.yml
@@ -162,7 +162,7 @@ jobs:
           name: lazydfu
 
       - name: Collect fabric-api
-        uses: dawidd6/action-download-artifact@v2.21.0
+        uses: dawidd6/action-download-artifact@v2
         with:
           github_token: ${{secrets.GITHUB_TOKEN}}
           workflow: build.yml
