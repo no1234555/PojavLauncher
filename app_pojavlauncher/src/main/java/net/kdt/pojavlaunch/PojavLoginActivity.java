@@ -327,17 +327,24 @@ public class PojavLoginActivity extends BaseActivity {
         mkdirs(Tools.CTRLMAP_PATH);
 
         try {
+            // Remove old fabric and old Titleworld
             File oldFabric = new File(Tools.DIR_HOME_VERSION + "/fabric-loader-0.13.3");
             if(oldFabric.exists()) {
                 oldFabric.delete();
             }
+
+            File titleworld = new File(DIR_GAME_NEW + "/titleworlds/TitleWorlds");
+            if(titleworld.exists()) {
+                titleworld.delete();
+            }
+
             new CustomControls(this).save(Tools.CTRLDEF_FILE);
             Tools.copyAssetFile(this, "jsons/fabric-loader-0.14.6.json", Tools.DIR_HOME_VERSION + "/fabric-loader-0.14.6", false);
 
              // Install Mods
             Tools.copyAssetFile(this, "artifacts/mcxr-core-0.2.2+null.jar", DIR_GAME_NEW + "/mods", false);
             Tools.copyAssetFile(this, "artifacts/mcxr-play-0.2.2+null.jar", DIR_GAME_NEW + "/mods", false);
-            Tools.copyAssetFile(this, "artifacts/titleworlds-0.0.2.jar", DIR_GAME_NEW + "/mods", false);
+            Tools.copyAssetFile(this, "artifacts/titleworlds-0.1.0.jar", DIR_GAME_NEW + "/mods", false);
             Tools.copyAssetFile(this, "artifacts/lazydfu-0.1.3-SNAPSHOT.jar", DIR_GAME_NEW + "/mods", false);
             Tools.copyAssetFile(this, "artifacts/fabric-api-0.54.0+1.18.2.jar", DIR_GAME_NEW + "/mods", false);
 
