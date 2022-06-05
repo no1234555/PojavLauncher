@@ -147,8 +147,8 @@ jobs:
           path: app_pojavlauncher/src/main/assets/artifacts
           workflow_conclusion: success
           repo: QuestCraftPlusPlus/TitleWorlds
-          branch: master
-          name: title-worlds
+          branch: 1.19
+          name: Artifacts
 
       - name: Collect lazydfu
         uses: dawidd6/action-download-artifact@v2
