@@ -644,7 +644,7 @@ void pojav_openGLOnUnload() {
 
 }
 
-void pojavTerminate() {
+void glfwTerminate() {
     printf("EGLBridge: Terminating\n");
 
     switch (config_renderer) {
@@ -675,7 +675,7 @@ JNIEXPORT void JNICALL Java_net_kdt_pojavlaunch_utils_JREUtils_setupBridgeWindow
     free(ptrStr);
 }
 
-void* pojavGetCurrentContext() {
+void* glfwGetCurrentContext() {
     switch (config_renderer) {
         case RENDERER_GL4ES:
             return (void *)eglGetCurrentContext_p();
@@ -789,7 +789,7 @@ bool loadSymbolsVirGL() {
     free(fileName);
 }
 
-int pojavInit() {
+int glfwInit() {
     savedWidth = 1980;
     savedHeight = 1080;
 
@@ -937,7 +937,7 @@ int pojavInit() {
 ANativeWindow_Buffer buf;
 int32_t stride;
 bool stopSwapBuffers;
-void pojavSwapBuffers() {
+void glfwSwapBuffers() {
     if (stopSwapBuffers) {
         return;
     }
@@ -993,7 +993,7 @@ void* egl_make_current(void* window) {
 }
 
 bool locked = false;
-void pojavMakeCurrent(void* window) {
+void glfwMakeCurrent(void* window) {
     //if(OSMesaGetCurrentContext_p() != NULL) {
     //    printf("OSMDroid: skipped context reset\n");
     //    return JNI_TRUE;
@@ -1058,7 +1058,7 @@ void pojavMakeCurrent(void* window) {
         int pixelsArr[4];
         glReadPixels_p(0, 0, 1, 1, GL_RGB, GL_INT, &pixelsArr);
 
-        pojavSwapBuffers();
+        glfwSwapBuffers();
         return;
     }
 }
@@ -1096,7 +1096,7 @@ Java_org_lwjgl_glfw_GLFW_nativeEglDetachOnCurrentThread(JNIEnv *env, jclass claz
 }
 */
 
-void* pojavCreateContext(void* contextSrc) {
+void* glfwCreateContext(void* contextSrc) {
     if (config_renderer == RENDERER_GL4ES) {
         const EGLint ctx_attribs[] = {
                 EGL_CONTEXT_CLIENT_VERSION, atoi(getenv("LIBGL_ES")),
@@ -1137,7 +1137,7 @@ Java_org_lwjgl_opengl_GL_getNativeWidthHeight(JNIEnv *env, jobject thiz) {
     (*env)->SetIntArrayRegion(env,ret,0,2,arr);
     return ret;
 }
-void pojavSwapInterval(int interval) {
+void glfwSwapInterval(int interval) {
     switch (config_renderer) {
         case RENDERER_GL4ES:
         case RENDERER_VIRGL: {

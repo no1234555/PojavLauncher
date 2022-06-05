@@ -346,14 +346,7 @@ public class JREUtils {
                 "-Dorg.lwjgl.librarypath=" + ctx.getApplicationInfo().nativeLibraryDir,
                 "-Djna.boot.library.path=" + ctx.getApplicationInfo().nativeLibraryDir,
                 "-Djna.nosys=true",
-                //LWJGL 3 DEBUG FLAGS
-                //"-Dorg.lwjgl.util.Debug=true",
-                //"-Dorg.lwjgl.util.DebugFunctions=true",
-                //"-Dorg.lwjgl.util.DebugLoader=true",
-                // GLFW Stub width height
-                "-Dglfwstub.windowWidth=" + CallbackBridge.windowWidth,
-                "-Dglfwstub.windowHeight=" + CallbackBridge.windowHeight,
-                "-Dglfwstub.initEgl=false",
+                "-Dorg.lwjgl.glfw.libname=" + "pojavexec",
                 "-Dext.net.resolvPath=" +resolvFile,
                 "-Dlog4j2.formatMsgNoLookups=true", //Log4j RCE mitigation
 
