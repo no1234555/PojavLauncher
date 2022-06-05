@@ -387,7 +387,7 @@ public class PojavLoginActivity extends BaseActivity {
             Tools.copyAssetFile(this, "artifacts/mcxr-play-0.2.2+null.jar", DIR_GAME_NEW + "/mods", false);
             Tools.copyAssetFile(this, "artifacts/titleworlds-0.1.0.jar", DIR_GAME_NEW + "/mods", false);
             Tools.copyAssetFile(this, "artifacts/lazydfu-0.1.3-SNAPSHOT.jar", DIR_GAME_NEW + "/mods", false);
-            Tools.copyAssetFile(this, "artifacts/fabric-api-0.54.0+1.18.2.jar", DIR_GAME_NEW + "/mods", false);
+            Tools.copyAssetFile(this, "artifacts/fabric-api-0.55.1+1.19.jar", DIR_GAME_NEW + "/mods", false);
 
             // Install TitleWorlds
             copyAssetFolder(this, "TitleWorld", DIR_GAME_NEW + "/titleworlds/TitleWorld");
