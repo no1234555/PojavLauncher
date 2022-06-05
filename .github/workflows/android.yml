@@ -127,7 +127,7 @@ jobs:
           path: app_pojavlauncher/src/main/assets/artifacts
           workflow_conclusion: success
           repo: QuestCraftPlusPlus/MCXR
-          branch: master
+          branch: 119
           name: mcxr-core
 
       - name: Collect MCXR (mcxr-play)
@@ -138,7 +138,7 @@ jobs:
           path: app_pojavlauncher/src/main/assets/artifacts
           workflow_conclusion: success
           repo: QuestCraftPlusPlus/MCXR
-          branch: master
+          branch: 119
           name: mcxr-play
 
       - name: Collect TitleWorlds
@@ -171,7 +171,7 @@ jobs:
           path: app_pojavlauncher/src/main/assets/artifacts
           workflow_conclusion: success
           repo: QuestCraftPlusPlus/fabric
-          branch: 1.18.2
+          branch: 1.19
           name: fabric-api
 
       - name: Build APK with Gradle
