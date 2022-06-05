@@ -148,7 +148,7 @@ jobs:
           workflow_conclusion: success
           repo: QuestCraftPlusPlus/TitleWorlds
           branch: 1.19
-          name: title-worlds
+          name: Artifacts
 
       - name: Collect lazydfu
         uses: dawidd6/action-download-artifact@v2
