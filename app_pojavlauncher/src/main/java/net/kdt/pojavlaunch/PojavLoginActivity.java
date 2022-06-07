@@ -17,7 +17,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Looper;
 import android.text.Html;
 import android.text.SpannableString;
@@ -63,7 +62,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -316,12 +314,10 @@ public class PojavLoginActivity extends BaseActivity {
         mkdirs(Tools.DIR_GAME_HOME + "/config");
         if (!PojavMigrator.migrateGameDir()) {
             mkdirs(Tools.DIR_GAME_NEW);
-            mkdirs(Tools.DIR_GAME_NEW + "/mods/extra");
             mkdirs(DIR_GAME_NEW + "/resourcepacks");
 
             mkdirs(Tools.DIR_HOME_VERSION);
             mkdirs(Tools.DIR_HOME_LIBRARY);
-            mkdirs(DIR_GAME_NEW + "titleworlds");
         }
 
         mkdirs(Tools.CTRLMAP_PATH);
@@ -339,14 +335,8 @@ public class PojavLoginActivity extends BaseActivity {
             }
 
             new CustomControls(this).save(Tools.CTRLDEF_FILE);
-            Tools.copyAssetFile(this, "jsons/fabric-loader-0.14.6.json", Tools.DIR_HOME_VERSION + "/fabric-loader-0.14.6", false);
-
-             // Install Mods
-            Tools.copyAssetFile(this, "artifacts/mcxr-core-0.2.2+null.jar", DIR_GAME_NEW + "/mods", false);
-            Tools.copyAssetFile(this, "artifacts/mcxr-play-0.2.2+null.jar", DIR_GAME_NEW + "/mods", false);
-            Tools.copyAssetFile(this, "artifacts/titleworlds-0.1.0.jar", DIR_GAME_NEW + "/mods", false);
-            Tools.copyAssetFile(this, "artifacts/lazydfu-0.1.3-SNAPSHOT.jar", DIR_GAME_NEW + "/mods", false);
-            Tools.copyAssetFile(this, "artifacts/fabric-api-0.54.0+1.18.2.jar", DIR_GAME_NEW + "/mods", false);
+            Tools.copyAssetFile(this, "jsons/fabric-loader-0.14.6-1.18.2.json", Tools.DIR_HOME_VERSION + "/fabric-loader-0.14.6-1.18.2", false);
+            Tools.copyAssetFile(this, "jsons/fabric-loader-0.14.6-1.19.json", Tools.DIR_HOME_VERSION + "/fabric-loader-0.14.6-1.19", false);
 
             // Install TitleWorlds
             copyAssetFolder(this, "TitleWorld", DIR_GAME_NEW + "/titleworlds/TitleWorld");
