@@ -21,7 +21,7 @@ public class MainActivity extends BaseMainActivity {
     public void onCreate(Bundle savedInstanceState) {
         MCXRLoader.setActivity(this);
         try {
-            if (PojavProfile.getCurrentProfileName(this).equals("fabric-loader-0.14.6-1.18.2")) {
+            if (mVersionInfo.id.equals("fabric-loader-0.14.6-1.18.2")) {
                 File[] files = new File[]{
                         new File(DIR_GAME_NEW + "mcxr-core-0.2.2+1.19-rc2.jar"),
                         new File(DIR_GAME_NEW + "mcxr-play-0.2.2+1.19-rc2.jar"),
