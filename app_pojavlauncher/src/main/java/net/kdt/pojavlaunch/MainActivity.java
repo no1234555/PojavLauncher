@@ -27,9 +27,9 @@ public class MainActivity extends BaseMainActivity {
         try {
             if (mVersionInfo.id.equals("fabric-loader-0.14.6-1.18.2")) {
                 File[] files = new File[]{
-                        new File(DIR_GAME_NEW + "mcxr-core-0.2.2+1.19-rc2.jar"),
-                        new File(DIR_GAME_NEW + "mcxr-play-0.2.2+1.19-rc2.jar"),
-                        new File(DIR_GAME_NEW + "titleworlds-0.1.0+1.19-rc2.jar"),
+                        new File(DIR_GAME_NEW + "mcxr-core-0.2.2+1.19.jar"),
+                        new File(DIR_GAME_NEW + "mcxr-play-0.2.2+1.19.jar"),
+                        new File(DIR_GAME_NEW + "titleworlds-0.1.0+1.19.jar"),
                         new File(DIR_GAME_NEW + "fabric-api-0.55.1+1.19.jar")
                 };
                 for(File file : files) {
@@ -54,9 +54,9 @@ public class MainActivity extends BaseMainActivity {
                         file.delete();
                     }
                 }
-                Tools.copyAssetFile(this, "artifacts/mcxr-core-0.2.2+1.19-rc2.jar", DIR_GAME_NEW + "/mods", false);
-                Tools.copyAssetFile(this, "artifacts/mcxr-play-0.2.2+1.19-rc2.jar", DIR_GAME_NEW + "/mods", false);
-                Tools.copyAssetFile(this, "artifacts/titleworlds-0.1.0+1.19-rc2.jar", DIR_GAME_NEW + "/mods", false);
+                Tools.copyAssetFile(this, "artifacts/mcxr-core-0.2.2+1.19.jar", DIR_GAME_NEW + "/mods", false);
+                Tools.copyAssetFile(this, "artifacts/mcxr-play-0.2.2+1.19.jar", DIR_GAME_NEW + "/mods", false);
+                Tools.copyAssetFile(this, "artifacts/titleworlds-0.1.0+1.19.jar", DIR_GAME_NEW + "/mods", false);
                 Tools.copyAssetFile(this, "artifacts/lazydfu-0.1.3-SNAPSHOT.jar", DIR_GAME_NEW + "/mods", false);
                 Tools.copyAssetFile(this, "artifacts/fabric-api-0.55.1+1.19.jar", DIR_GAME_NEW + "/mods", false);
             }
