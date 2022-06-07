@@ -45,7 +45,7 @@ public class BaseMainActivity extends BaseActivity {
     private static Touchpad touchpad;
     private LoggerView loggerView;
 
-    private MinecraftAccount mProfile;
+    public MinecraftAccount mProfile;
     
     private DrawerLayout drawerLayout;
     private NavigationView navDrawer;

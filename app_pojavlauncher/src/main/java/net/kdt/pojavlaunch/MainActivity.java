@@ -20,6 +20,10 @@ public class MainActivity extends BaseMainActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         MCXRLoader.setActivity(this);
+
+        mProfile = PojavProfile.getCurrentProfileContent(this);
+        mVersionInfo = Tools.getVersionInfo(null,mProfile.selectedVersion);
+
         try {
             if (mVersionInfo.id.equals("fabric-loader-0.14.6-1.18.2")) {
                 File[] files = new File[]{
