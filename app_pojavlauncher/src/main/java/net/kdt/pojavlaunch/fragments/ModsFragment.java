@@ -12,6 +12,9 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
+
+import net.kdt.pojavlaunch.BaseLauncherActivity;
+import net.kdt.pojavlaunch.PojavProfile;
 import net.kdt.pojavlaunch.R;
 import net.kdt.pojavlaunch.modmanager.ModData;
 import net.kdt.pojavlaunch.modmanager.ModManager;
@@ -83,7 +86,7 @@ public class ModsFragment extends Fragment {
     private void loadDataIntoList(ModAdapter modAdapter, String query, int offset, boolean refresh) {
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.N) return;
         if (refresh) modAdapter.reset();
-        State.Instance selectedInstance = ModManager.state.getInstance("Default");
+        State.Instance selectedInstance = ModManager.state.getInstance(PojavProfile.getCurrentProfileContent(this.getContext()).selectedVersion);
 
         if (filter.equals("Modrinth")) Modrinth.addProjectsToRecycler(modAdapter, selectedInstance.getGameVersion(), offset, query);
         else if (filter.equals("CurseForge")) Curseforge.addProjectsToRecycler(modAdapter, selectedInstance.getGameVersion(), offset, query);
@@ -138,14 +141,14 @@ public class ModsFragment extends Fragment {
                 return;
             }
 
-            State.Instance selectedInstance = ModManager.state.getInstance("Default");
+            State.Instance selectedInstance = ModManager.state.getInstance(PojavProfile.getCurrentProfileContent(this.compat.getContext()).selectedVersion);
             ModData mod = selectedInstance.getMod(modData.slug);
             if (mod != null) ModManager.setModActive(selectedInstance.getName(), modData.slug, enableSwitch.isChecked());
             else ModManager.addMod(selectedInstance, filter.toLowerCase(), modData.slug, selectedInstance.getGameVersion(), false);
         }
 
         public void setData(ModData modData) {
-            State.Instance selectedInstance = ModManager.state.getInstance("Default");
+            State.Instance selectedInstance = ModManager.state.getInstance(PojavProfile.getCurrentProfileContent(this.compat.getContext()).selectedVersion);
             ModData installedMod = selectedInstance.getMod(modData.slug);
             if (installedMod != null) modData = installedMod; //Check if mod is already installed and overwrite fetched data
 

@@ -108,7 +108,7 @@ public class Curseforge {
                     if (project.logo != null) modData.iconUrl = project.logo.thumbnailUrl;
                     else modData.iconUrl = "";
 
-                    for (ModData installedMod : ModManager.listInstalledMods("Default")) {
+                    for (ModData installedMod : ModManager.listInstalledMods("fabric-loader-0.14.6-" + version)) {
                         if (installedMod.isActive && String.valueOf(project.id).equals(installedMod.slug)) {
                             modData.isActive = true;
                             break;

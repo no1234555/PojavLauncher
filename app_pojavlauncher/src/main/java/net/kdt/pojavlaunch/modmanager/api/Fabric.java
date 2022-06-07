@@ -36,7 +36,7 @@ public class Fabric {
                 }
             }
         }
-        fabricLoaderVersion = "0.13.3"; //Known latest as backup
+        fabricLoaderVersion = "0.14.6"; //Known latest as backup
         return fabricLoaderVersion;
     }
 

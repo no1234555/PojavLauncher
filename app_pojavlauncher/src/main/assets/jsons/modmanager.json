@@ -1,7 +1,8 @@
 {
   "compatible_versions": {
     "releases": [
-      "1.18.2"
+      "1.18.2",
+      "1.19"
     ],
     "snapshots": [
     ]
@@ -22,6 +23,28 @@
       },
       {
         "slug": "ferrite-core",
+        "platform": "modrinth"
+      },
+      {
+        "slug": "mcxr-core",
+        "platform": "github"
+      },
+      {
+        "slug": "mcxr-play",
+        "platform": "github"
+      },
+      {
+        "slug": "title-worlds",
+        "platform": "github"
+      }
+    ],
+    "1.19": [
+      {
+        "slug": "fabric-api",
+        "platform": "modrinth"
+      },
+      {
+        "slug": "lazydfu",
         "platform": "modrinth"
       },
       {

@@ -50,10 +50,20 @@ public class ModManager {
 
                         String fabricLoaderName = String.format("%s-%s-%s", "fabric-loader", flVersion, gameVersion);
                         Instance instance = new Instance();
-                        instance.setName("Default");
+                        instance.setName(fabricLoaderName);
                         instance.setGameVersion(gameVersion);
                         instance.setLoaderVersion(fabricLoaderName);
                         state.addInstance(instance);
+
+                        gameVersion = Tools.getCompatibleVersions("releases").get(1);
+                        Fabric.downloadJson(gameVersion, flVersion);
+                        fabricLoaderName = String.format("%s-%s-%s", "fabric-loader", flVersion, gameVersion);
+                        instance = new Instance();
+                        instance.setName(fabricLoaderName);
+                        instance.setGameVersion(gameVersion);
+                        instance.setLoaderVersion(fabricLoaderName);
+                        state.addInstance(instance);
+
                         Tools.write(modsJson.getPath(), Tools.GLOBAL_GSON.toJson(state)); //Cant use save state cause async issues
                     } else state = Tools.GLOBAL_GSON.fromJson(Tools.read(modsJson.getPath()), net.kdt.pojavlaunch.modmanager.State.class);
 
@@ -266,7 +276,7 @@ public class ModManager {
                 if (modData == null) return;
 
                 modData.isActive = active;
-                String suffix = "";
+              String suffix = "";
                 if (!active) suffix = ".disabled";
 
                 File path = new File(workDir + "/instances/" + instanceName);
@@ -277,7 +287,7 @@ public class ModManager {
                             Files.move(source, source.resolveSibling(modData.fileData.filename + suffix));
                         } catch (IOException e) {
                             e.printStackTrace();
-                        }
+                          }
                     }
                 }
                 saveState();
