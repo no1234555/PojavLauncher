@@ -334,6 +334,9 @@ public class PojavLoginActivity extends BaseActivity {
                 titleworld.delete();
             }
 
+            // Install version independent mods
+            Tools.copyAssetFile(this, "artifacts/lazydfu-0.1.3-SNAPSHOT.jar", DIR_GAME_NEW + "/mods", false);
+
             new CustomControls(this).save(Tools.CTRLDEF_FILE);
             Tools.copyAssetFile(this, "jsons/fabric-loader-0.14.6-1.18.2.json", Tools.DIR_HOME_VERSION + "/fabric-loader-0.14.6-1.18.2", false);
             Tools.copyAssetFile(this, "jsons/fabric-loader-0.14.6-1.19.json", Tools.DIR_HOME_VERSION + "/fabric-loader-0.14.6-1.19", false);
