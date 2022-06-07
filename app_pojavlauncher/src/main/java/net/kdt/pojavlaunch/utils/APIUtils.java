@@ -1,6 +1,12 @@
 package net.kdt.pojavlaunch.utils;
 
 import android.os.Build;
+import android.util.JsonReader;
+import android.util.JsonWriter;
+
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 import net.kdt.pojavlaunch.Tools;
 
 import java.io.BufferedReader;
@@ -60,5 +66,17 @@ public class APIUtils {
             e.printStackTrace();
         }
         return null;
+    }
+
+    //Make a get request and return the response as a raw string;
+    public static String getCurseforgeJsonURL(String raw) {
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.N) return null;
+        raw = getRaw(raw);
+        JsonParser jsonParser = new JsonParser();
+        Object json = jsonParser.parse(raw);
+        JsonObject jsonObject = (JsonObject) json;
+        raw = String.valueOf(jsonObject.get("data"));
+        raw = raw.replaceAll("\"", "");
+        return raw;
     }
 }

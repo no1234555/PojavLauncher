@@ -75,7 +75,7 @@ public class Curseforge {
                 modData.fileData.id = String.valueOf(file.fileId);
                 modData.fileData.filename = file.filename;
                 //Work around for curse restricting mods outside CurseForge platform
-                modData.fileData.url = APIUtils.getRaw("https://addons-ecs.forgesvc.net/api/v2/addon/" + project.id + "/file/" + file.fileId + "/download-url");
+                modData.fileData.url = APIUtils.getCurseforgeJsonURL("https://qcxr-modmanager-curseforge-api.herokuapp.com" + "/getModDownloadURL/" + project.id + "/" + file.fileId);
                 return modData;
             }
         }
