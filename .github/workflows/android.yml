@@ -116,8 +116,6 @@ jobs:
           path: app_pojavlauncher/src/main/assets/components/jre
           workflow_conclusion: success
           repo: QuestCraftPlusPlus/android-openjdk-build-multiarch
-          run_id: 1938362555
-          run_number: 16
           branch: buildjre17
           name: jre17-pojav
 
