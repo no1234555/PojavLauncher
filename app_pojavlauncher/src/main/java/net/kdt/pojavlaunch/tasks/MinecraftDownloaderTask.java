@@ -159,7 +159,7 @@ public class MinecraftDownloaderTask extends AsyncTask<String, String, Throwable
                     }
                 }
 
-                String v = Tools.getCompatibleVersions("releases").get(0);
+                String v = verInfo.id.replace("fabric-loader-0.14.6-", "");
                 setMax(ModManager.getCoreModsFromJson(v).size());
                 zeroProgress();
                 downloadCoreMods(v);
