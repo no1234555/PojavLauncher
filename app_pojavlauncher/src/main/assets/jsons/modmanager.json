@@ -9,7 +9,8 @@
   },
   "repos": [
     "QuestCraftPlusPlus/MCXR",
-    "QuestCraftPlusPlus/TitleWorlds"
+    "QuestCraftPlusPlus/TitleWorlds",
+    "QuestCraftPlusPlus/lithium-fabric"
   ],
   "core_mods": {
     "1.18.2": [
@@ -19,6 +20,10 @@
       },
       {
         "slug": "lazydfu",
+        "platform": "modrinth"
+      },
+      {
+        "slug": "lithium",
         "platform": "modrinth"
       },
       {
@@ -41,6 +46,14 @@
     "1.19": [
       {
         "slug": "fabric-api",
+        "platform": "modrinth"
+      },
+      {
+        "slug": "lithium",
+        "platform": "github"
+      },
+      {
+        "slug": "ferrite-core",
         "platform": "modrinth"
       },
       {
