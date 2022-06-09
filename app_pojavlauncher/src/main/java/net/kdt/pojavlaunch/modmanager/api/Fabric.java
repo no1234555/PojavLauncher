@@ -1,11 +1,8 @@
 package net.kdt.pojavlaunch.modmanager.api;
 
-import android.util.Log;
-import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;
-import net.kdt.pojavlaunch.PojavLauncherActivity;
+
 import net.kdt.pojavlaunch.Tools;
-import net.kdt.pojavlaunch.tasks.RefreshVersionListTask;
 import net.kdt.pojavlaunch.utils.APIUtils;
 
 import java.io.File;
@@ -36,7 +33,7 @@ public class Fabric {
                 }
             }
         }
-        fabricLoaderVersion = "0.14.6"; //Known latest as backup
+        fabricLoaderVersion = "0.14.7"; //Known latest as backup
         return fabricLoaderVersion;
     }
 

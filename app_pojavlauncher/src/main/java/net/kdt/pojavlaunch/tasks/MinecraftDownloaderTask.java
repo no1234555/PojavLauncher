@@ -1,10 +1,14 @@
 package net.kdt.pojavlaunch.tasks;
 
+import static net.kdt.pojavlaunch.modmanager.ModManager.workDir;
+
 import android.annotation.SuppressLint;
 import android.app.*;
 import android.content.*;
 import android.os.*;
 import android.util.*;
+
+import com.google.gson.JsonObject;
 
 import java.io.*;
 import java.util.*;
@@ -159,7 +163,8 @@ public class MinecraftDownloaderTask extends AsyncTask<String, String, Throwable
                     }
                 }
 
-                String v = verInfo.id.replace("fabric-loader-0.14.6-", "");
+                JsonObject json = Tools.GLOBAL_GSON.fromJson(Tools.read(workDir + "/mods.json"), JsonObject.class);
+                String v = verInfo.id.replace(json.get("fabric-loader-version").getAsString() + "-", "");
                 setMax(ModManager.getCoreModsFromJson(v).size());
                 zeroProgress();
                 downloadCoreMods(v);

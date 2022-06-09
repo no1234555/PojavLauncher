@@ -44,6 +44,7 @@ public class ModManager {
                     //String qlVersion = Quilt.getLatestLoaderVersion();
 
                     if (!modsJson.exists()) {
+                        state.fabricLoaderVersion = flVersion;
                         String gameVersion = Tools.getCompatibleVersions("releases").get(0);
                         Fabric.downloadJson(gameVersion, flVersion);
                         String fabricLoaderName = String.format("%s-%s-%s", "fabric-loader", flVersion, gameVersion);
