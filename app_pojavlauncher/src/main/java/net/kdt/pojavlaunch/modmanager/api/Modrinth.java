@@ -4,6 +4,7 @@ import android.os.Build;
 import com.google.gson.annotations.SerializedName;
 
 import net.kdt.pojavlaunch.PojavProfile;
+import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.fragments.ModsFragment;
 import net.kdt.pojavlaunch.modmanager.ModData;
 import net.kdt.pojavlaunch.modmanager.ModManager;
@@ -114,7 +115,8 @@ public class Modrinth {
                     return false;
                 });
 
-                ArrayList<ModData> installedMods = ModManager.listInstalledMods("fabric-loader-0.14.6-" + version);
+
+                ArrayList<ModData> installedMods = ModManager.listInstalledMods("fabric-loader-" + Tools.getModJsonFabricLoaderVersion() + "-" + version);
                 for (ModData mod : result.hits) {
                     mod.platform = "modrinth";
                     for (ModData installedMod : installedMods) {

@@ -22,6 +22,7 @@ import java.util.*;
 import java.util.zip.*;
 
 import net.kdt.pojavlaunch.modmanager.ModManager;
+import net.kdt.pojavlaunch.modmanager.State;
 import net.kdt.pojavlaunch.prefs.*;
 import net.kdt.pojavlaunch.utils.*;
 import net.kdt.pojavlaunch.value.*;
@@ -37,6 +38,7 @@ import android.widget.Toast;
 import static android.os.Build.VERSION.SDK_INT;
 import static android.os.Build.VERSION_CODES.P;
 import static android.os.Build.VERSION_CODES.Q;
+import static net.kdt.pojavlaunch.modmanager.ModManager.workDir;
 import static net.kdt.pojavlaunch.prefs.LauncherPreferences.PREF_IGNORE_NOTCH;
 import static net.kdt.pojavlaunch.prefs.LauncherPreferences.PREF_NOTCH_SIZE;
 
@@ -941,5 +943,15 @@ public final class Tools {
             }
         }
         return result;
+    }
+
+    public static String getModJsonFabricLoaderVersion() {
+        File modsJson = new File(workDir + "/mods.json");
+        try {
+            return GLOBAL_GSON.fromJson(Tools.read(modsJson.getPath()), State.class).fabricLoaderVersion;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

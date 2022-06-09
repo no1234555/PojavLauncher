@@ -2,6 +2,8 @@ package net.kdt.pojavlaunch.modmanager.api;
 
 import android.os.Build;
 import com.google.gson.annotations.SerializedName;
+
+import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.fragments.ModsFragment;
 import net.kdt.pojavlaunch.modmanager.ModData;
 import net.kdt.pojavlaunch.modmanager.ModManager;
@@ -108,7 +110,7 @@ public class Curseforge {
                     if (project.logo != null) modData.iconUrl = project.logo.thumbnailUrl;
                     else modData.iconUrl = "";
 
-                    for (ModData installedMod : ModManager.listInstalledMods("fabric-loader-0.14.6-" + version)) {
+                    for (ModData installedMod : ModManager.listInstalledMods("fabric-loader-" + Tools.getModJsonFabricLoaderVersion() + "-" + version)) {
                         if (installedMod.isActive && String.valueOf(project.id).equals(installedMod.slug)) {
                             modData.isActive = true;
                             break;
