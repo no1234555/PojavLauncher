@@ -3,9 +3,7 @@ package net.kdt.pojavlaunch.utils;
 import static net.kdt.pojavlaunch.Architecture.ARCH_X86;
 import static net.kdt.pojavlaunch.Architecture.is64BitsDevice;
 import static net.kdt.pojavlaunch.Tools.LOCAL_RENDERER;
-import static net.kdt.pojavlaunch.prefs.LauncherPreferences.PREF_GLES_SHRINK_HACK;
-import static net.kdt.pojavlaunch.prefs.LauncherPreferences.PREF_OPENGL_VERSION_HACK;
-import static net.kdt.pojavlaunch.prefs.LauncherPreferences.PREF_VBO_DISABLE_HACK;
+import static net.kdt.pojavlaunch.Tools.currentDisplayMetrics;
 
 import android.app.*;
 import android.content.*;
@@ -18,6 +16,8 @@ import com.oracle.dalvik.*;
 import java.io.*;
 import java.util.*;
 import net.kdt.pojavlaunch.*;
+import net.kdt.pojavlaunch.extra.ExtraConstants;
+import net.kdt.pojavlaunch.extra.ExtraCore;
 import net.kdt.pojavlaunch.prefs.*;
 import org.lwjgl.glfw.*;
 
@@ -197,17 +197,11 @@ public class JREUtils {
         // On certain GLES drivers, overloading default functions shader hack fails, so disable it
         envMap.put("LIBGL_NOINTOVLHACK", "1");
 
-        // The shrink hack can be enabled from the experimental settings
-        envMap.put("LIBGL_SHRINK", PREF_GLES_SHRINK_HACK);
-
-        // VBO disable hack
-        if (PREF_VBO_DISABLE_HACK) envMap.put("LIBGL_USEVBO","0");
-
-        // openGL version hack
-        if (PREF_OPENGL_VERSION_HACK) envMap.put("LIBGL_ES", "1");
-        
         // Fix white color on banner and sheep, since GL4ES 1.1.5
         envMap.put("LIBGL_NORMALIZE", "1");
+
+        // The OPEN GL version is changed according
+        envMap.put("LIBGL_ES", (String) ExtraCore.getValue(ExtraConstants.OPEN_GL_VERSION));
    
         envMap.put("MESA_GLSL_CACHE_DIR", activity.getCacheDir().getAbsolutePath());
         if (LOCAL_RENDERER != null) {
@@ -260,7 +254,11 @@ public class JREUtils {
         }
         for (Map.Entry<String, String> env : envMap.entrySet()) {
             Logger.getInstance().appendToLog("Added custom env: " + env.getKey() + "=" + env.getValue());
-            Os.setenv(env.getKey(), env.getValue(), true);
+            try {
+                Os.setenv(env.getKey(), env.getValue(), true);
+            }catch (NullPointerException exception){
+                Log.e("JREUtils", exception.toString());
+            }
         }
 
         File serverFile = new File(Tools.DIR_HOME_JRE + "/" + Tools.DIRNAME_HOME_JRE + "/server/libjvm.so");
@@ -343,16 +341,15 @@ public class JREUtils {
                 "-Dos.version=Android-" + Build.VERSION.RELEASE,
                 "-Dpojav.path.minecraft=" + Tools.DIR_GAME_NEW,
                 "-Dpojav.path.private.account=" + Tools.DIR_ACCOUNT_NEW,
-                "-Dorg.lwjgl.librarypath=" + ctx.getApplicationInfo().nativeLibraryDir,
-                "-Djna.boot.library.path=" + ctx.getApplicationInfo().nativeLibraryDir,
-                "-Djna.nosys=true",
+
+                "-Dorg.lwjgl.vulkan.libname=libvulkan.so",
                 //LWJGL 3 DEBUG FLAGS
                 //"-Dorg.lwjgl.util.Debug=true",
                 //"-Dorg.lwjgl.util.DebugFunctions=true",
                 //"-Dorg.lwjgl.util.DebugLoader=true",
                 // GLFW Stub width height
-                "-Dglfwstub.windowWidth=" + CallbackBridge.windowWidth,
-                "-Dglfwstub.windowHeight=" + CallbackBridge.windowHeight,
+                "-Dglfwstub.windowWidth=" + Tools.getDisplayFriendlyRes(currentDisplayMetrics.widthPixels, LauncherPreferences.PREF_SCALE_FACTOR/100F),
+                "-Dglfwstub.windowHeight=" + Tools.getDisplayFriendlyRes(currentDisplayMetrics.heightPixels, LauncherPreferences.PREF_SCALE_FACTOR/100F),
                 "-Dglfwstub.initEgl=false",
                 "-Dext.net.resolvPath=" +resolvFile,
                 "-Dlog4j2.formatMsgNoLookups=true", //Log4j RCE mitigation
@@ -437,12 +434,12 @@ public class JREUtils {
         if(LOCAL_RENDERER == null) return null;
         String renderLibrary;
         switch (LOCAL_RENDERER){
-            case "opengles2": renderLibrary = "libgl4es_114.so"; break;
+            case "opengles2":
             case "opengles2_5":
-            case "opengles3": renderLibrary = "libgl4es_115.so"; break;
+            case "opengles3":
+                renderLibrary = "libgl4es_114.so"; break;
             case "opengles3_virgl":
             case "vulkan_zink": renderLibrary = "libOSMesa_8.so"; break;
-            case "opengles3_vgpu" : renderLibrary = "libvgpu.so"; break;
             default:
                 Log.w("RENDER_LIBRARY", "No renderer selected, defaulting to opengles2");
                 renderLibrary = "libgl4es_114.so";
@@ -487,7 +484,8 @@ public class JREUtils {
         }
         return false;
     }
-    private static int getDetectedVersion() {
+
+    public static int getDetectedVersion() {
         /*
          * Get all the device configurations and check the EGL_RENDERABLE_TYPE attribute
          * to determine the highest ES version supported by any config. The
@@ -549,6 +547,7 @@ public class JREUtils {
     public static native boolean dlopen(String libPath);
     public static native void setLdLibraryPath(String ldLibraryPath);
     public static native void setupBridgeWindow(Object surface);
+    public static native void releaseBridgeWindow();
     public static native void setupExitTrap(Context context);
     // Obtain AWT screen pixels to render on Android SurfaceView
     public static native int[] renderAWTScreenFrame(/* Object canvas, int width, int height */);
