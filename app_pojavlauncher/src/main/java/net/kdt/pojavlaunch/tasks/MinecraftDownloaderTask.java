@@ -1,10 +1,14 @@
 package net.kdt.pojavlaunch.tasks;
 
+import static net.kdt.pojavlaunch.modmanager.ModManager.workDir;
+
 import android.annotation.SuppressLint;
 import android.app.*;
 import android.content.*;
 import android.os.*;
 import android.util.*;
+
+import com.google.gson.JsonObject;
 
 import java.io.*;
 import java.util.*;
@@ -159,7 +163,7 @@ public class MinecraftDownloaderTask extends AsyncTask<String, String, Throwable
                     }
                 }
 
-                String v = Tools.getCompatibleVersions("releases").get(0);
+                String v = verInfo.id.replace(ModManager.state.fabricLoaderVersion + "-", "");
                 setMax(ModManager.getCoreModsFromJson(v).size());
                 zeroProgress();
                 downloadCoreMods(v);
@@ -175,8 +179,7 @@ public class MinecraftDownloaderTask extends AsyncTask<String, String, Throwable
                         publishProgress("1", "Ignored " + libItem.name);
                         //Thread.sleep(100);
                     } else {
-                        String[] libInfo = libItem.name.split(":");
-                        String libArtifact = Tools.artifactToPath(libInfo[0], libInfo[1], libInfo[2]);
+                        String libArtifact = Tools.artifactToPath(libItem.name);
                         outLib = new File(Tools.DIR_HOME_LIBRARY + "/" + libArtifact);
                         outLib.getParentFile().mkdirs();
 

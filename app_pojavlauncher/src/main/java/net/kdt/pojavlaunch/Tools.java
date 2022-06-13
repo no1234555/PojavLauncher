@@ -22,6 +22,7 @@ import java.util.*;
 import java.util.zip.*;
 
 import net.kdt.pojavlaunch.modmanager.ModManager;
+import net.kdt.pojavlaunch.modmanager.State;
 import net.kdt.pojavlaunch.prefs.*;
 import net.kdt.pojavlaunch.utils.*;
 import net.kdt.pojavlaunch.value.*;
@@ -37,6 +38,7 @@ import android.widget.Toast;
 import static android.os.Build.VERSION.SDK_INT;
 import static android.os.Build.VERSION_CODES.P;
 import static android.os.Build.VERSION_CODES.Q;
+import static net.kdt.pojavlaunch.modmanager.ModManager.workDir;
 import static net.kdt.pojavlaunch.prefs.LauncherPreferences.PREF_IGNORE_NOTCH;
 import static net.kdt.pojavlaunch.prefs.LauncherPreferences.PREF_NOTCH_SIZE;
 
@@ -253,7 +255,7 @@ public final class Tools {
         }
 
         //Fabric
-        javaArgList.add("-Dfabric.addMods=" + ModManager.getWorkDir() + "/core/" + versionInfo.id + ":" + ModManager.getWorkDir() + "/instances/Default");
+        javaArgList.add("-Dfabric.addMods=" + ModManager.getWorkDir() + "/core/" + versionInfo.id + ":" + ModManager.getWorkDir() + "/instances/" + versionName);
 
         //Quilt
         //javaArgList.add("-Dloader.addMods=" + ModManager.getWorkDir() + "/core/" + versionInfo.id + ":" + ModManager.getWorkDir() + "/instances/Default");
@@ -398,7 +400,14 @@ public final class Tools {
         return strList.toArray(new String[0]);
     }
 
-    public static String artifactToPath(String group, String artifact, String version) {
+    public static String artifactToPath(String name) {
+        int idx = name.indexOf(":");
+        assert idx != -1;
+        int idx2 = name.indexOf(":", idx+1);
+        assert idx2 != -1;
+        String group = name.substring(0, idx);
+        String artifact = name.substring(idx+1, idx2);
+        String version = name.substring(idx2+1).replace(':','-');
         return group.replaceAll("\\.", "/") + "/" + artifact + "/" + version + "/" + artifact + "-" + version + ".jar";
     }
 
@@ -638,8 +647,7 @@ public final class Tools {
         List<String> libDir = new ArrayList<String>();
 
         for (DependentLibrary libItem: info.libraries) {
-            String[] libInfos = libItem.name.split(":");
-            libDir.add(Tools.DIR_HOME_LIBRARY + "/" + Tools.artifactToPath(libInfos[0], libInfos[1], libInfos[2]));
+            libDir.add(Tools.DIR_HOME_LIBRARY + "/" + Tools.artifactToPath(libItem.name));
         }
         return libDir.toArray(new String[0]);
     }
@@ -935,5 +943,15 @@ public final class Tools {
             }
         }
         return result;
+    }
+
+    public static String getModJsonFabricLoaderVersion() {
+        File modsJson = new File(workDir + "/mods.json");
+        try {
+            return GLOBAL_GSON.fromJson(Tools.read(modsJson.getPath()), State.class).fabricLoaderVersion;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

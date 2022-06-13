@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 
 public class State {
+    @SerializedName("fabric-loader-version")
+    public String fabricLoaderVersion;
     @SerializedName("instances")
     private final List<Instance> instances = new ArrayList<>();
     @SerializedName("core_mods")

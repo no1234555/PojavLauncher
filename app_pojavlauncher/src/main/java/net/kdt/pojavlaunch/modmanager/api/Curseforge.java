@@ -2,6 +2,8 @@ package net.kdt.pojavlaunch.modmanager.api;
 
 import android.os.Build;
 import com.google.gson.annotations.SerializedName;
+
+import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.fragments.ModsFragment;
 import net.kdt.pojavlaunch.modmanager.ModData;
 import net.kdt.pojavlaunch.modmanager.ModManager;
@@ -75,7 +77,7 @@ public class Curseforge {
                 modData.fileData.id = String.valueOf(file.fileId);
                 modData.fileData.filename = file.filename;
                 //Work around for curse restricting mods outside CurseForge platform
-                //modData.fileData.url = handler.get("getModDownloadURL")
+                modData.fileData.url = APIUtils.getCurseforgeJsonURL("https://qcxr-modmanager-curseforge-api.herokuapp.com" + "/getModDownloadURL/" + project.id + "/" + file.fileId);
                 return modData;
             }
         }
@@ -108,7 +110,7 @@ public class Curseforge {
                     if (project.logo != null) modData.iconUrl = project.logo.thumbnailUrl;
                     else modData.iconUrl = "";
 
-                    for (ModData installedMod : ModManager.listInstalledMods("Default")) {
+                    for (ModData installedMod : ModManager.listInstalledMods("fabric-loader-" + Tools.getModJsonFabricLoaderVersion() + "-" + version)) {
                         if (installedMod.isActive && String.valueOf(project.id).equals(installedMod.slug)) {
                             modData.isActive = true;
                             break;
