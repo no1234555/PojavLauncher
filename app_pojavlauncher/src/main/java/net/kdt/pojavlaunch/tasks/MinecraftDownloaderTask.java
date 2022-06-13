@@ -163,8 +163,7 @@ public class MinecraftDownloaderTask extends AsyncTask<String, String, Throwable
                     }
                 }
 
-                JsonObject json = Tools.GLOBAL_GSON.fromJson(Tools.read(workDir + "/mods.json"), JsonObject.class);
-                String v = verInfo.id.replace(json.get("fabric-loader-version").getAsString() + "-", "");
+                String v = verInfo.id.replace(ModManager.state.fabricLoaderVersion + "-", "");
                 setMax(ModManager.getCoreModsFromJson(v).size());
                 zeroProgress();
                 downloadCoreMods(v);

@@ -71,12 +71,8 @@ public class APIUtils {
     //Make a get request and return the response as a raw string;
     public static String getCurseforgeJsonURL(String raw) {
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.N) return null;
-        raw = getRaw(raw);
-        JsonParser jsonParser = new JsonParser();
-        Object json = jsonParser.parse(raw);
-        JsonObject jsonObject = (JsonObject) json;
-        raw = String.valueOf(jsonObject.get("data"));
-        raw = raw.replaceAll("\"", "");
+        JsonObject jsonObject = Tools.GLOBAL_GSON.fromJson(getRaw(raw), JsonObject.class);
+        raw = String.valueOf(jsonObject.get("data")).replaceAll("\"", "");
         return raw;
     }
 }
