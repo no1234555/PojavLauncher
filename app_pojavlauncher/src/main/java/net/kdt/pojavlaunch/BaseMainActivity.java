@@ -68,7 +68,7 @@ public class BaseMainActivity extends BaseActivity {
             loggerView = findViewById(R.id.mainLoggerView);
             
             mProfile = PojavProfile.getCurrentProfileContent(this);
-            mVersionInfo = Tools.getVersionInfo(null,mProfile.selectedVersion);
+            mVersionInfo = Tools.getVersionInfo(null,mProfile.selectedVersion, false);
             
             setTitle("Minecraft " + mProfile.selectedVersion);
             PerVersionConfig.update();
@@ -190,7 +190,7 @@ public class BaseMainActivity extends BaseActivity {
         windowWidth = 1980;
 
         mProfile = PojavProfile.getCurrentProfileContent(this);
-        mVersionInfo = Tools.getVersionInfo(null,mProfile.selectedVersion);
+        mVersionInfo = Tools.getVersionInfo(null,mProfile.selectedVersion, false);
 
         config = PerVersionConfig.configMap.get(mProfile.selectedVersion);
         String runtime = LauncherPreferences.PREF_DEFAULT_RUNTIME;

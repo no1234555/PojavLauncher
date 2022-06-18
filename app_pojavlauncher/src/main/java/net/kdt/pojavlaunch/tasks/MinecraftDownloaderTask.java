@@ -93,7 +93,7 @@ public class MinecraftDownloaderTask extends AsyncTask<String, String, Throwable
                     }
                 }
 
-                verInfo = Tools.getVersionInfo(mActivity,p1[0]);
+                verInfo = Tools.getVersionInfo(mActivity,p1[0], false);
 
                 //Now we have the reliable information to check if our runtime settings are good enough
                 if(verInfo.javaVersion != null) { //1.17+
@@ -520,6 +520,6 @@ public class MinecraftDownloaderTask extends AsyncTask<String, String, Throwable
          }
 
          // Custom version, inherits from base.
-         return Tools.getVersionInfo(mActivity,version);
+         return Tools.getVersionInfo(mActivity,version, false);
     }
 }
