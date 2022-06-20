@@ -1099,7 +1099,8 @@ Java_org_lwjgl_glfw_GLFW_nativeEglDetachOnCurrentThread(JNIEnv *env, jclass claz
 void* pojavCreateContext(void* contextSrc) {
     if (config_renderer == RENDERER_GL4ES) {
         const EGLint ctx_attribs[] = {
-                EGL_CONTEXT_CLIENT_VERSION, 3,
+                EGL_CONTEXT_MAJOR_VERSION, 3,
+                EGL_CONTEXT_MINOR_VERSION, 2,
                 EGL_NONE
         };
         EGLContext* ctx = eglCreateContext_p(potatoBridge.eglDisplay, config, (void*)contextSrc, ctx_attribs);
