@@ -231,7 +231,9 @@ public class JREUtils {
         }
         envMap.put("AWTSTUB_WIDTH", Integer.toString(CallbackBridge.windowWidth > 0 ? CallbackBridge.windowWidth : CallbackBridge.physicalWidth));
         envMap.put("AWTSTUB_HEIGHT", Integer.toString(CallbackBridge.windowHeight > 0 ? CallbackBridge.windowHeight : CallbackBridge.physicalHeight));
-        
+        envMap.put("LIBGL_GLES", "/system/lib64/libGLESv3.so");
+        envMap.put("LIBGL_EGL", "/system/lib64/libEGL.so");
+
         File customEnvFile = new File(Tools.DIR_GAME_HOME, "custom_env.txt");
         if (customEnvFile.exists() && customEnvFile.isFile()) {
             BufferedReader reader = new BufferedReader(new FileReader(customEnvFile));
@@ -244,19 +246,9 @@ public class JREUtils {
             reader.close();
         }
         if(!envMap.containsKey("LIBGL_ES") && LOCAL_RENDERER != null) {
-            int glesMajor = getDetectedVersion();
-            Log.i("glesDetect","GLES version detected: "+glesMajor);
-
-            if (glesMajor < 3) {
-                //fallback to 2 since it's the minimum for the entire app
-                envMap.put("LIBGL_ES","2");
-            } else if (LOCAL_RENDERER.startsWith("opengles")) {
-                envMap.put("LIBGL_ES", LOCAL_RENDERER.replace("opengles", "").replace("_5", ""));
-            } else {
-                // TODO if can: other backends such as Vulkan.
-                // Sure, they should provide GLES 3 support.
-                envMap.put("LIBGL_ES", "3");
-            }
+            // TODO if can: other backends such as Vulkan
+            // Sure, they should provide GLES 3 support
+            envMap.put("LIBGL_ES", "3");
         }
         for (Map.Entry<String, String> env : envMap.entrySet()) {
             Logger.getInstance().appendToLog("Added custom env: " + env.getKey() + "=" + env.getValue());
@@ -299,6 +291,8 @@ public class JREUtils {
         userArgs.add("-Xms" + LauncherPreferences.PREF_RAM_ALLOCATION + "M");
         userArgs.add("-Xmx" + LauncherPreferences.PREF_RAM_ALLOCATION + "M");
         if(LOCAL_RENDERER != null) userArgs.add("-Dorg.lwjgl.opengl.libname=" + graphicsLib);
+        userArgs.add("-Dorg.lwjgl.opengles.libname=" + "/system/lib64/libGLESv3.so");
+        userArgs.add("-Dorg.lwjgl.egl.libname=" + "/system/lib64/libEGL.so");
 
         userArgs.addAll(JVMArgs);
         activity.runOnUiThread(() -> Toast.makeText(activity, activity.getString(R.string.autoram_info_msg,LauncherPreferences.PREF_RAM_ALLOCATION), Toast.LENGTH_SHORT).show());

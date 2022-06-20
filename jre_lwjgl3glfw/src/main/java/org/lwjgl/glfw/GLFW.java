@@ -1038,6 +1038,11 @@ public class GLFW
         win.windowAttribs.put(GLFW_HOVERED, 1);
         win.windowAttribs.put(GLFW_VISIBLE, 1);
 
+		win.windowAttribs.put(GLFW_CONTEXT_CREATION_API, GLFW_EGL_CONTEXT_API);
+		win.windowAttribs.put(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
+		win.windowAttribs.put(GLFW_CONTEXT_VERSION_MAJOR, 3);
+		win.windowAttribs.put(GLFW_CONTEXT_VERSION_MINOR, 2);
+
         mGLFWWindowMap.put(ptr, win);
         mainContext = ptr;
         return ptr;
