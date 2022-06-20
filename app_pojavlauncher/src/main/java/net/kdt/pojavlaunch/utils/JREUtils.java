@@ -247,8 +247,8 @@ public class JREUtils {
         }
         if(!envMap.containsKey("LIBGL_ES") && LOCAL_RENDERER != null) {
             // TODO if can: other backends such as Vulkan
-            // Sure, they should provide GLES 3 support
-            envMap.put("LIBGL_ES", "3");
+            // Sure, they should provide GLES 2 support
+            envMap.put("LIBGL_ES", "2");
         }
         for (Map.Entry<String, String> env : envMap.entrySet()) {
             Logger.getInstance().appendToLog("Added custom env: " + env.getKey() + "=" + env.getValue());
