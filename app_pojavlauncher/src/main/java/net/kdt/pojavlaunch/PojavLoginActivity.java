@@ -336,17 +336,23 @@ public class PojavLoginActivity extends BaseActivity {
 
         try {
             new CustomControls(this).save(Tools.CTRLDEF_FILE);
-            Tools.copyAssetFile(this, "jsons/fabric-loader-0.13.3.json", Tools.DIR_HOME_VERSION + "/fabric-loader-0.13.3", false);
+
+            File file = new File(Tools.DIR_HOME_VERSION + "/fabric-loader-0.13.3");
+            if(file.exists()) {
+                file.delete();
+            }
+
+            Tools.copyAssetFile(this, "jsons/fabric-loader-0.14.8.json", Tools.DIR_HOME_VERSION + "/fabric-loader-0.14.8", false);
 
              // Install Mods
             Tools.copyAssetFile(this, "artifacts/mcxr-core-0.2.2+null.jar", DIR_GAME_NEW + "/mods", false);
             Tools.copyAssetFile(this, "artifacts/mcxr-play-0.2.2+null.jar", DIR_GAME_NEW + "/mods", false);
             Tools.copyAssetFile(this, "artifacts/titleworlds-0.0.2.jar", DIR_GAME_NEW + "/mods", false);
             Tools.copyAssetFile(this, "artifacts/lazydfu-0.1.3-SNAPSHOT.jar", DIR_GAME_NEW + "/mods", false);
-            Tools.copyAssetFile(this, "artifacts/fabric-api-0.48.0+1.18.2.jar", DIR_GAME_NEW + "/mods", false);
-            
-            // Install Resource Pack
-            Tools.copyAssetFile(this, "assets-v0.zip", DIR_GAME_NEW + "/resourcepacks", false);
+            Tools.copyAssetFile(this, "artifacts/fabric-api-0.57.0+1.18.2.jar", DIR_GAME_NEW + "/mods", false);
+
+            // Featured Servers
+            Tools.copyAssetFile(this, "servers.dat", DIR_GAME_NEW, true);
 
             // Install TitleWorlds
             Tools.copyAssetFile(this, "titleworlds/TitleWorlds/advancements/6b404275-563a-4c56-8f46-c1c0c23df5c8.json", DIR_GAME_NEW + "/titleworlds/TitleWorlds/advancements", false);

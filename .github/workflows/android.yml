@@ -127,7 +127,7 @@ jobs:
           path: app_pojavlauncher/src/main/assets/artifacts
           workflow_conclusion: success
           repo: QuestCraftPlusPlus/MCXR
-          branch: master
+          commit: 8dfbeee4bfb6aec2f650bfce905dde94ae8881a0
           name: mcxr-core
 
       - name: Collect MCXR (mcxr-play)
@@ -138,7 +138,7 @@ jobs:
           path: app_pojavlauncher/src/main/assets/artifacts
           workflow_conclusion: success
           repo: QuestCraftPlusPlus/MCXR
-          branch: master
+          commit: 8dfbeee4bfb6aec2f650bfce905dde94ae8881a0
           name: mcxr-play
 
       - name: Collect TitleWorlds
@@ -189,6 +189,7 @@ jobs:
           
           # Build the launcher
           ./gradlew :app_pojavlauncher:assembleRelease
+
       - name: Upload APK
         uses: actions/upload-artifact@v2
         with:
