@@ -858,10 +858,10 @@ int pojavInit() {
         eglBindAPI_p(EGL_OPENGL_ES_API);
 
         if (!potatoBridge.androidWindow) {
-            potatoBridge.eglSurface = eglCreatePbufferSurface(potatoBridge.eglDisplay, config,
+            potatoBridge.eglSurface = eglCreatePbufferSurface_p(potatoBridge.eglDisplay, config,
                                                               NULL);
             if (!potatoBridge.eglSurface) {
-                printf("EGLBridge: Error eglCreatePbufferSurface failed: %d\n", eglGetError());
+                printf("EGLBridge: Error eglCreatePbufferSurface failed: %d\n", eglGetError_p());
                 return 0;
             }
 
