@@ -855,7 +855,7 @@ int pojavInit() {
             return 0;
         }
 
-        eglBindAPI_p(EGL_OPENGL_ES_API);
+        eglBindAPI_p(EGL_OPENGL_API);
 
         if (!potatoBridge.androidWindow) {
             potatoBridge.eglSurface = eglCreatePbufferSurface(potatoBridge.eglDisplay, config,
@@ -1098,9 +1098,10 @@ Java_org_lwjgl_glfw_GLFW_nativeEglDetachOnCurrentThread(JNIEnv *env, jclass claz
 
 void* pojavCreateContext(void* contextSrc) {
     if (config_renderer == RENDERER_GL4ES) {
-        const EGLint ctx_attribs[] = {
-                EGL_CONTEXT_MAJOR_VERSION, 3,
+            const EGLint ctx_attribs[] = {
+                EGL_CONTEXT_MAJOR_VERSION, atoi(getenv("LIBGL_ES")),
                 EGL_CONTEXT_MINOR_VERSION, 2,
+                EGL_CONTEXT_OPENGL_PROFILE_MASK, EGL_CONTEXT_OPENGL_CORE_PROFILE_BIT,
                 EGL_NONE
         };
         EGLContext* ctx = eglCreateContext_p(potatoBridge.eglDisplay, config, (void*)contextSrc, ctx_attribs);
