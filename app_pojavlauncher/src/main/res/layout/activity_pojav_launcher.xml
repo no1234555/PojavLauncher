@@ -161,6 +161,7 @@
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/progressDownloadText"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/guidelineLeft"
         tools:visibility="visible" />
 
@@ -239,5 +240,17 @@
         app:layout_constraintBottom_toBottomOf="@+id/btnTab1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/launchermain_text_accountstatus" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="119dp"
+        android:layout_height="21dp"
+        android:text="Version: 2.0"
+        app:layout_constraintBottom_toTopOf="@+id/progressDownloadBar"
+        app:layout_constraintEnd_toEndOf="@+id/launchermainTabPager"
+        app:layout_constraintHorizontal_bias="0.013"
+        app:layout_constraintStart_toStartOf="@+id/guidelineLeft"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
