@@ -1,6 +1,7 @@
 #include <jni.h>
 #include <thread>
 #include <GLES3/gl3.h>
+#include <dlfcn.h>
 
 //
 // Created by Judge on 12/23/2021.
@@ -9,6 +10,7 @@
 static jobject* context;
 static jobject* app;
 static JavaVM* jvm;
+static void* handle;
 
 jint JNI_OnLoad(JavaVM* vm, void* reserved) {
     if (jvm == nullptr) {
@@ -35,9 +37,24 @@ Java_net_sorenon_mcxr_play_MCXRNativeLoad_getApplicationActivityPtr(JNIEnv *env,
     return reinterpret_cast<jlong>(&app);
 }
 
+JNIEXPORT JNICALL
+extern "C" jlong
+Java_net_sorenon_mcxr_play_MCXRNativeLoad_getOpenXRHandle(JNIEnv *env, jclass clazz) {
+    return reinterpret_cast<jlong>(&handle);
+}
+
 extern "C"
 JNIEXPORT void JNICALL
-Java_net_kdt_pojavlaunch_MCXRLoader_launch(JNIEnv *env, jclass clazz, jobject main) {
+Java_net_kdt_pojavlaunch_MCXRLoader_launch(JNIEnv *env, jclass clazz, jobject main, jstring nativeDir) {
+    // Load OpenXR
+    std::string dir = env->GetStringUTFChars(nativeDir, JNI_FALSE);
+    std::string fileext = "/libopenxr_loader.so";
+    dir = dir + fileext;
+    handle = dlopen(dir.c_str(), RTLD_LAZY|RTLD_LOCAL);
+    if(!handle) {
+        printf("OpenXR lib is null!");
+    }
+
     main = (*env).NewGlobalRef(main);
     jclass clazz1 = (*env).GetObjectClass(main);
     jmethodID id = (*env).GetMethodID(clazz1, "runCraft", "()V");

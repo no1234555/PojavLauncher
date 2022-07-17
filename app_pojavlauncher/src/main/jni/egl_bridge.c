@@ -8,13 +8,12 @@
 #include <stdlib.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <link.h>
 
 #include <EGL/egl.h>
 #include <GL/osmesa.h>
 
-#ifdef GLES_TEST
-#include <GLES2/gl2.h>
-#endif
+#include <GLES3/gl3.h>
 
 #include <android/native_window.h>
 #include <android/native_window_jni.h>
@@ -789,6 +788,10 @@ bool loadSymbolsVirGL() {
     free(fileName);
 }
 
+GLubyte* hooked_glGetString(const char* str) {
+    return glGetString_p(str);
+}
+
 int pojavInit() {
     savedWidth = 1980;
     savedHeight = 1080;
@@ -858,10 +861,15 @@ int pojavInit() {
         eglBindAPI_p(EGL_OPENGL_API);
 
         if (!potatoBridge.androidWindow) {
-            potatoBridge.eglSurface = eglCreatePbufferSurface(potatoBridge.eglDisplay, config,
-                                                              NULL);
+            static const EGLint attribs[] = {
+                    EGL_WIDTH, 1920,
+                    EGL_HEIGHT, 1080,
+                    EGL_NONE
+            };
+            potatoBridge.eglSurface = eglCreatePbufferSurface_p(potatoBridge.eglDisplay, config,
+                                                              attribs);
             if (!potatoBridge.eglSurface) {
-                printf("EGLBridge: Error eglCreatePbufferSurface failed: %d\n", eglGetError());
+                printf("EGLBridge: Error eglCreatePbufferSurface failed: %d\n", eglGetError_p());
                 return 0;
             }
 

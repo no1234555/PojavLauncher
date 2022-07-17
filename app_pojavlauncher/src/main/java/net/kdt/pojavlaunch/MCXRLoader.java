@@ -9,5 +9,5 @@ public class MCXRLoader {
         System.loadLibrary("mcxr_loader");
     }
 
-    public static native void launch(MainActivity activity);
+    public static native void launch(MainActivity activity, String nativeDir);
 }

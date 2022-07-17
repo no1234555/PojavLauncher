@@ -231,6 +231,7 @@ public class JREUtils {
         envMap.put("REGAL_GL_VERSION", "4.5");
         if(LOCAL_RENDERER != null) {
             envMap.put("POJAV_RENDERER", LOCAL_RENDERER);
+            if(LOCAL_RENDERER.equals("opengles3_desktopgl_angle_vulkan")) envMap.put("POJAVEXEC_EGL","libEGL_angle.so"); // use ANGLE egl
         }
         envMap.put("AWTSTUB_WIDTH", Integer.toString(CallbackBridge.windowWidth > 0 ? CallbackBridge.windowWidth : CallbackBridge.physicalWidth));
         envMap.put("AWTSTUB_HEIGHT", Integer.toString(CallbackBridge.windowHeight > 0 ? CallbackBridge.windowHeight : CallbackBridge.physicalHeight));
@@ -281,7 +282,7 @@ public class JREUtils {
         setJavaEnvironment(activity);
         
         final String graphicsLib = loadGraphicsLibrary();
-         List<String> userArgs = getJavaArgs(activity);
+        List<String> userArgs = getJavaArgs(activity);
 
         //Remove arguments that can interfere with the good working of the launcher
         purgeArg(userArgs,"-Xms");

@@ -8,7 +8,7 @@ HERE_PATH := $(LOCAL_PATH)
 LOCAL_PATH := $(HERE_PATH)
 
 include $(CLEAR_VARS)
-LOCAL_LDLIBS := -lGLESv3
+LOCAL_LDLIBS := -lGLESv3 -ldl
 LOCAL_MODULE := mcxr_loader
         LOCAL_SRC_FILES := \
                     mcxr_loader.cpp
@@ -34,13 +34,24 @@ include $(CLEAR_VARS)
 LOCAL_LDLIBS := -ldl -llog -landroid -lEGL -lGLESv3
 # -lGLESv2
 LOCAL_MODULE := pojavexec
-# LOCAL_CFLAGS += -DDEBUG
 # -DGLES_TEST
 LOCAL_SRC_FILES := \
     egl_bridge.c \
     input_bridge_v3.c \
     jre_launcher.c \
     utils.c
+include $(BUILD_SHARED_LIBRARY)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE := angle_gles2
+LOCAL_SRC_FILES := tinywrapper/angle-gles/$(TARGET_ARCH_ABI)/libGLESv2_angle.so
+include $(PREBUILT_SHARED_LIBRARY)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE := tinywrapper
+LOCAL_SHARED_LIBRARIES := angle_gles2
+LOCAL_SRC_FILES := tinywrapper/main.c tinywrapper/string_utils.c
+LOCAL_C_INCLUDES := $(LOCAL_PATH)/tinywrapper
 include $(BUILD_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)
