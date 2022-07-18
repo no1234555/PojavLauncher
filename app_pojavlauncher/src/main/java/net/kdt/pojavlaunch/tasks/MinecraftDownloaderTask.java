@@ -1,6 +1,9 @@
 package net.kdt.pojavlaunch.tasks;
 
-import static net.kdt.pojavlaunch.modmanager.ModManager.workDir;
+import static net.kdt.pojavlaunch.modmanager.ModManager.checkCoreModsForUpdate;
+import static net.kdt.pojavlaunch.modmanager.ModManager.checkModsForUpdate;
+import static net.kdt.pojavlaunch.modmanager.ModManager.updateCoreMods;
+import static net.kdt.pojavlaunch.modmanager.ModManager.updateMods;
 
 import android.annotation.SuppressLint;
 import android.app.*;
@@ -8,13 +11,12 @@ import android.content.*;
 import android.os.*;
 import android.util.*;
 
-import com.google.gson.JsonObject;
-
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.*;
 
 import net.kdt.pojavlaunch.*;
+import net.kdt.pojavlaunch.modmanager.ModData;
 import net.kdt.pojavlaunch.modmanager.ModManager;
 import net.kdt.pojavlaunch.multirt.MultiRTUtils;
 import net.kdt.pojavlaunch.multirt.Runtime;
@@ -163,10 +165,18 @@ public class MinecraftDownloaderTask extends AsyncTask<String, String, Throwable
                     }
                 }
 
-                String v = verInfo.id.replace(ModManager.state.fabricLoaderVersion + "-", "");
-                setMax(ModManager.getCoreModsFromJson(v).size());
+                setMax(ModManager.getCoreModsFromJson(verInfo.id).size());
                 zeroProgress();
-                downloadCoreMods(v);
+
+                downloadCoreMods(verInfo.id);
+
+                String v = "fabric-loader-" + ModManager.state.fabricLoaderVersion + "-" + verInfo.id;
+                // Check for Update and apply
+                ArrayList<ModData> mods = checkModsForUpdate(v);
+                updateMods(v, mods);
+
+                mods = checkCoreModsForUpdate(verInfo.id);
+                updateCoreMods(verInfo.id, mods);
 
                 setMax(verInfo.libraries.length);
                 zeroProgress();

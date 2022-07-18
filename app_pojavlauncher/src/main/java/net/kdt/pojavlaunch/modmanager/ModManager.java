@@ -17,6 +17,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class ModManager {
 
@@ -268,13 +269,19 @@ public class ModManager {
     public static ArrayList<ModData> checkModsForUpdate(String instanceName) {
         ArrayList<ModData> mods = new ArrayList<>();
         try {
-            Instance instance = state.getInstance(instanceName);
-            for (ModData mod : instance.getMods()) {
-                ModData modData = null;
-                if (mod.platform.equals("modrinth")) modData = Modrinth.getModData(mod.slug, instance.getGameVersion());
-                else if (mod.platform.equals("curseforge")) modData = Curseforge.getModData(mod.slug, instance.getGameVersion());
-                else if (mod.platform.equals("github")) modData = Github.getModData(mod.slug, instance.getGameVersion());
-                if (modData != null && !mod.fileData.id.equals(modData.fileData.id)) mods.add(mod);
+            Instance instance = getInstance(instanceName);
+            if(instance.getMods() != null) {
+                for (ModData mod : instance.getMods()) {
+                    ModData modData = null;
+                    if (mod.platform.equals("modrinth"))
+                        modData = Modrinth.getModData(mod.slug, instance.getGameVersion());
+                    else if (mod.platform.equals("curseforge"))
+                        modData = Curseforge.getModData(mod.slug, instance.getGameVersion());
+                    else if (mod.platform.equals("github"))
+                        modData = Github.getModData(mod.slug, instance.getGameVersion());
+                    if (modData != null && !mod.fileData.id.equals(modData.fileData.id) && !Objects.equals(modData.slug, "simple-voice-chat"))
+                        mods.add(mod);
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -287,6 +294,28 @@ public class ModManager {
         for (ModData mod : modsToUpdate) {
             removeMod(instance, mod);
             addMod(instance, mod.platform, mod.slug, instance.getGameVersion(), false);
+        }
+    }
+
+    public static ArrayList<ModData> checkCoreModsForUpdate(String instanceName) {
+        ArrayList<ModData> mods = new ArrayList<>();
+        try {
+            for (ModData mod : state.getCoreMods(instanceName)) {
+                ModData modData = null;
+                if (mod.platform.equals("github")) modData = Github.getModData(mod.slug, instanceName);
+                if (modData != null && !mod.fileData.id.equals(modData.fileData.id)) mods.add(mod);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return mods;
+    }
+
+    public static void updateCoreMods(String instanceName, ArrayList<ModData> modsToUpdate) {
+        Instance instance = state.getInstance(instanceName);
+        for (ModData mod : modsToUpdate) {
+            removeMod(instance, mod);
+            addMod(instance, mod.platform, mod.slug, instance.getGameVersion(), true);
         }
     }
 
