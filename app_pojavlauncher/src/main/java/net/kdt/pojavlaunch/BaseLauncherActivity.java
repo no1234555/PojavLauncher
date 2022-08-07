@@ -162,7 +162,7 @@ public abstract class BaseLauncherActivity extends BaseActivity {
             };
         }
         LauncherPreferences.DEFAULT_PREF.registerOnSharedPreferenceChangeListener(listRefreshListener);
-
+        new RefreshVersionListTask(this).execute();
         System.out.println("call to onResumeFragments");
         mRuntimeConfigDialog = new MultiRTConfigDialog();
         mRuntimeConfigDialog.prepare(this);
