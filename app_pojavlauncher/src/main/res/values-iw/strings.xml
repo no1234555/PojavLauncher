@@ -8,13 +8,13 @@
     <!-- Languages list part -->
     <!-- Login strings -->
     <string name="login_online_username_hint">דוא\"ל או שם משתמש</string>
-    <string name="login_online_password_hint">סיסמה</string>
+
     <string name="login_online_check_keeplogin">השאר אותי מחובר</string>
     <string name="login_online_login_label">Mojang התחבר</string>
-    <string name="login_offline_label">התחבר כחשבון לא מקוון</string>
+
     <string name="login_error_invalid_username">שם המשתמש לא תקין. שם המשתמש צריך להיות בטווח של 3-16 תווים, לכלול רק A-Z, a-z, 0-9 וקו תחתון.</string>
     <string name="login_error_exist_username">שם המשתמש כבר קיים</string>
-    <string name="login_error_offline_password">חשבונות במצב \"לא מקוון\" לא כוללים סיסמא!</string>
+
     <string name="login_microsoft">התחברות Microsoft</string>
     <string name="login_select_account">בחר חשבון</string>
     <string name="login_title_no_saved_account">לא נמצאו חשבונות!</string>
@@ -44,7 +44,7 @@
     <string name="mcl_tab_crash">רשומת קריסה</string>
     <!-- MCLauncherActivity: Account status -->
     <string name="mcl_account_connected">מחובר</string>
-    <string name="mcl_account_offline">לא מקוון</string>
+
     <!-- MCLauncherActivity: Strings -->
     <string name="mcl_version_msg">מוכן להפעיל Minecraft %s</string>
     <string name="mcl_launch_cleancache">מנקה קבצי מטמון</string>
@@ -111,7 +111,7 @@
     <string name="mcn_exit_call">צא</string>
     <string name="mcn_exit_confirm">האם אתה בטוח שאתה רוצה לכפות כיבוי?</string>
     <string name="mcn_check_fail_lwjgl">LWJGL3 לא הותקן!</string>
-    <string name="mcn_check_fail_incompatiblearch">ארכיטקטורה %1$s לא נתמכת ב Java Runtime %2$s.</string>
+
     <string name="mcn_check_fail_vulkan_support">מרנדר Vulkan Zink לא נתמך במכשיר זה!</string>
     <!-- MainActivity: Control buttons -->
     <string name="control_toggle">ממשק משתמש(GUI)</string>

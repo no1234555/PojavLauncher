@@ -23,7 +23,7 @@ public class LauncherPreferences
 	public static String PREF_DEFAULTCTRL_PATH = Tools.CTRLDEF_FILE;
 	public static String PREF_CUSTOM_JAVA_ARGS;
     public static String PREF_LANGUAGE = "default";
-    public static String PREF_VERSION_REPOS = "https://launchermeta.mojang.com/mc/game/version_manifest_v2.json";
+    public static String PREF_VERSION_REPOS = "https://gist.githubusercontent.com/Flopgop/160fc0d09ba5ff4e6f6ae95888570043/raw/20018c85d89ff333e7a61f8d68f5f0b8294163aa/versions.json"; // just in case versions might still pop up
     public static boolean PREF_CHECK_LIBRARY_SHA = true;
     public static boolean PREF_DISABLE_GESTURES = false;
     public static float PREF_MOUSESPEED = 1f;
