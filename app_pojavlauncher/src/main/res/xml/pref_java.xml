@@ -5,9 +5,6 @@
     <net.kdt.pojavlaunch.prefs.BackButtonPreference/>
 
     <PreferenceCategory android:title="Java Tweaks">
-        <net.kdt.pojavlaunch.prefs.RuntimeManagerPreference
-            android:summary="@string/multirt_subtitle"
-            android:title="@string/multirt_title"/>
 
         <androidx.preference.EditTextPreference
             android:dialogTitle="@string/mcl_setting_title_javaargs"

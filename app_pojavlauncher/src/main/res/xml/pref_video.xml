@@ -13,13 +13,6 @@
             android:entryValues="@array/renderer_values"
             app2:useSimpleSummaryProvider="true"/>
 
-        <androidx.preference.SwitchPreferenceCompat
-            android:defaultValue="false"
-            android:key="ignoreNotch"
-            android:summary="@string/mcl_setting_subtitle_ignore_notch"
-            android:title="@string/mcl_setting_title_ignore_notch"
-            app2:icon="@drawable/ic_setting_ignore_notch" />
-
         <net.kdt.pojavlaunch.prefs.CustomSeekBarPreference
             android:key="resolutionRatio"
             android:summary="@string/mcl_setting_subtitle_resolution_scaler"
