@@ -13,6 +13,7 @@ import android.widget.*;
 import androidx.annotation.Nullable;
 
 import java.io.*;
+import java.util.Objects;
 
 import net.kdt.pojavlaunch.multirt.MultiRTConfigDialog;
 import net.kdt.pojavlaunch.multirt.MultiRTUtils;
@@ -59,57 +60,100 @@ public abstract class BaseLauncherActivity extends BaseActivity {
      * Used by the install button from the layout_main_v4
      * @param view The view triggering the function
      */
-    public void backup(View view) throws IOException {
-        mPlayButton.setEnabled(false);
-        File backupFolder = new File(System.getenv("EXTERNAL_STORAGE") + "/QuestcraftBackup");
-        File savesFolder = new File(DIR_GAME_NEW+"/saves");
-        File modsFolder = new File(DIR_GAME_NEW+"/mods");
-        File configFolder = new File(DIR_GAME_NEW+"/config");
-        File optionsTxt = new File(DIR_GAME_NEW+"/options.txt");
+    public void backup(View view) {
+        try {
+            mPlayButton.setEnabled(false);
+            File backupFolder = new File(System.getenv("EXTERNAL_STORAGE") + "/QuestcraftBackup");
+            File savesFolder = new File(DIR_GAME_NEW+"/saves");
+            File modsFolder = new File(DIR_GAME_NEW+"/mods");
+            File configFolder = new File(DIR_GAME_NEW+"/config");
+            File optionsTxt = new File(DIR_GAME_NEW+"/options.txt");
 
-        if (backupFolder.exists()) {
-            FileUtils.deleteDirectory(backupFolder);
+            if (backupFolder.exists()) {
+                FileUtils.deleteDirectory(backupFolder);
+            }
+            backupFolder.mkdirs();
+
+            if (savesFolder.exists()) {
+                File f = new File(System.getenv("EXTERNAL_STORAGE") + "/QuestcraftBackup" + "/saves");
+                if (f.exists()) f.delete();
+                FileUtils.copyDirectoryToDirectory(savesFolder, backupFolder);
+            }
+            if (modsFolder.exists()) {
+                File f = new File(System.getenv("EXTERNAL_STORAGE") + "/QuestcraftBackup" + "/mods");
+                if (f.exists()) f.delete();
+                for (File file : Objects.requireNonNull(modsFolder.listFiles())) {
+                    if (!file.isDirectory()) { // failsafe, should always be true
+                        if (!file.getName().toLowerCase().contains("mcxr") && !file.getName().toLowerCase().contains("titleworlds")) {
+                            FileUtils.copyFileToDirectory(file, backupFolder);
+                        }
+                    }
+                }
+            }
+            if (configFolder.exists()) {
+                File f = new File(System.getenv("EXTERNAL_STORAGE") + "/QuestcraftBackup" + "/config");
+                if (f.exists()) f.delete();
+                FileUtils.copyDirectoryToDirectory(configFolder, backupFolder);
+            }
+            if (optionsTxt.exists()) {
+                File f = new File(System.getenv("EXTERNAL_STORAGE") + "/QuestcraftBackup" + "/config.txt");
+                if (f.exists()) f.delete();
+                FileUtils.copyFileToDirectory(optionsTxt, backupFolder);
+            }
+
+            Toast.makeText(this, "Successfully completed backup!", Toast.LENGTH_LONG).show();
+            mPlayButton.setEnabled(true);
+        } catch (IOException e) {
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
         }
-        backupFolder.mkdirs();
-
-        if (savesFolder.exists())
-            FileUtils.copyDirectoryToDirectory(savesFolder, backupFolder);
-        if (modsFolder.exists())
-            FileUtils.copyDirectoryToDirectory(modsFolder, backupFolder);
-        if (configFolder.exists())
-            FileUtils.copyDirectoryToDirectory(configFolder, backupFolder);
-        if (optionsTxt.exists())
-            FileUtils.copyFileToDirectory(optionsTxt, backupFolder);
-
-        Toast.makeText(this, "Successfully completed backup!", Toast.LENGTH_LONG).show();
-        mPlayButton.setEnabled(true);
     }
 
-    public void restore(View view) throws IOException {
-        mPlayButton.setEnabled(false);
-        String backupFolderPath = System.getenv("EXTERNAL_STORAGE") + "/QuestcraftBackup";
-        File backupFolder = new File(backupFolderPath);
-        File savesFolder = new File(backupFolderPath+"/saves");
-        File modsFolder = new File(backupFolderPath+"/mods");
-        File configFolder = new File(backupFolderPath+"/config");
-        File optionsTxt = new File(backupFolderPath+"/options.txt");
+    public void restore(View view) {
+        try {
+            mPlayButton.setEnabled(false);
+            String backupFolderPath = System.getenv("EXTERNAL_STORAGE") + "/QuestcraftBackup";
+            File backupFolder = new File(backupFolderPath);
+            File savesFolder = new File(backupFolderPath + "/saves");
+            File modsFolder = new File(backupFolderPath + "/mods");
+            File configFolder = new File(backupFolderPath + "/config");
+            File optionsTxt = new File(backupFolderPath + "/options.txt");
+            File dirGameNew = new File(DIR_GAME_NEW);
 
-        if (!backupFolder.exists()) {
-            Toast.makeText(this, "A backup has not been previously made!", Toast.LENGTH_LONG).show();
-            return;
+            if (!backupFolder.exists()) {
+                Toast.makeText(this, "A backup has not been previously made!", Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            if (savesFolder.exists()) {
+                File f = new File(DIR_GAME_NEW + "/saves");
+                if (f.exists()) f.delete();
+                FileUtils.copyDirectoryToDirectory(savesFolder, dirGameNew);
+            }
+            if (modsFolder.exists()) {
+                for (File file : Objects.requireNonNull(modsFolder.listFiles())) {
+                    if (!file.isDirectory()) { // failsafe, should always be true
+                        if (!file.getName().toLowerCase().contains("mcxr") && !file.getName().toLowerCase().contains("titleworlds")) {
+                            FileUtils.copyFileToDirectory(file, backupFolder);
+                        }
+                    }
+                }
+            }
+            if (configFolder.exists()) {
+                File f = new File(DIR_GAME_NEW + "/config");
+                if (f.exists()) f.delete();
+                FileUtils.copyDirectoryToDirectory(configFolder, dirGameNew);
+            }
+            if (optionsTxt.exists()) {
+                File f = new File(DIR_GAME_NEW + "/options.txt");
+                if (f.exists()) f.delete();
+                FileUtils.copyFileToDirectory(optionsTxt, dirGameNew);
+            }
+
+            Toast.makeText(this, "Successfully completed restore!", Toast.LENGTH_LONG).show();
+            mPlayButton.setEnabled(true);
+        } catch (IOException e) {
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
         }
-
-        if (savesFolder.exists())
-            FileUtils.copyDirectoryToDirectory(savesFolder, new File(DIR_GAME_NEW));
-        if (modsFolder.exists())
-            FileUtils.copyDirectoryToDirectory(modsFolder, new File(DIR_GAME_NEW));
-        if (configFolder.exists())
-            FileUtils.copyDirectoryToDirectory(configFolder, new File(DIR_GAME_NEW));
-        if (optionsTxt.exists())
-            FileUtils.copyFileToDirectory(optionsTxt, new File(DIR_GAME_NEW));
-
-        Toast.makeText(this, "Successfully completed restore!", Toast.LENGTH_LONG).show();
-        mPlayButton.setEnabled(true);
     }
 
 
