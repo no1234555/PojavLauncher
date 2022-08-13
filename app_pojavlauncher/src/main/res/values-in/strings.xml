@@ -8,13 +8,13 @@
     <!-- Languages list part -->
     <!-- Login strings -->
     <string name="login_online_username_hint">Email atau username</string>
-    <string name="login_online_password_hint">Kata sandi</string>
+
     <string name="login_online_check_keeplogin">Tetap masuk</string>
     <string name="login_online_login_label">Mojang Masuk</string>
-    <string name="login_offline_label">Masuk sebagai akun offline</string>
+
     <string name="login_error_invalid_username">Username tidak valid. Username harus berada dalam jangka 3-16 karakter, dan hanya bisa berisi A-Z, a-z, 0-9, dan garis bawah.</string>
     <string name="login_error_exist_username">Username ini sudah ada</string>
-    <string name="login_error_offline_password">Akun offline tidak bisa menyertakan kata sandi!</string>
+
     <string name="login_microsoft">Login Microsoft</string>
     <string name="login_select_account">Pilih akun</string>
     <string name="login_title_no_saved_account">Tidak ada akun yang ditemukan!</string>
@@ -44,7 +44,7 @@
     <string name="mcl_tab_crash">Catatan cras</string>
     <!-- MCLauncherActivity: Account status -->
     <string name="mcl_account_connected">Terhubung</string>
-    <string name="mcl_account_offline">Offline</string>
+
     <!-- MCLauncherActivity: Strings -->
     <string name="mcl_version_msg">Siap bermain Minecraft %s</string>
     <string name="mcl_launch_cleancache">Membersihkan berkas-berkas cache</string>
@@ -110,7 +110,7 @@
     <string name="mcn_exit_call">Keluar</string>
     <string name="mcn_exit_confirm">Apa anda yakin mau tutup secara paksa?</string>
     <string name="mcn_check_fail_lwjgl">LWJGL3 tidak dipasang!</string>
-    <string name="mcn_check_fail_incompatiblearch">Arsitektur %1$s tidak kompatibel dengan Runtime Java %2$s.</string>
+
     <string name="mcn_check_fail_vulkan_support">Renderer Vulkan Zink tidak didukung di perangkat ini!</string>
     <!-- MainActivity: Control buttons -->
     <string name="control_toggle">GUI</string>
