@@ -205,7 +205,8 @@
     <string name="customctrl_selectdefault">Select default Control json</string>
 
 
-    <string name="main_install_jar_file">Install .jar</string>
+    <string name="main_backup">Backup</string>
+    <string name="main_restore">Restore</string>
     <string name="main_options">Options</string>
     <string name="main_play">Play</string>
     <string name="main_welcome">Welcome, %s</string>

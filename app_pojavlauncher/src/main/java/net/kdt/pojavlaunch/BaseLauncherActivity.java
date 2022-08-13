@@ -22,6 +22,7 @@ import net.kdt.pojavlaunch.tasks.*;
 import androidx.appcompat.app.AlertDialog;
 import net.kdt.pojavlaunch.value.*;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
 public abstract class BaseLauncherActivity extends BaseActivity {
@@ -58,8 +59,57 @@ public abstract class BaseLauncherActivity extends BaseActivity {
      * Used by the install button from the layout_main_v4
      * @param view The view triggering the function
      */
-    public void installJarFile(View view){
-        installMod(false);
+    public void backup(View view) throws IOException {
+        mPlayButton.setEnabled(false);
+        File backupFolder = new File(System.getenv("EXTERNAL_STORAGE") + "/QuestcraftBackup");
+        File savesFolder = new File(DIR_GAME_NEW+"/saves");
+        File modsFolder = new File(DIR_GAME_NEW+"/mods");
+        File configFolder = new File(DIR_GAME_NEW+"/config");
+        File optionsTxt = new File(DIR_GAME_NEW+"/options.txt");
+
+        if (backupFolder.exists()) {
+            FileUtils.deleteDirectory(backupFolder);
+        }
+        backupFolder.mkdirs();
+
+        if (savesFolder.exists())
+            FileUtils.copyDirectoryToDirectory(savesFolder, backupFolder);
+        if (modsFolder.exists())
+            FileUtils.copyDirectoryToDirectory(modsFolder, backupFolder);
+        if (configFolder.exists())
+            FileUtils.copyDirectoryToDirectory(configFolder, backupFolder);
+        if (optionsTxt.exists())
+            FileUtils.copyFileToDirectory(optionsTxt, backupFolder);
+
+        Toast.makeText(this, "Successfully completed backup!", Toast.LENGTH_LONG).show();
+        mPlayButton.setEnabled(true);
+    }
+
+    public void restore(View view) throws IOException {
+        mPlayButton.setEnabled(false);
+        String backupFolderPath = System.getenv("EXTERNAL_STORAGE") + "/QuestcraftBackup";
+        File backupFolder = new File(backupFolderPath);
+        File savesFolder = new File(backupFolderPath+"/saves");
+        File modsFolder = new File(backupFolderPath+"/mods");
+        File configFolder = new File(backupFolderPath+"/config");
+        File optionsTxt = new File(backupFolderPath+"/options.txt");
+
+        if (!backupFolder.exists()) {
+            Toast.makeText(this, "A backup has not been previously made!", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        if (savesFolder.exists())
+            FileUtils.copyDirectoryToDirectory(savesFolder, new File(DIR_GAME_NEW));
+        if (modsFolder.exists())
+            FileUtils.copyDirectoryToDirectory(modsFolder, new File(DIR_GAME_NEW));
+        if (configFolder.exists())
+            FileUtils.copyDirectoryToDirectory(configFolder, new File(DIR_GAME_NEW));
+        if (optionsTxt.exists())
+            FileUtils.copyFileToDirectory(optionsTxt, new File(DIR_GAME_NEW));
+
+        Toast.makeText(this, "Successfully completed restore!", Toast.LENGTH_LONG).show();
+        mPlayButton.setEnabled(true);
     }
 
 
