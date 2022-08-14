@@ -77,7 +77,10 @@ public abstract class BaseLauncherActivity extends BaseActivity {
             if (savesFolder.exists()) {
                 File f = new File(System.getenv("EXTERNAL_STORAGE") + "/QuestcraftBackup" + "/saves");
                 if (f.exists()) f.delete();
-                FileUtils.copyDirectoryToDirectory(savesFolder, backupFolder);
+                f.mkdir();
+                for (File file : savesFolder.listFiles()) {
+                    FileUtils.copyDirectoryToDirectory(file, f);
+                }
             }
             if (modsFolder.exists()) {
                 File f = new File(System.getenv("EXTERNAL_STORAGE") + "/QuestcraftBackup" + "/mods");
@@ -93,7 +96,10 @@ public abstract class BaseLauncherActivity extends BaseActivity {
             if (configFolder.exists()) {
                 File f = new File(System.getenv("EXTERNAL_STORAGE") + "/QuestcraftBackup" + "/config");
                 if (f.exists()) f.delete();
-                FileUtils.copyDirectoryToDirectory(configFolder, backupFolder);
+                f.mkdir();
+                for (File file : configFolder.listFiles()) {
+                    FileUtils.copyDirectoryToDirectory(file, f);
+                }
             }
             if (optionsTxt.exists()) {
                 File f = new File(System.getenv("EXTERNAL_STORAGE") + "/QuestcraftBackup" + "/config.txt");
