@@ -169,7 +169,7 @@ jobs:
           path: app_pojavlauncher/src/main/assets/artifacts
           workflow_conclusion: success
           repo: QuestCraftPlusPlus/fabric
-          commit: 150726d26716693b7666053a0c860b26fe954a80
+          commit: 6aaea1f73c3120a4abe87bdefd8d88b4252347a3
           name: fabric-api
 
       - name: Build APK with Gradle
