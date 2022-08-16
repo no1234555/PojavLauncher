@@ -125,7 +125,7 @@ jobs:
           path: app_pojavlauncher/src/main/assets/artifacts
           workflow_conclusion: success
           repo: QuestCraftPlusPlus/MCXR
-          commit: 8dfbeee4bfb6aec2f650bfce905dde94ae8881a0
+          commit: 8b20e5c71431b4ef0c940896c846e190f096f45b
           name: mcxr-core
 
       - name: Collect MCXR (mcxr-play)
@@ -136,7 +136,7 @@ jobs:
           path: app_pojavlauncher/src/main/assets/artifacts
           workflow_conclusion: success
           repo: QuestCraftPlusPlus/MCXR
-          commit: 8dfbeee4bfb6aec2f650bfce905dde94ae8881a0
+          commit: 8b20e5c71431b4ef0c940896c846e190f096f45b
           name: mcxr-play
 
       - name: Collect TitleWorlds
