@@ -147,7 +147,7 @@ jobs:
           path: app_pojavlauncher/src/main/assets/artifacts
           workflow_conclusion: success
           repo: QuestCraftPlusPlus/TitleWorlds
-          branch: master
+          commit: c113728d566ed67fb6290059595b96aeeff1a628
           name: title-worlds
 
       - name: Collect lazydfu
@@ -169,7 +169,7 @@ jobs:
           path: app_pojavlauncher/src/main/assets/artifacts
           workflow_conclusion: success
           repo: QuestCraftPlusPlus/fabric
-          branch: 1.18.2
+          commit: 150726d26716693b7666053a0c860b26fe954a80
           name: fabric-api
 
       - name: Build APK with Gradle
