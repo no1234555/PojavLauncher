@@ -8,13 +8,13 @@
     <!-- Languages list part -->
     <!-- Login strings -->
     <string name="login_online_username_hint">Indirizzo Email o nome utente</string>
-    <string name="login_online_password_hint">Password</string>
+
     <string name="login_online_check_keeplogin">Resta collegato</string>
     <string name="login_online_login_label">Mojang Accedi</string>
-    <string name="login_offline_label">Accedi come account Offline</string>
+
     <string name="login_error_invalid_username">Nome utente non valido. Il nome utente deve essere lungo tra i 3-16 caratteri, dovrebbe contenere solamente valori compresi tra A-Z, a-z, 0-9 e trattini bassi.</string>
     <string name="login_error_exist_username">Nome utente già esistente</string>
-    <string name="login_error_offline_password">Gli account offline non possono avere una password!</string>
+
     <string name="login_microsoft">Accedi Da Microsoft</string>
     <string name="login_select_account">Seleziona account</string>
     <string name="login_title_no_saved_account">Non ci sono account !</string>
@@ -44,7 +44,7 @@
     <string name="mcl_tab_crash">Crash log</string>
     <!-- MCLauncherActivity: Account status -->
     <string name="mcl_account_connected">Connesso</string>
-    <string name="mcl_account_offline">Offline</string>
+
     <!-- MCLauncherActivity: Strings -->
     <string name="mcl_version_msg">Minecraft %s pronto</string>
     <string name="mcl_launch_cleancache">Pulizia dei file di cache in corso</string>
@@ -111,7 +111,7 @@
     <string name="mcn_exit_call">Esci</string>
     <string name="mcn_exit_confirm">Sei sicuro di voler eseguire una chiusura forzata?</string>
     <string name="mcn_check_fail_lwjgl">LWJGL3 non installato!</string>
-    <string name="mcn_check_fail_incompatiblearch">L\'architettura %1$s non è compatibile con il Runtime Java %2$s.</string>
+
     <string name="mcn_check_fail_vulkan_support">Il renderer Vulkan Zink non è supportato su questo dispositivo!</string>
     <!-- MainActivity: Control buttons -->
     <string name="control_toggle">GUI</string>

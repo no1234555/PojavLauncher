@@ -8,10 +8,10 @@
     <!-- Languages list part -->
     <!-- Login strings -->
     <string name="login_online_username_hint">Email o usuari</string>
-    <string name="login_online_password_hint">Contrasenya</string>
+
     <string name="login_online_check_keeplogin">Mantenir-me connectat</string>
     <string name="login_online_login_label">Mojang Iniciar sessió</string>
-    <string name="login_offline_label">Enta amb una conta offline</string>
+
     <string name="login_error_exist_username">Aquet nom d’usuari ja existeix</string>
     <string name="login_select_account">Seleccioneu un compte</string>
     <!-- Hint -->
@@ -75,7 +75,7 @@
     <string name="mcn_exit_call">Exit</string>
     <string name="mcn_exit_confirm">Are you sure want to force close?</string>
     <string name="mcn_check_fail_lwjgl">LWJGL3 no s\'ha instal·lat!</string>
-    <string name="mcn_check_fail_incompatiblearch">L\'arquitectura %1$s no és compatible amb Java Runtime %2$s.</string>
+
     <!-- MainActivity: Control buttons -->
     <string name="control_toggle">GUI</string>
     <string name="control_keyboard">Keyboard</string>

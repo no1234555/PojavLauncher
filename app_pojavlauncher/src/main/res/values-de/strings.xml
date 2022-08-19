@@ -8,13 +8,13 @@
     <!-- Languages list part -->
     <!-- Login strings -->
     <string name="login_online_username_hint">Email oder Benutzername</string>
-    <string name="login_online_password_hint">Passwort</string>
+
     <string name="login_online_check_keeplogin">Angemeldet bleiben</string>
     <string name="login_online_login_label">Mojang Anmelden</string>
-    <string name="login_offline_label">Als Offline-Konto anmelden</string>
+
     <string name="login_error_invalid_username">Ungültiger Benutzername. Der Benutzername muss zwischen 3-16 Zeichen lang sein und sollte nur A-Z, a-z, 0-9 und Unterstriche enthalten.</string>
     <string name="login_error_exist_username">Dieser Benutzername ist bereits vergeben</string>
-    <string name="login_error_offline_password">Offline Konten können kein Kennwort haben!</string>
+
     <string name="login_microsoft">Microsoft-Login</string>
     <string name="login_select_account">Konto auswählen</string>
     <string name="login_title_no_saved_account">Es konnte kein Konto gefunden werden!</string>
@@ -44,7 +44,7 @@
     <string name="mcl_tab_crash">Absturzbericht</string>
     <!-- MCLauncherActivity: Account status -->
     <string name="mcl_account_connected">Verbunden</string>
-    <string name="mcl_account_offline">Offline</string>
+
     <!-- MCLauncherActivity: Strings -->
     <string name="mcl_version_msg">Bereit um Minecraft Version %s zu spielen</string>
     <string name="mcl_launch_cleancache">Säuberung von Cachedateien</string>
@@ -111,7 +111,7 @@
     <string name="mcn_exit_call">Beenden</string>
     <string name="mcn_exit_confirm">Sind Sie sicher, dass Sie die Beendung erzwingen möchten?</string>
     <string name="mcn_check_fail_lwjgl">LWJGL3 wurde nicht installiert!</string>
-    <string name="mcn_check_fail_incompatiblearch">Architektur %1$s ist inkompatibel mit Java Runtime %2$s.</string>
+
     <string name="mcn_check_fail_vulkan_support">Vulkan Zink-Renderer wird auf diesem Gerät nicht unterstützt!</string>
     <!-- MainActivity: Control buttons -->
     <string name="control_toggle">Benutzeroberfläche</string>

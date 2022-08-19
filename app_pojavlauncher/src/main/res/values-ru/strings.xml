@@ -8,13 +8,13 @@
     <!-- Languages list part -->
     <!-- Login strings -->
     <string name="login_online_username_hint">Email или имя пользователя</string>
-    <string name="login_online_password_hint">Пароль</string>
+
     <string name="login_online_check_keeplogin">Запомнить меня</string>
     <string name="login_online_login_label">Mojang Войти</string>
-    <string name="login_offline_label">Войти как офлайн учётная запись</string>
+
     <string name="login_error_invalid_username">Наверное имя пользователя. Оно должно быть длиной от 3 до 16 символов и содержать только латинские буквы, цифры или нижнее подчёркивание.</string>
     <string name="login_error_exist_username">Это имя пользователя уже существует</string>
-    <string name="login_error_offline_password">Офлайн учётная запись не может содержать пароль!</string>
+
     <string name="login_microsoft">Войти через Microsoft</string>
     <string name="login_select_account">Учётные записи</string>
     <string name="login_title_no_saved_account">Учётные записи не найдены!</string>
@@ -44,7 +44,7 @@
     <string name="mcl_tab_crash">Журнал сбоев</string>
     <!-- MCLauncherActivity: Account status -->
     <string name="mcl_account_connected">Подключено</string>
-    <string name="mcl_account_offline">Офлайн</string>
+
     <!-- MCLauncherActivity: Strings -->
     <string name="mcl_version_msg">Minecraft %s готов к запуску</string>
     <string name="mcl_launch_cleancache">Очистка файлов кэша</string>
@@ -111,7 +111,7 @@
     <string name="mcn_exit_call">Выйти</string>
     <string name="mcn_exit_confirm">Вы уверены, что хотите принудительно закрыть его?</string>
     <string name="mcn_check_fail_lwjgl">LWJGL3 не установлен!</string>
-    <string name="mcn_check_fail_incompatiblearch">Архитектура %1$s несовместима с Java Runtime %2$s.</string>
+
     <string name="mcn_check_fail_vulkan_support">Визуализатор Vulkan Zink не поддерживается на этом устройстве!</string>
     <!-- MainActivity: Control buttons -->
     <string name="control_toggle">GUI</string>

@@ -8,13 +8,13 @@
     <!-- Languages list part -->
     <!-- Login strings -->
     <string name="login_online_username_hint">E-mail lub nazwa użytkownika</string>
-    <string name="login_online_password_hint">Hasło</string>
+
     <string name="login_online_check_keeplogin">Zapamiętaj dane logowania</string>
     <string name="login_online_login_label">Mojang Zaloguj się</string>
-    <string name="login_offline_label">Zaloguj się jako konto offline</string>
+
     <string name="login_error_invalid_username">Nieprawidłowa nazwa użytkownika. Nazwa użytkownika musi zawierać od 3 do 16 znaków; A-Z, a-z, 0-9 oraz znak podkreślenia.</string>
     <string name="login_error_exist_username">Ta nazwa użytkownika już istnieje</string>
-    <string name="login_error_offline_password">Konto offline nie może zawierać hasła!</string>
+
     <string name="login_microsoft">Logowanie Microsoft</string>
     <string name="login_select_account">Wybierz konto</string>
     <string name="login_title_no_saved_account">Nie znaleziono żadnych kont!</string>
@@ -44,7 +44,7 @@
     <string name="mcl_tab_crash">Rejestr awarii</string>
     <!-- MCLauncherActivity: Account status -->
     <string name="mcl_account_connected">Połączono</string>
-    <string name="mcl_account_offline">Offline</string>
+
     <!-- MCLauncherActivity: Strings -->
     <string name="mcl_version_msg">Minecraft %s jest gotowy do uruchomienia</string>
     <string name="mcl_launch_cleancache">Czyszczenie plików pamięci podręcznej</string>
@@ -111,7 +111,7 @@
     <string name="mcn_exit_call">Wyjdź</string>
     <string name="mcn_exit_confirm">Czy na pewno chcesz wymusić zamknięcie?</string>
     <string name="mcn_check_fail_lwjgl">LWJGL3 nie został zainstalowany!</string>
-    <string name="mcn_check_fail_incompatiblearch">Architektura %1$s nie jest kompatybilna ze środowiskiem wykonawczym Java %2$s.</string>
+
     <string name="mcn_check_fail_vulkan_support">Renderer Vulkan Zink nie jest obsługiwany na tym urządzeniu!</string>
     <!-- MainActivity: Control buttons -->
     <string name="control_toggle">GUI</string>

@@ -79,6 +79,7 @@ public class PojavLoginActivity extends BaseActivity {
     private EditText edit2;
     private final int REQUEST_STORAGE_REQUEST_CODE = 1;
     private final int MY_PERMISSIONS_RECORD_AUDIO = 2;
+    private final int MY_PERMISSIONS_WRITE_EXTERNAL_STORAGE = 3;
     private CheckBox sRemember;
     private TextView startupTextView;
     private SharedPreferences firstLaunchPrefs;
@@ -366,27 +367,48 @@ public class PojavLoginActivity extends BaseActivity {
         ModManager.init();
 
         if (ContextCompat.checkSelfPermission(this,
-                    Manifest.permission.RECORD_AUDIO)
-                    != PackageManager.PERMISSION_GRANTED) {
+                Manifest.permission.RECORD_AUDIO)
+                != PackageManager.PERMISSION_GRANTED) {
 
-                //When permission is not granted by user, show them message why this permission is needed.
-                if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                        Manifest.permission.RECORD_AUDIO)) {
-                    Looper.prepare();
-                    Toast.makeText(this, "This permission is for voice chat.", Toast.LENGTH_LONG).show();
+            //When permission is not granted by user, show them message why this permission is needed.
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.RECORD_AUDIO)) {
+                Looper.prepare();
+                Toast.makeText(this, "This permission is for voice chat.", Toast.LENGTH_LONG).show();
 
-                    //Give user option to still opt-in the permissions
-                    ActivityCompat.requestPermissions(this,
-                            new String[]{Manifest.permission.RECORD_AUDIO},
-                            MY_PERMISSIONS_RECORD_AUDIO);
+                //Give user option to still opt-in the permissions
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.RECORD_AUDIO},
+                        MY_PERMISSIONS_RECORD_AUDIO);
 
-                } else {
-                    // Show user dialog to grant permission to record audio
-                    ActivityCompat.requestPermissions(this,
-                            new String[]{Manifest.permission.RECORD_AUDIO},
-                            MY_PERMISSIONS_RECORD_AUDIO);
-                }
+            } else {
+                // Show user dialog to grant permission to record audio
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.RECORD_AUDIO},
+                        MY_PERMISSIONS_RECORD_AUDIO);
             }
+        }
+
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                Looper.prepare();
+                Toast.makeText(this, "This permission is for backup and log storage.", Toast.LENGTH_LONG).show();
+
+                //Give user option to still opt-in the permissions
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        MY_PERMISSIONS_WRITE_EXTERNAL_STORAGE);
+
+            } else {
+                // Show user dialog to grant permission to record audio
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        MY_PERMISSIONS_WRITE_EXTERNAL_STORAGE);
+            }
+        }
     }
 
 

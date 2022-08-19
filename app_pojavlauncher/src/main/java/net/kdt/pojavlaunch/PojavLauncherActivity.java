@@ -45,8 +45,7 @@ public class PojavLauncherActivity extends BaseLauncherActivity {
     private final Button[] Tabs = new Button[3];
     private View selectedTab;
     private ImageView accountFaceImageView;
-
-    private Button logoutBtn; // MineButtons
+    
     private ExtraListener backPreferenceListener;
 
     private final LauncherFragment launcherFragment = new LauncherFragment();
@@ -69,7 +68,6 @@ public class PojavLauncherActivity extends BaseLauncherActivity {
         mVersionSelector = findViewById(R.id.launchermain_spinner_version);
         mLaunchProgress = findViewById(R.id.progressDownloadBar);
         mLaunchTextStatus = findViewById(R.id.progressDownloadText);
-        logoutBtn = findViewById(R.id.installJarButton);
         mPlayButton = findViewById(R.id.launchermainPlayButton);
         Tabs[0] = findViewById(R.id.btnTab1);
         Tabs[1] = findViewById(R.id.btnTab2);
@@ -207,7 +205,6 @@ public class PojavLauncherActivity extends BaseLauncherActivity {
         mLaunchProgress.setVisibility(launchVisibility);
         mLaunchTextStatus.setVisibility(launchVisibility);
 
-        logoutBtn.setEnabled(!isLaunching);
         mVersionSelector.setEnabled(!isLaunching);
         canBack = !isLaunching;
     }

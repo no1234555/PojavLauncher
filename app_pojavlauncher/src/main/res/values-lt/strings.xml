@@ -8,12 +8,12 @@
     <!-- Languages list part -->
     <!-- Login strings -->
     <string name="login_online_username_hint">El. paštas arba slapyvardis</string>
-    <string name="login_online_password_hint">Slaptažodis</string>
+
     <string name="login_online_check_keeplogin">Likti prisijungus</string>
     <string name="login_online_login_label">Mojang Prisijungti</string>
-    <string name="login_offline_label">Prisijungti naudojant be interneto paskyrą</string>
+
     <string name="login_error_exist_username">Šis slapyvardis jau egzistuoja</string>
-    <string name="login_error_offline_password">Netikros pasakytos negali turėti slaptažodžio</string>
+
     <string name="login_microsoft">Microsoft prisijungimas</string>
     <string name="login_select_account">Pasirinkti paskyrą</string>
     <string name="login_title_no_saved_account">Paskyra nerasta!</string>
@@ -43,7 +43,7 @@
     <string name="mcl_tab_crash">Išsijungimo įrašai</string>
     <!-- MCLauncherActivity: Account status -->
     <string name="mcl_account_connected">Prisijungta</string>
-    <string name="mcl_account_offline">Neprisijungta</string>
+
     <!-- MCLauncherActivity: Strings -->
     <string name="mcl_version_msg">Pasiruošta žaisti Minecraft %s</string>
     <string name="mcl_launch_cleancache">Valomi nereikalingi failai</string>
@@ -108,7 +108,7 @@
     <string name="mcn_exit_call">Išeiti</string>
     <string name="mcn_exit_confirm">Ar jūs tikrai norite priverstinai išjungti?</string>
     <string name="mcn_check_fail_lwjgl">LWJGL3 nebuvo instaliuota!</string>
-    <string name="mcn_check_fail_incompatiblearch">Architektūra %1$s nėra palaikomas su Java Runtime %2$s.</string>
+
     <string name="mcn_check_fail_vulkan_support">Vulkan Zink atvaizduotojas nėra palaikomas ant šio įrenginio!</string>
     <!-- MainActivity: Control buttons -->
     <string name="control_toggle">GUI</string>

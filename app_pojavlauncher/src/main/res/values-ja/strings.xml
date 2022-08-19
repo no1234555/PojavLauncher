@@ -8,7 +8,7 @@
     <!-- Languages list part -->
     <!-- Login strings -->
     <string name="login_online_username_hint">メールアドレス・ユーザー名</string>
-    <string name="login_online_password_hint">パスワード</string>
+
     <string name="login_online_check_keeplogin">ログインを保持する</string>
     <string name="login_online_login_label">Mojang ログイン</string>
     <string name="login_error_exist_username">このユーザー名は既に存在しています</string>

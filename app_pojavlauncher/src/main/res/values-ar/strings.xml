@@ -8,12 +8,12 @@
     <!-- Languages list part -->
     <!-- Login strings -->
     <string name="login_online_username_hint">البريد الإلكتروني أو اسم المستخدم</string>
-    <string name="login_online_password_hint">كلمة المرور</string>
+
     <string name="login_online_check_keeplogin">أبق تسجيل دخولي</string>
     <string name="login_online_login_label">Mojang تسجيل الدخول</string>
-    <string name="login_offline_label">تسجيل الدخول كحساب غير متصل</string>
+
     <string name="login_error_exist_username">هذا الاسم موجود مسبقا</string>
-    <string name="login_error_offline_password">الحسابات غير المتصلة لا يمكنها تضمن كلمة مرور!</string>
+
     <string name="login_microsoft">تسجيل دخول بحساب مايكروسوفت</string>
     <string name="login_select_account">اختر الحساب</string>
     <string name="login_title_no_saved_account">لم يتم العثور على الحساب!</string>
@@ -43,7 +43,7 @@
     <string name="mcl_tab_crash">سجل توقف العمل</string>
     <!-- MCLauncherActivity: Account status -->
     <string name="mcl_account_connected">متصل</string>
-    <string name="mcl_account_offline">غير متصل</string>
+
     <!-- MCLauncherActivity: Strings -->
     <string name="mcl_version_msg">جاهز للعب ماين كرافت %s</string>
     <string name="mcl_launch_cleancache">تنظيف ملفات ذاكرة التخزين المؤقت</string>
@@ -109,7 +109,7 @@
     <string name="mcn_exit_call">خروج</string>
     <string name="mcn_exit_confirm">هل أنت متأكد من أنك تريد الإغلاق؟</string>
     <string name="mcn_check_fail_lwjgl">لم يتم تثبيت LWJGL3!</string>
-    <string name="mcn_check_fail_incompatiblearch">البنية %1$s غير متوافقة مع محرك تشغيل جافا %2$s.</string>
+
     <string name="mcn_check_fail_vulkan_support">رندر فولكان زينك غير مدعوم على هذا الجهاز!</string>
     <!-- MainActivity: Control buttons -->
     <string name="control_toggle">واجهة المستخدم الرسومية</string>
