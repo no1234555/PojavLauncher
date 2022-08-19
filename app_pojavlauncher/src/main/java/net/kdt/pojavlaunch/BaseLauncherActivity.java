@@ -63,8 +63,8 @@ public abstract class BaseLauncherActivity extends BaseActivity {
      */
     public void backup(View view) {
         try {
-            String storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)+ "/QuestcraftBackup";
             mPlayButton.setEnabled(false);
+            String storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)+ "/QuestcraftBackup";
             File backupFolder = new File(storageDir);
             File savesFolder = new File(DIR_GAME_NEW+"/saves");
             File modsFolder = new File(DIR_GAME_NEW+"/mods");
