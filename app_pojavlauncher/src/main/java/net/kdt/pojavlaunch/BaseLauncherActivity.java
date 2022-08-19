@@ -280,11 +280,6 @@ public abstract class BaseLauncherActivity extends BaseActivity {
         mRuntimeConfigDialog = new MultiRTConfigDialog();
         mRuntimeConfigDialog.prepare(this);
 
-        ((Button)findViewById(R.id.installJarButton)).setOnLongClickListener(view -> {
-            installMod(true);
-            return true;
-        });
-
         //TODO ADD CRASH CHECK AND FOCUS
         System.out.println("call to onResumeFragments; E");
     }
