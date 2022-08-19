@@ -69,6 +69,10 @@
         "platform": "github"
       },
       {
+        "slug": "entityculling",
+        "platform": "modrinth"
+      },
+      {
         "slug": "voicechat-fabric",
         "platform": "github"
       },
