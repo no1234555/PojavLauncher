@@ -67,7 +67,7 @@ public class PojavLauncherActivity extends BaseLauncherActivity {
         accountSelector = findViewById(R.id.launchermain_spinner_account);
         mVersionSelector = findViewById(R.id.launchermain_spinner_version);
         mLaunchProgress = findViewById(R.id.progressDownloadBar);
-        mLaunchTextStatus = findViewById(R.id.progressDownloadText)
+        mLaunchTextStatus = findViewById(R.id.progressDownloadText);
         mPlayButton = findViewById(R.id.launchermainPlayButton);
         Tabs[0] = findViewById(R.id.btnTab1);
         Tabs[1] = findViewById(R.id.btnTab2);
