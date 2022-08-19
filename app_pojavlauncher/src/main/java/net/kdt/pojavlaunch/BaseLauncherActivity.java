@@ -6,6 +6,7 @@ import static net.kdt.pojavlaunch.Tools.getFileName;
 import android.app.*;
 import android.content.*;
 import android.net.Uri;
+import android.os.Environment;
 import android.view.*;
 import android.webkit.MimeTypeMap;
 import android.widget.*;
@@ -62,8 +63,9 @@ public abstract class BaseLauncherActivity extends BaseActivity {
      */
     public void backup(View view) {
         try {
+            String storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)+ "/QuestcraftBackup";
             mPlayButton.setEnabled(false);
-            File backupFolder = new File(System.getenv("EXTERNAL_STORAGE") + "/QuestcraftBackup");
+            File backupFolder = new File(storageDir);
             File savesFolder = new File(DIR_GAME_NEW+"/saves");
             File modsFolder = new File(DIR_GAME_NEW+"/mods");
             File configFolder = new File(DIR_GAME_NEW+"/config");
@@ -75,7 +77,7 @@ public abstract class BaseLauncherActivity extends BaseActivity {
             backupFolder.mkdirs();
 
             if (savesFolder.exists()) {
-                File f = new File(System.getenv("EXTERNAL_STORAGE") + "/QuestcraftBackup" + "/saves");
+                File f = new File(storageDir + "/saves");
                 if (f.exists()) f.delete();
                 f.mkdir();
                 for (File file : savesFolder.listFiles()) {
@@ -83,7 +85,7 @@ public abstract class BaseLauncherActivity extends BaseActivity {
                 }
             }
             if (modsFolder.exists()) {
-                File f = new File(System.getenv("EXTERNAL_STORAGE") + "/QuestcraftBackup" + "/mods");
+                File f = new File(storageDir + "/mods");
                 if (f.exists()) f.delete();
                 for (File file : Objects.requireNonNull(modsFolder.listFiles())) {
                     if (!file.isDirectory()) { // failsafe, should always be true
@@ -94,7 +96,7 @@ public abstract class BaseLauncherActivity extends BaseActivity {
                 }
             }
             if (configFolder.exists()) {
-                File f = new File(System.getenv("EXTERNAL_STORAGE") + "/QuestcraftBackup" + "/config");
+                File f = new File(storageDir + "/config");
                 if (f.exists()) f.delete();
                 f.mkdir();
                 for (File file : configFolder.listFiles()) {
@@ -102,7 +104,7 @@ public abstract class BaseLauncherActivity extends BaseActivity {
                 }
             }
             if (optionsTxt.exists()) {
-                File f = new File(System.getenv("EXTERNAL_STORAGE") + "/QuestcraftBackup" + "/config.txt");
+                File f = new File(storageDir + "/config.txt");
                 if (f.exists()) f.delete();
                 FileUtils.copyFileToDirectory(optionsTxt, backupFolder);
             }
@@ -117,7 +119,7 @@ public abstract class BaseLauncherActivity extends BaseActivity {
     public void restore(View view) {
         try {
             mPlayButton.setEnabled(false);
-            String backupFolderPath = System.getenv("EXTERNAL_STORAGE") + "/QuestcraftBackup";
+            String backupFolderPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)+ "/QuestcraftBackup";
             File backupFolder = new File(backupFolderPath);
             File savesFolder = new File(backupFolderPath + "/saves");
             File modsFolder = new File(backupFolderPath + "/mods");
