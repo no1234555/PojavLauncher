@@ -298,17 +298,7 @@ public class ModManager {
     }
 
     public static ArrayList<ModData> checkCoreModsForUpdate(String instanceName) {
-        ArrayList<ModData> mods = new ArrayList<>();
-        try {
-            for (ModData mod : state.getCoreMods(instanceName)) {
-                ModData modData = null;
-                if (mod.platform.equals("github")) modData = Github.getModData(mod.slug, instanceName);
-                if (modData != null && !mod.fileData.url.equals(modData.fileData.url)) mods.add(mod);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return mods;
+        return new ArrayList<>(state.getCoreMods(instanceName));
     }
 
     public static void updateCoreMods(String instanceName, ArrayList<ModData> modsToUpdate) {
