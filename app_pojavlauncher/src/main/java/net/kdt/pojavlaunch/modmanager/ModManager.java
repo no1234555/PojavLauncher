@@ -303,7 +303,7 @@ public class ModManager {
             for (ModData mod : state.getCoreMods(instanceName)) {
                 ModData modData = null;
                 if (mod.platform.equals("github")) modData = Github.getModData(mod.slug, instanceName);
-                if (modData != null && !mod.fileData.id.equals(modData.fileData.id)) mods.add(mod);
+                if (modData != null && !mod.fileData.url.equals(modData.fileData.url)) mods.add(mod);
             }
         } catch (IOException e) {
             e.printStackTrace();
