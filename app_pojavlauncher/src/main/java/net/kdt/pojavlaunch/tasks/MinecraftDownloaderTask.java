@@ -175,8 +175,8 @@ public class MinecraftDownloaderTask extends AsyncTask<String, String, Throwable
                 ArrayList<ModData> mods = checkModsForUpdate(v);
                 updateMods(v, mods);
 
-                mods = checkCoreModsForUpdate(verInfo.id);
-                updateCoreMods(verInfo.id, mods);
+                mods = checkCoreModsForUpdate(v);
+                updateCoreMods(v, mods);
 
                 setMax(verInfo.libraries.length);
                 zeroProgress();
