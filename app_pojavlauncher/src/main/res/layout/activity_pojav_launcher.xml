@@ -263,7 +263,7 @@
         android:id="@+id/textView2"
         android:layout_width="119dp"
         android:layout_height="21dp"
-        android:text="Version: 2.1"
+        android:text="Version: 2.0.1"
         app:layout_constraintBottom_toTopOf="@+id/progressDownloadBar"
         app:layout_constraintEnd_toEndOf="@+id/launchermainTabPager"
         app:layout_constraintHorizontal_bias="0.013"
