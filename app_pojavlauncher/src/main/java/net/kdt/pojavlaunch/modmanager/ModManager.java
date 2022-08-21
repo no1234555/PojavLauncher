@@ -207,42 +207,49 @@ public class ModManager {
     }
 
     public static void addMod(Instance instance, String platform, String slug, String gameVersion, boolean isCoreMod) {
-        currentDownloadSlugs.add(slug);
+        Thread thread = new Thread() {
+            public void run() {
+                currentDownloadSlugs.add(slug);
 
-        File path;
-        if (isCoreMod) path = new File(workDir + "/core/" + gameVersion);
-        else path = new File(workDir + "/instances/" + instance.getName());
-        if (!path.exists()) path.mkdir();
+                File path;
+                if (isCoreMod) path = new File(workDir + "/core/" + gameVersion);
+                else path = new File(workDir + "/instances/" + instance.getName());
+                if (!path.exists()) path.mkdir();
 
-        try {
-            ModData modData = null;
-            if (platform.equals("modrinth")) modData = Modrinth.getModData(slug, gameVersion);
-            else if (platform.equals("curseforge"))
-                modData = Curseforge.getModData(slug, gameVersion);
-            else if (platform.equals("github")) modData = Github.getModData(slug, gameVersion);
-            if (modData == null) return;
-            modData.isActive = true;
+                try {
+                    ModData modData = null;
+                    if (platform.equals("modrinth")) modData = Modrinth.getModData(slug, gameVersion);
+                    else if (platform.equals("curseforge")) modData = Curseforge.getModData(slug, gameVersion);
+                    else if (platform.equals("github")) modData = Github.getModData(slug, gameVersion);
+                    if (modData == null) return;
+                    modData.isActive = true;
 
-            //No duplicate mods allowed
-            if (isCoreMod) {
-                for (ModData mod : state.getCoreMods(gameVersion)) {
-                    if (mod.slug.equals(modData.slug)) return;
+                    //No duplicate mods allowed
+                    if (isCoreMod) {
+                        for (ModData mod : state.getCoreMods(gameVersion)) {
+                            if (mod.slug.equals(modData.slug)) return;
+                        }
+                        state.addCoreMod(gameVersion, modData);
+                    } else {
+                        for (ModData mod : instance.getMods()) {
+                            if (mod.slug.equals(modData.slug)) return;
+                        }
+                        instance.addMod(modData);
+                    }
+
+                    DownloadUtils.downloadFile(modData.fileData.url, new File(path.getPath() + "/" + modData.fileData.filename));
+                    currentDownloadSlugs.remove(slug);
+
+                    saveState();
+                    synchronized (state) {
+                        state.notifyAll();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-                state.addCoreMod(gameVersion, modData);
-            } else {
-                for (ModData mod : instance.getMods()) {
-                    if (mod.slug.equals(modData.slug)) return;
-                }
-                instance.addMod(modData);
             }
-
-            DownloadUtils.downloadFile(modData.fileData.url, new File(path.getPath() + "/" + modData.fileData.filename));
-            currentDownloadSlugs.remove(slug);
-
-            Tools.write(workDir + "/mods.json", Tools.GLOBAL_GSON.toJson(state));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        };
+        thread.start();
     }
 
     public static void removeMod(String instanceName, String slug) {
