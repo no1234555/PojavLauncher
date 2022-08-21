@@ -261,7 +261,23 @@ public class ModManager {
         File modJar = new File(workDir + "/instances/" + instance.getName() + "/" + modData.fileData.filename);
         if (modJar.delete()) {
             instance.getMods().remove(modData);
-            saveState();
+            try {
+                Tools.write(workDir + "/mods.json", Tools.GLOBAL_GSON.toJson(state));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static void removeCoreMod(String version, ModData modData) {
+        File modJar = new File(workDir + "/core/" + version + "/" + modData.fileData.filename);
+        if (modJar.delete()) {
+            state.getCoreMods(version).remove(modData);
+            try {
+                Tools.write(workDir + "/mods.json", Tools.GLOBAL_GSON.toJson(state));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -304,7 +320,7 @@ public class ModManager {
     public static void updateCoreMods(String instanceName, ArrayList<ModData> modsToUpdate) {
         Instance instance = state.getInstance(instanceName);
         for (ModData mod : modsToUpdate) {
-            removeMod(instance, mod);
+            removeCoreMod(instance.getGameVersion(), mod);
             addMod(instance, mod.platform, mod.slug, instance.getGameVersion(), true);
         }
     }
