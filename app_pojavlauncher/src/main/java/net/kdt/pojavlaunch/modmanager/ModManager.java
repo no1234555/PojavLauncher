@@ -240,7 +240,7 @@ public class ModManager {
                     DownloadUtils.downloadFile(modData.fileData.url, new File(path.getPath() + "/" + modData.fileData.filename));
                     currentDownloadSlugs.remove(slug);
 
-                    saveState();
+                    Tools.write(workDir + "/mods.json", Tools.GLOBAL_GSON.toJson(state));
                     synchronized (state) {
                         state.notifyAll();
                     }
