@@ -101,7 +101,11 @@ public class Modrinth {
                 queries.put("query", query);
                 queries.put("offset", offset);
                 queries.put("limit", 50);
-                queries.put("facets", "[[\"categories:fabric\"], [\"versions:" + version + "\"]]");
+                if(version.equals("1.19.2")) {
+                    queries.put("facets", "[[\"categories:fabric\"], [\"versions:1.19\"]]");
+                } else {
+                    queries.put("facets", "[[\"categories:fabric\"], [\"versions:" + version + "\"]]");
+                }
 
                 SearchResult result = handler.get("search", queries, SearchResult.class);
                 if (result == null || Build.VERSION.SDK_INT <= Build.VERSION_CODES.N) {

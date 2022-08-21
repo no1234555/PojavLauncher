@@ -309,7 +309,11 @@ public class ModManager {
         Instance instance = state.getInstance(instanceName);
         for (ModData mod : modsToUpdate) {
             removeMod(instance, mod);
-            addMod(instance, mod.platform, mod.slug, instance.getGameVersion(), false);
+            if(instance.getGameVersion().equals("1.19.2")) {
+                addMod(instance, mod.platform, mod.slug, "1.19", false);
+            } else {
+                addMod(instance, mod.platform, mod.slug, instance.getGameVersion(), false);
+            }
         }
     }
 
