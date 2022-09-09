@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import net.kdt.pojavlaunch.customcontrols.ControlLayout;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
+import net.kdt.pojavlaunch.utils.JREUtils;
 import net.kdt.pojavlaunch.utils.MCOptionUtils;
 
 import java.io.IOException;
@@ -16,7 +17,8 @@ public class MainActivity extends BaseMainActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        MCXRLoader.setActivity(this);
+        MCXRLoader.setEGLGlobal(JREUtils.getEGLContextPtr(), JREUtils.getEGLDisplayPtr(), JREUtils.getEGLConfigPtr());
+        MCXRLoader.setAndroidInitInfo(this);
         MCXRLoader.launch(this);
         super.onCreate(savedInstanceState);
     }

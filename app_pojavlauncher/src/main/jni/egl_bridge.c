@@ -1064,17 +1064,17 @@ void pojavMakeCurrent(void* window) {
 }
 
 JNIEXPORT JNICALL jlong
-Java_org_lwjgl_glfw_CallbackBridge_getEGLDisplayPtr(JNIEnv *env, jclass clazz) {
+Java_net_kdt_pojavlaunch_utils_JREUtils_getEGLDisplayPtr(JNIEnv *env, jclass clazz) {
     return (jlong) &potatoBridge.eglDisplay;
 }
 
 JNIEXPORT JNICALL jlong
-Java_org_lwjgl_glfw_CallbackBridge_getEGLContextPtr(JNIEnv *env, jclass clazz) {
+Java_net_kdt_pojavlaunch_utils_JREUtils_getEGLContextPtr(JNIEnv *env, jclass clazz) {
     return (jlong) &potatoBridge.eglContext;
 }
 
 JNIEXPORT JNICALL jlong
-Java_org_lwjgl_glfw_CallbackBridge_getEGLConfigPtr(JNIEnv *env, jclass clazz) {
+Java_net_kdt_pojavlaunch_utils_JREUtils_getEGLConfigPtr(JNIEnv *env, jclass clazz) {
     return (jlong) &config;
 }
 

@@ -8,8 +8,6 @@
     ]
   },
   "repos": [
-    "QuestCraftPlusPlus/MCXR",
-    "QuestCraftPlusPlus/TitleWorlds",
     "QuestCraftPlusPlus/simple-voice-chat"
   ],
   "core_mods": {
@@ -29,18 +27,6 @@
       {
         "slug": "ferrite-core",
         "platform": "modrinth"
-      },
-      {
-        "slug": "mcxr-core",
-        "platform": "github"
-      },
-      {
-        "slug": "mcxr-play",
-        "platform": "github"
-      },
-      {
-        "slug": "title-worlds",
-        "platform": "github"
       }
     ],
     "1.19.2": [
@@ -61,19 +47,7 @@
         "platform": "modrinth"
       },
       {
-        "slug": "mcxr-core",
-        "platform": "github"
-      },
-      {
-        "slug": "mcxr-play",
-        "platform": "github"
-      },
-      {
         "slug": "voicechat-fabric",
-        "platform": "github"
-      },
-      {
-        "slug": "title-worlds",
         "platform": "github"
       }
     ]
