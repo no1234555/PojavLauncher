@@ -1,32 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-	xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:orientation="vertical"
 	android:gravity="center">
 
-	<TextView
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:text="@string/app_short_name"
-		android:textAppearance="?android:attr/textAppearanceLarge"
-		android:fontFamily="@font/noto_sans_bold"
-		android:textSize="40sp"/>
-
-	<TextView
-		android:layout_height="wrap_content"
-		android:layout_width="wrap_content"
-		android:text="@string/app_motd"
-		android:fontFamily="@font/noto_sans_bold"
-		android:id="@+id/startscreen_text"/>
+	<ImageView
+		android:id="@+id/logo"
+		android:layout_width="1144dp"
+		android:layout_height="108dp"
+		android:scaleX="4"
+		android:scaleY="4"
+		app:srcCompat="@drawable/questcraftxp" />
 
 	<ProgressBar
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
 		android:layout_marginTop="20dp"
 		android:id="@+id/startscreenProgress"
-		android:visibility="invisible"/>
+		android:visibility="visible"/>
 
 </LinearLayout>
 
