@@ -1,6 +1,7 @@
 package net.kdt.pojavlaunch;
 
 import android.animation.ValueAnimator;
+import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -9,12 +10,21 @@ import android.os.*;
 import android.util.Log;
 import android.view.View;
 import android.widget.*;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.Guideline;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentContainer;
+import androidx.fragment.app.FragmentContainerView;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.widget.ViewPager2;
+import com.google.android.material.tabs.TabLayout;
 import net.kdt.pojavlaunch.extra.ExtraCore;
 import net.kdt.pojavlaunch.extra.ExtraListener;
 import net.kdt.pojavlaunch.fragments.LauncherFragment;
 import net.kdt.pojavlaunch.fragments.ModsFragment;
+import net.kdt.pojavlaunch.modmanager.ModManager;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
 import net.kdt.pojavlaunch.prefs.screens.LauncherPreferenceFragment;
 import net.kdt.pojavlaunch.value.MinecraftAccount;
@@ -59,6 +69,7 @@ public class PojavLauncherActivity extends BaseLauncherActivity {
         mLaunchProgress = findViewById(R.id.progressDownloadBar);
         mLaunchTextStatus = findViewById(R.id.progressDownloadText);
         mPlayButton = findViewById(R.id.launchermainPlayButton);
+        Tabs[0] = findViewById(R.id.btnTab1);
         Tabs[1] = findViewById(R.id.btnTab2);
         Tabs[2] = findViewById(R.id.btnTab3);
 
@@ -170,6 +181,7 @@ public class PojavLauncherActivity extends BaseLauncherActivity {
     }
 
     public void selectTabPage(int pageIndex){
+        if (pageIndex == 0) getSupportFragmentManager().beginTransaction().replace(R.id.launchermainTabPager, launcherFragment).commit();
         if (pageIndex == 1) getSupportFragmentManager().beginTransaction().replace(R.id.launchermainTabPager, modsFragment).commit();
         if (pageIndex == 2) getSupportFragmentManager().beginTransaction().replace(R.id.launchermainTabPager, launcherPreferenceFragment).commit();
         setTabActive(pageIndex);
