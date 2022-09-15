@@ -72,6 +72,7 @@
         app:layout_constraintTop_toTopOf="@+id/guidelineBottom"
         app:layout_constraintVertical_bias="0.493" />
 
+
     <TextView
         android:id="@+id/launchermain_text_accountstatus"
         android:layout_width="0dp"
@@ -79,36 +80,12 @@
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
         android:text="@string/global_waiting"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guidelineLeft"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="759dp" />
-
-    <Button
-        android:id="@+id/btnTab1"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="?attr/selectableItemBackground"
-        android:clickable="true"
-        android:drawableStart="@drawable/ic_menu_news"
-        android:focusable="true"
-        android:gravity="center"
-        android:onClick="onTabClicked"
-        android:paddingStart="12dp"
-        android:paddingTop="10dp"
-        android:paddingEnd="0dp"
-        android:paddingBottom="10dp"
-        android:text="@string/mcl_tab_news"
-        android:textAlignment="center"
-        android:textAllCaps="true"
-        android:textColor="#FFFFFF"
-        android:textSize="16sp"
-        android:visibility="gone"
-        app:layout_constraintEnd_toStartOf="@+id/guidelineLeft"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/launchermain_text_accountstatus"
-        tools:visibility="gone" />
-
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.971" />
 
     <Button
         android:id="@+id/btnTab2"
@@ -249,21 +226,6 @@
         app:layout_constraintTop_toTopOf="@+id/guidelineBottom"
         app:layout_constraintVertical_bias="0.162" />
 
-    <Button
-        style="?android:attr/buttonBarButtonStyle"
-        android:layout_width="166dp"
-        android:layout_height="29dp"
-        android:background="?attr/selectableItemBackground"
-        android:onClick="resetOptionsTXT"
-        android:text="@string/mcl_option_customcontrol"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.968"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
-        tools:visibility="gone" />
-
     <com.kdt.mcgui.MineButton
         android:id="@+id/launchermainPlayButton"
         android:layout_width="245dp"
@@ -291,7 +253,6 @@
         android:layout_width="5dp"
         android:layout_height="30dp"
         android:background="@android:color/white"
-        app:layout_constraintBottom_toBottomOf="@+id/btnTab1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/launchermain_text_accountstatus" />
 
