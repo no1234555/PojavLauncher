@@ -7,9 +7,6 @@
     "snapshots": [
     ]
   },
-  "repos": [
-    "QuestCraftPlusPlus/simple-voice-chat"
-  ],
   "core_mods": {
     "1.18.2": [
       {
@@ -45,10 +42,6 @@
       {
         "slug": "lazydfu",
         "platform": "modrinth"
-      },
-      {
-        "slug": "voicechat-fabric",
-        "platform": "github"
       }
     ]
   }
