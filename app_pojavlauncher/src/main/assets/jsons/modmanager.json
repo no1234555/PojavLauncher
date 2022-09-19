@@ -21,6 +21,10 @@
         "platform": "modrinth"
       },
       {
+        "slug": "simple-voice-chat",
+        "platform": "modrinth"
+      },
+      {
         "slug": "lithium",
         "platform": "modrinth"
       },
@@ -40,6 +44,10 @@
       },
       {
         "slug": "lithium",
+        "platform": "modrinth"
+      },
+      {
+        "slug": "simple-voice-chat",
         "platform": "modrinth"
       },
       {
