@@ -1,6 +1,7 @@
 package net.kdt.pojavlaunch;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Intent;
 import android.content.Context;
 import android.os.Bundle;
