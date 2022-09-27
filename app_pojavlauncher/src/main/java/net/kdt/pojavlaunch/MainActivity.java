@@ -3,6 +3,7 @@ package net.kdt.pojavlaunch;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.content.pm.ApplicationInfo;
 
 import net.kdt.pojavlaunch.customcontrols.ControlLayout;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
@@ -44,7 +45,7 @@ public class MainActivity extends BaseMainActivity {
                 mActivityManager.killBackgroundProcesses(packageInfo.packageName);    
             }
         }
-    }  
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
