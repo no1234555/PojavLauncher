@@ -352,6 +352,12 @@ public class PojavLoginActivity extends BaseActivity {
 
             unpackComponent(am, "caciocavallo");
             unpackComponent(am, "lwjgl3");
+            if(!installRuntimeAutomatically(am,MultiRTUtils.getRuntimes().size() > 0)) {
+                MultiRTConfigDialog.openRuntimeSelector(this, MultiRTConfigDialog.MULTIRT_PICK_RUNTIME_STARTUP);
+                synchronized (mLockSelectJRE) {
+                    mLockSelectJRE.wait();
+                }
+            }
             if(Build.VERSION.SDK_INT > 28) runOnUiThread(this::showStorageDialog);
             LauncherPreferences.loadPreferences(getApplicationContext());
         }
