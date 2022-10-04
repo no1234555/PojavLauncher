@@ -143,4 +143,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: app-release
-          path: app_pojavlauncher/build/outputs/apk/release/app_pojavlauncher-release.apk
+          path: app_pojavlauncher/build/outputs/aar/app_pojavlauncher-release.aar
