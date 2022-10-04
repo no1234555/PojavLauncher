@@ -185,7 +185,7 @@ public class BaseMainActivity extends BaseActivity {
         return Build.VERSION.SDK_INT >= 26; 
     }
 
-    private void runCraft() throws Throwable {
+    public void runCraft() throws Throwable {
         windowHeight = 1080;
         windowWidth = 1980;
 

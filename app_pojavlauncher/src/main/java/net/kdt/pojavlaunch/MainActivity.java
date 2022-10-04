@@ -22,7 +22,11 @@ public class MainActivity extends BaseMainActivity {
         AppContainer.getInstance().killOpenXR = true;
         MCXRLoader.setEGLGlobal(JREUtils.getEGLContextPtr(), JREUtils.getEGLDisplayPtr(), JREUtils.getEGLConfigPtr());
         MCXRLoader.setAndroidInitInfo(this);
-        MCXRLoader.launch(this);
+        try {
+            runCraft();
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
         super.onCreate(savedInstanceState);
     }
 
