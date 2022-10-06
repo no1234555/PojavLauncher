@@ -171,7 +171,7 @@ public class PojavLauncherActivity extends BaseLauncherActivity {
     }
 
     public void selectTabPage(int pageIndex){
-        if (pageIndex == 0) getSupportFragmentManager().beginTransaction().replace(R.id.btnTab, launcherFragment).commit();
+        if (pageIndex == 0) getSupportFragmentManager().beginTransaction().replace(R.id.launchermainTabPager, launcherFragment).commit();
         if (pageIndex == 1) getSupportFragmentManager().beginTransaction().replace(R.id.launchermainTabPager, modsFragment).commit();
         if (pageIndex == 2) getSupportFragmentManager().beginTransaction().replace(R.id.launchermainTabPager, launcherPreferenceFragment).commit();
         setTabActive(pageIndex);
