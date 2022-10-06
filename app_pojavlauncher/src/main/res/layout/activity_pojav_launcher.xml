@@ -88,6 +88,29 @@
         app:layout_constraintVertical_bias="0.971" />
 
     <Button
+        android:id="@+id/btnTab"
+        android:layout_width="246dp"
+        android:layout_height="133dp"
+        android:background="@drawable/questcraftxp"
+        android:clickable="true"
+        android:focusable="true"
+        android:fontFamily="@font/minecrafter"
+        android:gravity="center"
+        android:onClick="onTabClicked"
+        android:paddingStart="12dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="0dp"
+        android:paddingBottom="10dp"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/guidelineBottom"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        tools:layout_editor_absoluteX="304dp" />
+
+    <Button
         android:id="@+id/btnTab2"
         android:layout_width="134dp"
         android:layout_height="40dp"
@@ -264,7 +287,7 @@
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/progressDownloadBar"
         app:layout_constraintEnd_toEndOf="@+id/launchermainTabPager"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/guidelineLeft"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0" />
@@ -293,17 +316,5 @@
         app:layout_constraintTop_toTopOf="@+id/guidelineBottom"
         app:layout_constraintVertical_bias="0.185"
         app:srcCompat="@drawable/grassblock" />
-
-    <ImageView
-        android:id="@+id/imageView4"
-        android:layout_width="354dp"
-        android:layout_height="106dp"
-        android:scaleType="centerCrop"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/questcraftxp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
