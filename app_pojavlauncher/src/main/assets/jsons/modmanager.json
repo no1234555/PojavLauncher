@@ -30,8 +30,12 @@
         "platform": "modrinth"
       },
       {
-        "slug": "vivecraft",
-        "platform": "modrinth"
+        "slug": "mcxr-core",
+        "platform": "github"
+      },
+      {
+        "slug": "mcxr-play",
+        "platform": "github"
       },
       {
         "slug": "title-worlds",
