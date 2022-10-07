@@ -144,13 +144,7 @@ public class ModsFragment extends Fragment {
             State.Instance selectedInstance = ModManager.state.getInstance(PojavProfile.getCurrentProfileContent(this.compat.getContext()).selectedVersion);
             ModData mod = selectedInstance.getMod(modData.slug);
             if (mod != null) ModManager.setModActive(selectedInstance.getName(), modData.slug, enableSwitch.isChecked());
-            else {
-                if(selectedInstance.getGameVersion().equals("1.19.2")) {
-                    ModManager.addMod(selectedInstance, filter.toLowerCase(), modData.slug, "1.19", false);
-                } else {
-                    ModManager.addMod(selectedInstance, filter.toLowerCase(), modData.slug, selectedInstance.getGameVersion(), false);
-                }
-            }
+            else ModManager.addMod(selectedInstance, filter.toLowerCase(), modData.slug, selectedInstance.getGameVersion(), false);
         }
 
         public void setData(ModData modData) {
