@@ -90,11 +90,7 @@ public class Curseforge {
             public void run() {
                 HashMap<String, Object> queries = new HashMap<>();
                 queries.put("gameId", 432);
-                if(version.equals("1.19.2")) {
-                    queries.put("gameVersion", "1.19");
-                } else {
-                    queries.put("gameVersion", version);
-                }
+                queries.put("gameVersion", version);
                 queries.put("searchFilter", query);
                 queries.put("modLoaderType", 4); //4 = fabric
                 queries.put("index", offset);
