@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.ViewGroup;
 import android.webkit.CookieManager;
@@ -30,13 +31,24 @@ public class MicrosoftLoginGUIActivity extends AppCompatActivity {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+    }
 
-        // Checks whether a hardware keyboard is available
-        if (newConfig.hardKeyboardHidden == Configuration.HARDKEYBOARDHIDDEN_NO) {
-            AppContainer.getInstance().shouldOpenKeyboard = true;
-        } else if(newConfig.hardKeyboardHidden == Configuration.HARDKEYBOARDHIDDEN_YES) {
-            AppContainer.getInstance().shouldOpenKeyboard = false;
-        }
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        webView.onKeyUp(keyCode, event);
+        return super.onKeyUp(keyCode, event);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        webView.onKeyUp(keyCode, event);
+        return super.onKeyUp(keyCode, event);
+    }
+
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        webView.dispatchKeyEvent(event);
+        return super.dispatchKeyEvent(event);
     }
 
     @Override
