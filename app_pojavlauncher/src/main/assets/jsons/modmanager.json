@@ -9,8 +9,7 @@
   },
   "repos": [
     "QuestCraftPlusPlus/MCXR",
-    "QuestCraftPlusPlus/TitleWorlds",
-    "QuestCraftPlusPlus/simple-voice-chat"
+    "QuestCraftPlusPlus/TitleWorlds"
   ],
   "core_mods": {
     "1.18.2": [
@@ -31,12 +30,8 @@
         "platform": "modrinth"
       },
       {
-        "slug": "mcxr-core",
-        "platform": "github"
-      },
-      {
-        "slug": "mcxr-play",
-        "platform": "github"
+        "slug": "vivecraft",
+        "platform": "modrinth"
       },
       {
         "slug": "title-worlds",
@@ -66,10 +61,6 @@
       },
       {
         "slug": "mcxr-play",
-        "platform": "github"
-      },
-      {
-        "slug": "voicechat-fabric",
         "platform": "github"
       },
       {
