@@ -41,9 +41,6 @@ android {
     compileSdkVersion 31
     packagingOptions.jniLibs.useLegacyPackaging = true
 
-    lintOptions {
-        abortOnError false
-    }
 
     signingConfigs {
         customDebug {
@@ -69,8 +66,6 @@ android {
     defaultConfig {
         minSdkVersion 29
         targetSdkVersion 31
-        versionCode getDateSeconds()
-        versionName getVersionName()
         multiDexEnabled true //important
     }
 
@@ -121,6 +116,9 @@ android {
 
     buildToolsVersion '30.0.3'
     ndkVersion '22.1.7171670'
+    lint {
+        abortOnError false
+    }
 }
 
 repositories {

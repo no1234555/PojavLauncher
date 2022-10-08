@@ -85,7 +85,6 @@
             android:resizeableActivity="false"
             android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout|keyboard|navigation"
             android:exported="true">
-            <meta-data android:name="com.oculus.ossplash" android:value="true"/>
         </activity>
         <provider
             android:name=".scoped.GameFolderProvider"
