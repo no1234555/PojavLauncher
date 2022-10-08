@@ -28,6 +28,7 @@
             android:label="@string/app_short_name"
             android:name=".PojavLoginActivity">
         </activity>
+        <meta-data android:name="com.yvr.application.mode" android:value="vr_only"/>
 
         <activity android:name=".ImportControlActivity"
             android:exported="true"
