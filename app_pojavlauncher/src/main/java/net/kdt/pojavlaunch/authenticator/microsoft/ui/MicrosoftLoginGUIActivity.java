@@ -41,7 +41,7 @@ public class MicrosoftLoginGUIActivity extends AppCompatActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        webView.onKeyDown(keyCode, event);
+        webView.onKeyUp(keyCode, event);
         return super.onKeyUp(keyCode, event);
     }
 
