@@ -32,7 +32,7 @@ public class PojavLauncherActivity extends BaseLauncherActivity {
 
     private TextView tvConnectStatus;
     private Spinner accountSelector;
-    private final Button[] Tabs = new Button[3];
+    private final Button[] Tabs = new Button[2];
     private View selectedTab;
     private ImageView accountFaceImageView;
     
@@ -59,9 +59,8 @@ public class PojavLauncherActivity extends BaseLauncherActivity {
         mLaunchProgress = findViewById(R.id.progressDownloadBar);
         mLaunchTextStatus = findViewById(R.id.progressDownloadText);
         mPlayButton = findViewById(R.id.launchermainPlayButton);
-        Tabs[0] = findViewById(R.id.btnTab);
-        Tabs[1] = findViewById(R.id.btnTab2);
-        Tabs[2] = findViewById(R.id.btnTab3);
+        Tabs[0] = findViewById(R.id.btnTab2);
+        Tabs[1] = findViewById(R.id.btnTab3);
 
         if (BuildConfig.DEBUG) {
             Toast.makeText(this, "Launcher process id: " + Process.myPid(), Toast.LENGTH_LONG).show();
@@ -171,7 +170,6 @@ public class PojavLauncherActivity extends BaseLauncherActivity {
     }
 
     public void selectTabPage(int pageIndex){
-        if (pageIndex == 0) getSupportFragmentManager().beginTransaction().replace(R.id.btnTab, launcherFragment).commit();
         if (pageIndex == 1) getSupportFragmentManager().beginTransaction().replace(R.id.launchermainTabPager, modsFragment).commit();
         if (pageIndex == 2) getSupportFragmentManager().beginTransaction().replace(R.id.launchermainTabPager, launcherPreferenceFragment).commit();
         setTabActive(pageIndex);
