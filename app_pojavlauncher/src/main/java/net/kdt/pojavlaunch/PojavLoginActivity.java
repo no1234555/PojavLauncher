@@ -582,25 +582,8 @@ public class PojavLoginActivity extends BaseActivity {
             showNoAccountDialog();
             return;
         } else if(accountArr.length == 1){
-            RefreshListener authListener = new RefreshListener() {
-                @Override
-                public void onFailed(Throwable e) {
-                    Tools.showError(PojavLoginActivity.this, e);
-                }
-
-                @Override
-                public void onSuccess(MinecraftAccount out) {
-                    mProfile = out;
-                    playProfile(true);
-                }
-            };
-            MinecraftAccount acc = MinecraftAccount.load(accountArr[0]);
-            if (acc.accessToken.length() >= 5){
-                new MicrosoftAuthTask(PojavLoginActivity.this, authListener)
-                        .execute("true", acc.msaRefreshToken);
-            } else {
-                PojavProfile.launch(PojavLoginActivity.this, accountArr[0]);
-            }
+            mProfile = MinecraftAccount.load(accountArr[0]);
+            playProfile(false);
         }
 
         final Dialog accountDialog = new Dialog(PojavLoginActivity.this);
