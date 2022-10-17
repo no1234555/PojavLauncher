@@ -10,5 +10,4 @@ public class MCXRLoader {
     }
 
     public static native void launch(MainActivity activity);
-    public static native void setEGLGlobal(long ctx, long display, long cfg);
 }

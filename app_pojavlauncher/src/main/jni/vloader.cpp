@@ -75,7 +75,7 @@ Java_net_kdt_pojavlaunch_MCXRLoader_setAndroidInitInfo(JNIEnv *env, jclass clazz
 
 extern "C"
 JNIEXPORT void JNICALL
-Java_net_kdt_pojavlaunch_MCXRLoader_setEGLGlobal(JNIEnv* env, jclass clazz, jlong ctx, jlong display, jlong cfg) {
+Java_org_vivecraft_provider_VLoader_setEGLGlobal(JNIEnv* env, jclass clazz, jlong ctx, jlong display, jlong cfg) {
     OpenComposite_Android_GLES_Binding_Info = new XrGraphicsBindingOpenGLESAndroidKHR {
             XR_TYPE_GRAPHICS_BINDING_OPENGL_ES_ANDROID_KHR,
             nullptr,
