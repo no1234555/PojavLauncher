@@ -3,7 +3,7 @@
 //
 #include <thread>
 #include <string>
-#include <errno.h>
+#include "egl_bridge.h"
 #include <fcntl.h>
 #include <unistd.h>
 #include <OpenOVR/openxr_platform.h>
@@ -13,6 +13,9 @@
 static JavaVM* jvm;
 XrInstanceCreateInfoAndroidKHR* OpenComposite_Android_Create_Info;
 XrGraphicsBindingOpenGLESAndroidKHR* OpenComposite_Android_GLES_Binding_Info;
+static void* dsp;
+static void* cfg;
+static void* ctx;
 
 std::string (*OpenComposite_Android_Load_Input_File)(const char *path);
 
@@ -73,15 +76,21 @@ Java_net_kdt_pojavlaunch_MCXRLoader_setAndroidInitInfo(JNIEnv *env, jclass clazz
     initializeLoader((const XrLoaderInitInfoBaseHeaderKHR *) &loaderInitInfoAndroidKhr);
 }
 
+void setEGLGlobal(void* display, void* config, void* context) {
+    dsp = display;
+    cfg = config;
+    ctx = context;
+}
+
 extern "C"
 JNIEXPORT void JNICALL
-Java_org_vivecraft_provider_VLoader_setEGLGlobal(JNIEnv* env, jclass clazz, jlong ctx, jlong display, jlong cfg) {
+Java_org_vivecraft_provider_VLoader_setEGLGlobal(JNIEnv* env, jclass clazz) {
     OpenComposite_Android_GLES_Binding_Info = new XrGraphicsBindingOpenGLESAndroidKHR {
             XR_TYPE_GRAPHICS_BINDING_OPENGL_ES_ANDROID_KHR,
             nullptr,
-            (void*)display,
-            (void*)cfg,
-            (void*)ctx
+            dsp,
+            cfg,
+            ctx
     };
 }
 

@@ -5,6 +5,7 @@
 #include <pthread.h>
 #include <stdio.h>
 #include <xhook.h>
+#include <string.h>
 
 //
 // Created by maks on 17.02.21.
@@ -18,6 +19,18 @@ static volatile jmethodID exitTrap_staticMethod;
 static JavaVM *exitTrap_jvm;
 static int pfd[2];
 static pthread_t logger;
+
+int chr_isvalid(uint32_t c)
+{
+    if (c <= 0x7F) return 1;
+    if (0xC080 == c) return 1;   // Accept 0xC080 as representation for '\0'
+    if (0xC280 <= c && c <= 0xDFBF) return ((c & 0xE0C0) == 0xC080);
+    if (0xEDA080 <= c && c <= 0xEDBFBF) return 0; // Reject UTF-16 surrogates
+    if (0xE0A080 <= c && c <= 0xEFBFBF) return ((c & 0xF0C0C0) == 0xE08080);
+    if (0xF0908080 <= c && c <= 0xF48FBFBF) return ((c & 0xF8C0C0C0) == 0xF0808080);
+    return 0;
+}
+
 static void *logger_thread() {
     JNIEnv *env;
     jstring str;
@@ -29,8 +42,19 @@ static void *logger_thread() {
             rsize=rsize-1;
         }
         buf[rsize]=0x00;
-        str = (*env)->NewStringUTF(env,buf);
-        (*env)->CallVoidMethod(env,_______obj,_______method,str);
+
+        bool isValid;
+        for(int i = 0; i < 2048; i++) {
+            if(strcmp(&buf[i], "\0") == 0) {
+
+            }
+            isValid = chr_isvalid(buf[i]);
+        }
+
+        if(isValid) {
+            str = (*env)->NewStringUTF(env, buf);
+            (*env)->CallVoidMethod(env, _______obj, _______method, str);
+        }
         (*env)->DeleteLocalRef(env,str);
     }
     (*env)->DeleteGlobalRef(env,_______method);

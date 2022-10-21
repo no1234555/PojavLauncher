@@ -22,6 +22,7 @@
 #include <string.h>
 #include <pthread.h>
 #include "utils.h"
+#include "egl_bridge.h"
 // region OSMESA internals
 
 struct pipe_screen;
@@ -591,7 +592,7 @@ struct PotatoBridge {
     void* eglSurfaceDraw;
 */
 };
-EGLConfig config;
+void* config;
 struct PotatoBridge potatoBridge;
 
 /* OSMesa functions */
@@ -1021,6 +1022,7 @@ void pojavMakeCurrent(void* window) {
             // eglMakeCurrent(potatoBridge.eglDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
             printf("EGLBridge: Making current on window %p on thread %d\n", window, gettid());
             egl_make_current((void *)window);
+            setEGLGlobal(potatoBridge.eglDisplay, config, potatoBridge.eglContext);
 
             // Test
 #ifdef GLES_TEST
@@ -1061,21 +1063,6 @@ void pojavMakeCurrent(void* window) {
         pojavSwapBuffers();
         return;
     }
-}
-
-JNIEXPORT JNICALL jlong
-Java_org_lwjgl_glfw_CallbackBridge_getEGLDisplayPtr(JNIEnv *env, jclass clazz) {
-    return (jlong) &potatoBridge.eglDisplay;
-}
-
-JNIEXPORT JNICALL jlong
-Java_org_lwjgl_glfw_CallbackBridge_getEGLContextPtr(JNIEnv *env, jclass clazz) {
-    return (jlong) &potatoBridge.eglContext;
-}
-
-JNIEXPORT JNICALL jlong
-Java_org_lwjgl_glfw_CallbackBridge_getEGLConfigPtr(JNIEnv *env, jclass clazz) {
-    return (jlong) &config;
 }
 
 /*
