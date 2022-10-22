@@ -1,5 +1,7 @@
 # QuestCraft | Base provided by the PojavLauncher team free of charge.
 
+![Lines of code](https://img.shields.io/tokei/lines/github/questcraftplusplus/pojavlauncher?style=flat)
+
 ## Note
 - We do not exist on TikTok. No one from the dev team makes TikTok videos. 
 - QuestCraft (QCXR) is developed and maintained by the QCXR and PojavLauncher team including public and or anonymous outside contributors.
