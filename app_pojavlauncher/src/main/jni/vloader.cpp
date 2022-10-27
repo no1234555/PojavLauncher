@@ -94,20 +94,26 @@ Java_org_vivecraft_provider_VLoader_setEGLGlobal(JNIEnv* env, jclass clazz) {
     EGLDisplay dsp = eglGetCurrentDisplay();
     EGLConfig cfg;
     int num_configs;
-    if (!eglChooseConfig(dsp, attribs, &cfg, 1, &num_configs)) {
-        printf("EGLBridge: Error couldn't get an EGL visual config: %s\n", eglGetError());
+    if (!
+    eglChooseConfig(dsp, attribs, &cfg,
+    1, &num_configs)) {
+    printf("EGLBridge: Error couldn't get an EGL visual config: %s\n",
+
+    eglGetError()
+
+    );
     }
-}
 
-assert(num_configs > 0);
+    assert(num_configs
+    > 0);
 
-OpenComposite_Android_GLES_Binding_Info = new XrGraphicsBindingOpenGLESAndroidKHR {
-        XR_TYPE_GRAPHICS_BINDING_OPENGL_ES_ANDROID_KHR,
-        nullptr,
-        dsp,
-        cfg,
-        eglGetCurrentContext()
-};
+    OpenComposite_Android_GLES_Binding_Info = new XrGraphicsBindingOpenGLESAndroidKHR{
+            XR_TYPE_GRAPHICS_BINDING_OPENGL_ES_ANDROID_KHR,
+            nullptr,
+            dsp,
+            cfg,
+            eglGetCurrentContext()
+    };
 }
 
 static std::string load_file(const char *path) {
