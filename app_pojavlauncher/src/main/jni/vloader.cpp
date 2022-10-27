@@ -8,6 +8,7 @@
 #include <unistd.h>
 #include <OpenOVR/openxr_platform.h>
 #include <jni.h>
+#include <assert.h>
 #include "log.h"
 
 static JavaVM* jvm;
