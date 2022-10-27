@@ -15,7 +15,6 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
 <!--    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />-->
     <application
         android:allowBackup="true"
@@ -33,7 +32,6 @@
         <meta-data 
             android:name="android.max_aspect"
             android:value="ratio_float"/>
-        <meta-data android:name="com.yvr.application.mode" android:value="vr_only"/>
         <meta-data android:name="com.oculus.intent.category.VR" android:value="vr_only"/>
         <meta-data android:name="com.oculus.supportedDevices" android:value="quest|quest2"/>
         <activity
@@ -105,6 +103,10 @@
             android:resizeableActivity="false"
             android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout|keyboard|navigation"
             android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.RUN"/>
+                <category android:name="com.oculus.intent.category.VR"/>
+            </intent-filter>
         </activity>
         <provider
             android:name=".scoped.GameFolderProvider"

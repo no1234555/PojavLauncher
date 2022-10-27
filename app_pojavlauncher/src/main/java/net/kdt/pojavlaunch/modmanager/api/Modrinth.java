@@ -63,6 +63,12 @@ public class Modrinth {
             return null;
         }
 
+        //Jank temp fix for simple voice chat
+        if (project.slug.equals("simple-voice-chat")) {
+            Version v = handler.get("version/n1gKBKPO", Version.class);
+            versions[0] = v;
+        }
+
         for (Version modVersion : versions) {
             for (String loader : modVersion.loaders) {
                 if (loader.equals("fabric")) {
@@ -95,7 +101,11 @@ public class Modrinth {
                 queries.put("query", query);
                 queries.put("offset", offset);
                 queries.put("limit", 50);
-                queries.put("facets", "[\"project_type:mod\"], [[\"categories:fabric\"], [\"versions:" + version + "\"]]");
+                if(version.equals("1.19.2")) {
+                    queries.put("facets", "[[\"categories:fabric\"], [\"versions:1.19\"]]");
+                } else {
+                    queries.put("facets", "[[\"categories:fabric\"], [\"versions:" + version + "\"]]");
+                }
 
                 SearchResult result = handler.get("search", queries, SearchResult.class);
                 if (result == null || Build.VERSION.SDK_INT <= Build.VERSION_CODES.N) {
@@ -108,6 +118,7 @@ public class Modrinth {
                     }
                     return false;
                 });
+
 
                 ArrayList<ModData> installedMods = ModManager.listInstalledMods("fabric-loader-" + Tools.getModJsonFabricLoaderVersion() + "-" + version);
                 for (ModData mod : result.hits) {

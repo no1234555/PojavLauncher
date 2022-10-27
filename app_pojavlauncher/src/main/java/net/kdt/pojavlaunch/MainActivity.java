@@ -1,14 +1,8 @@
 package net.kdt.pojavlaunch;
 
 import android.app.Activity;
-import android.app.ActivityManager;
 import android.content.Intent;
-import android.content.Context;
 import android.os.Bundle;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
-
-import java.util.List;
 
 import net.kdt.pojavlaunch.customcontrols.ControlLayout;
 import net.kdt.pojavlaunch.prefs.LauncherPreferences;
@@ -24,32 +18,7 @@ public class MainActivity extends BaseMainActivity {
     public void onCreate(Bundle savedInstanceState) {
         MCXRLoader.setActivity(this);
         MCXRLoader.launch(this);
-        killAppBypackage("com.oculus.vrshell");
         super.onCreate(savedInstanceState);
-    }
-
-    private void killAppBypackage(String packageTokill){
-        List<ApplicationInfo> packages;
-        PackageManager pm;
-        pm = getPackageManager();
-        //get a list of installed apps.
-        packages = pm.getInstalledApplications(0);
-
-        ActivityManager mActivityManager = (ActivityManager) MainActivity.this.getSystemService(Context.ACTIVITY_SERVICE);
-        String myPackage = getApplicationContext().getPackageName();
-
-        for (ApplicationInfo packageInfo : packages) {
-
-            if((packageInfo.flags & ApplicationInfo.FLAG_SYSTEM)==1) {
-                continue;
-            }
-            if(packageInfo.packageName.equals(myPackage)) {
-                continue;
-            }
-            if(packageInfo.packageName.equals(packageTokill)) {
-                mActivityManager.killBackgroundProcesses(packageInfo.packageName);    
-            }
-        }
     }
 
     @Override
