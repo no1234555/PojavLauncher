@@ -3,7 +3,7 @@
 //
 #include <thread>
 #include <string>
-#include "egl_bridge.h"
+#include <EGL/egl.h>
 #include <fcntl.h>
 #include <unistd.h>
 #include <OpenOVR/openxr_platform.h>
@@ -76,22 +76,37 @@ Java_net_kdt_pojavlaunch_MCXRLoader_setAndroidInitInfo(JNIEnv *env, jclass clazz
     initializeLoader((const XrLoaderInitInfoBaseHeaderKHR *) &loaderInitInfoAndroidKhr);
 }
 
-void setEGLGlobal(void* display, void* config, void* context) {
-    dsp = display;
-    cfg = config;
-    ctx = context;
-}
-
 extern "C"
 JNIEXPORT void JNICALL
 Java_org_vivecraft_provider_VLoader_setEGLGlobal(JNIEnv* env, jclass clazz) {
-    OpenComposite_Android_GLES_Binding_Info = new XrGraphicsBindingOpenGLESAndroidKHR {
-            XR_TYPE_GRAPHICS_BINDING_OPENGL_ES_ANDROID_KHR,
-            nullptr,
-            dsp,
-            cfg,
-            ctx
+    static const EGLint attribs[] = {
+            EGL_RED_SIZE, 8,
+            EGL_GREEN_SIZE, 8,
+            EGL_BLUE_SIZE, 8,
+            EGL_ALPHA_SIZE, 8,
+            // Minecraft required on initial 24
+            EGL_DEPTH_SIZE, 24,
+            EGL_RENDERABLE_TYPE, EGL_OPENGL_ES3_BIT,
+            EGL_NONE
     };
+
+    EGLDisplay dsp = eglGetCurrentDisplay();
+    EGLConfig cfg;
+    int num_configs;
+    if (!eglChooseConfig(dsp, attribs, &cfg, 1, &num_configs)) {
+        printf("EGLBridge: Error couldn't get an EGL visual config: %s\n", eglGetError());
+    }
+}
+
+assert(num_configs > 0);
+
+OpenComposite_Android_GLES_Binding_Info = new XrGraphicsBindingOpenGLESAndroidKHR {
+        XR_TYPE_GRAPHICS_BINDING_OPENGL_ES_ANDROID_KHR,
+        nullptr,
+        dsp,
+        cfg,
+        eglGetCurrentContext()
+};
 }
 
 static std::string load_file(const char *path) {

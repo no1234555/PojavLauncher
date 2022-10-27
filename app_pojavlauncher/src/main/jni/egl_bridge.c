@@ -22,7 +22,6 @@
 #include <string.h>
 #include <pthread.h>
 #include "utils.h"
-#include "egl_bridge.h"
 // region OSMESA internals
 
 struct pipe_screen;
@@ -1022,7 +1021,6 @@ void pojavMakeCurrent(void* window) {
             // eglMakeCurrent(potatoBridge.eglDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
             printf("EGLBridge: Making current on window %p on thread %d\n", window, gettid());
             egl_make_current((void *)window);
-            setEGLGlobal(potatoBridge.eglDisplay, config, potatoBridge.eglContext);
 
             // Test
 #ifdef GLES_TEST
