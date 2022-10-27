@@ -256,15 +256,6 @@ public class MinecraftDownloaderTask extends AsyncTask<String, String, Throwable
             }
 
             mActivity.mIsAssetsProcessing = true;
-            mActivity.mPlayButton.post(new Runnable(){
-
-                    @Override
-                    public void run()
-                    {
-                        mActivity.mPlayButton.setText("Skip");
-                        mActivity.mPlayButton.setEnabled(true);
-                    }
-                });
                 
             if (assets == null) {
                 return null;
