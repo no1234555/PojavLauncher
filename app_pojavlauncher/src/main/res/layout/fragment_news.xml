@@ -29,7 +29,7 @@
 		android:textStyle="bold"
 
 		android:visibility="visible"
-		app:drawableBottomCompat="@drawable/qc512old"
+		app:drawableBottomCompat="@drawable/qc512"
 		tools:visibility="visible" />
 
 </LinearLayout>

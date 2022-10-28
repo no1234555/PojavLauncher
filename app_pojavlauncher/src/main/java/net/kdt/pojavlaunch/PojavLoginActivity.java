@@ -122,7 +122,6 @@ public class PojavLoginActivity extends BaseActivity {
 
             progress = (ProgressBar) findViewById(R.id.startscreenProgress);
             if(isStarting) progress.setVisibility(View.VISIBLE);
-            startupTextView = (TextView) findViewById(R.id.startscreen_text);
         }
 
         public int _start() {

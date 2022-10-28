@@ -2,8 +2,8 @@
 <resources>
     <!-- App name part -->
     <string name="app_name">PojavLauncher (Minecraft: Java Edition for Android)</string>
-    <string name="app_short_name">QuestCraft</string>
-    <string name="app_motd">Khởi chạy Minecraft: Java Edition trên Quest của bạn!</string>
+    <string name="app_short_name">YVR世界</string>
+    <string name="app_motd">Khởi chạy Minecraft: Java Edition trên YVR của bạn!</string>
     <!-- Action bar part -->
     <!-- Languages list part -->
     <!-- Login strings -->

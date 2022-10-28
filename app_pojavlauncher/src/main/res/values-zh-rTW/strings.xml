@@ -2,8 +2,8 @@
 <resources>
     <!-- App name part -->
     <string name="app_name">PojavLauncher（適用於 Android 的《Minecraft：Java版》）,</string>
-    <string name="app_short_name">QuestCraft</string>
-    <string name="app_motd">在您的 Quest 上启动 Minecraft：Java 版！</string>
+    <string name="app_short_name">YVR世界</string>
+    <string name="app_motd">在您的 YVR 上启动 Minecraft：Java 版！</string>
     <!-- Action bar part -->
     <!-- Languages list part -->
     <!-- Login strings -->
@@ -208,4 +208,5 @@
     <string name="pvc_title">Per-version 設定</string>
     <string name="storage_warning_title">儲存位置已變更</string>
     <string name="storage_warning_text"><![CDATA[由於Google在Android 10所加入的儲存規範，我們把遊戲的目錄移動到app的私有資料夾下了。.<br />Pojav的新資料夾位於<b>Android/data/%s/files/</b> (可用檔案瀏覽器存取) <br /> 如果有需要移動先前的遊戲檔案，請手動從<b>/games/PojavLauncher</b>將資料複製到新的位置。]]></string>
+    <string name="mcl_tab_mods">模组</string>
 </resources>
