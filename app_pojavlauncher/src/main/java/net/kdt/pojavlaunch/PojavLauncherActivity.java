@@ -42,7 +42,7 @@ public class PojavLauncherActivity extends BaseLauncherActivity {
 
     private TextView tvConnectStatus;
     private Spinner accountSelector;
-    private final Button[] Tabs = new Button[3];
+    private final Button[] Tabs = new Button[2];
     private View selectedTab;
     private ImageView accountFaceImageView;
     
@@ -70,8 +70,8 @@ public class PojavLauncherActivity extends BaseLauncherActivity {
         mLaunchTextStatus = findViewById(R.id.progressDownloadText);
         mPlayButton = findViewById(R.id.launchermainPlayButton);
         //Tabs[0] = findViewById(R.id.btnTab1);
-        Tabs[1] = findViewById(R.id.btnTab2);
-        Tabs[2] = findViewById(R.id.btnTab3);
+        Tabs[0] = findViewById(R.id.btnTab2);
+        Tabs[1] = findViewById(R.id.btnTab3);
 
         if (BuildConfig.DEBUG) {
             Toast.makeText(this, "Launcher process id: " + Process.myPid(), Toast.LENGTH_LONG).show();
