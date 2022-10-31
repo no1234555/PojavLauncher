@@ -31,6 +31,26 @@
         "platform": "modrinth"
       },
       {
+        "slug": "starlight",
+        "platform": "modrinth"
+      },
+      {
+        "slug": "exordium",
+        "platform": "modrinth"
+      },
+      {
+        "slug": "entityculling",
+        "platform": "modrinth"
+      },
+      {
+        "slug": "moreculling",
+        "platform": "modrinth"
+      },
+      {
+        "slug": "smoothboot",
+        "platform": "modrinth"
+      },
+      {
         "slug": "mcxr-core-yvr",
         "platform": "github"
       },
@@ -58,6 +78,26 @@
       },
       {
         "slug": "lazydfu",
+        "platform": "modrinth"
+      },
+      {
+        "slug": "starlight",
+        "platform": "modrinth"
+      },
+      {
+        "slug": "exordium",
+        "platform": "modrinth"
+      },
+      {
+        "slug": "entityculling",
+        "platform": "modrinth"
+      },
+      {
+        "slug": "moreculling",
+        "platform": "modrinth"
+      },
+      {
+        "slug": "smoothboot",
         "platform": "modrinth"
       },
       {
