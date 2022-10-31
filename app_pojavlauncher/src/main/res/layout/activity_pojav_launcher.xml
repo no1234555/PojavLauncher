@@ -19,6 +19,17 @@
         app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/side" />
 
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/launchermainTabPager"
+        android:layout_width="566dp"
+        android:layout_height="216dp"
+        android:layout_marginBottom="8dp"
+        android:background="@android:color/transparent"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/progressDownloadBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/imageView3" />
+
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineBottom"
         android:layout_width="wrap_content"
@@ -61,8 +72,8 @@
 
     <Spinner
         android:id="@+id/launchermain_spinner_account"
-        android:layout_width="117dp"
-        android:layout_height="47dp"
+        android:layout_width="126dp"
+        android:layout_height="44dp"
         android:background="@android:color/transparent"
         android:paddingLeft="3dp"
         android:spinnerMode="dropdown"
@@ -86,6 +97,23 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.976" />
+
+    <ImageView
+        android:id="@+id/btnTab1"
+        android:layout_width="147dp"
+        android:layout_height="50dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="onTabClicked"
+        android:scaleType="centerCrop"
+        android:scaleX="2"
+        android:scaleY="2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.04"
+        app:srcCompat="@drawable/questcraftxp" />
 
     <Button
         android:id="@+id/btnTab2"
@@ -141,20 +169,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.01" />
-
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/launchermainTabPager"
-        android:layout_width="572dp"
-        android:layout_height="337dp"
-        android:background="@android:color/transparent"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/guidelineBottom"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/guidelineLeft"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        tools:visibility="gone" />
 
     <ProgressBar
         android:id="@+id/progressDownloadBar"
@@ -218,7 +232,7 @@
         android:id="@+id/launchermain_spinner_version"
         android:layout_width="181dp"
         android:layout_height="36dp"
-        android:layout_marginEnd="32dp"
+        android:layout_marginEnd="12dp"
         android:background="@drawable/modsbutton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -268,18 +282,5 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_begin="429dp" />
-
-    <ImageView
-        android:id="@+id/imageView4"
-        android:layout_width="357dp"
-        android:layout_height="78dp"
-        android:scaleType="centerCrop"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.01"
-        app:srcCompat="@drawable/questcraftxp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
