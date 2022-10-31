@@ -47,16 +47,17 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.95" />
 
+
     <ImageView
         android:id="@+id/launchermain_account_image"
-        android:layout_width="66dp"
-        android:layout_height="70dp"
-        android:layout_marginStart="32dp"
+        android:layout_width="49dp"
+        android:layout_height="57dp"
+        android:layout_marginStart="16dp"
         android:src="@mipmap/ic_launcher"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.953" />
+        app:layout_constraintVertical_bias="0.943" />
 
     <Spinner
         android:id="@+id/launchermain_spinner_account"
@@ -67,11 +68,10 @@
         android:spinnerMode="dropdown"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/launchermainPlayButton"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.194"
         app:layout_constraintStart_toEndOf="@+id/launchermain_account_image"
         app:layout_constraintTop_toTopOf="@+id/guidelineBottom"
-        app:layout_constraintVertical_bias="0.493" />
-
+        app:layout_constraintVertical_bias="0.333" />
 
     <TextView
         android:id="@+id/launchermain_text_accountstatus"
@@ -85,7 +85,7 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.971" />
+        app:layout_constraintVertical_bias="0.976" />
 
     <Button
         android:id="@+id/btnTab2"
@@ -216,20 +216,19 @@
 
     <Spinner
         android:id="@+id/launchermain_spinner_version"
-        android:layout_width="202dp"
-        android:layout_height="44dp"
+        android:layout_width="181dp"
+        android:layout_height="36dp"
+        android:layout_marginEnd="32dp"
         android:background="@drawable/modsbutton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.67"
-        app:layout_constraintStart_toStartOf="@+id/imageView2"
         app:layout_constraintTop_toTopOf="@+id/guidelineBottom"
-        app:layout_constraintVertical_bias="0.162" />
+        app:layout_constraintVertical_bias="0.4" />
 
     <com.kdt.mcgui.MineButton
         android:id="@+id/launchermainPlayButton"
-        android:layout_width="245dp"
-        android:layout_height="56dp"
+        android:layout_width="190dp"
+        android:layout_height="41dp"
         android:layout_alignParentBottom="true"
         android:background="@drawable/button"
         android:fontFamily="cursive"
@@ -243,7 +242,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guidelineBottom"
-        app:layout_constraintVertical_bias="0.29"
+        app:layout_constraintVertical_bias="0.466"
         app:layout_constraintWidth_default="percent"
         app:layout_constraintWidth_percent="0.25"
         tools:text="Start" />
@@ -255,19 +254,6 @@
         android:background="@android:color/white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/launchermain_text_accountstatus" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="49dp"
-        android:layout_height="45dp"
-        android:text="V3"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/progressDownloadBar"
-        app:layout_constraintEnd_toEndOf="@+id/launchermainTabPager"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/guidelineLeft"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"
@@ -284,26 +270,16 @@
         app:layout_constraintGuide_begin="429dp" />
 
     <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="61dp"
-        android:layout_height="58dp"
-        android:layout_marginStart="252dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/launchermainPlayButton"
-        app:layout_constraintTop_toTopOf="@+id/guidelineBottom"
-        app:layout_constraintVertical_bias="0.185"
-        app:srcCompat="@drawable/grassblock" />
-
-    <ImageView
         android:id="@+id/imageView4"
-        android:layout_width="354dp"
-        android:layout_height="106dp"
+        android:layout_width="357dp"
+        android:layout_height="78dp"
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintVertical_bias="0.01"
         app:srcCompat="@drawable/questcraftxp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

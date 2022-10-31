@@ -17,8 +17,8 @@
 
     <View
         android:id="@+id/login_menu"
-        android:layout_width="350dp"
-        android:layout_height="200dp"
+        android:layout_width="334dp"
+        android:layout_height="167dp"
         android:background="#00424242"
 
         android:padding="@dimen/padding_extra_large"
@@ -26,10 +26,10 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
 
-        app:layout_constraintHorizontal_bias="0.508"
+        app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.608"
+        app:layout_constraintVertical_bias="0.669"
         app:layout_constraintWidth_max="480dp" />
 
     <Spinner
@@ -102,7 +102,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/login_menu"
-        app:layout_constraintVertical_bias="0.784"
+        app:layout_constraintVertical_bias="0.709"
         app:srcCompat="@drawable/questcraftxp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
