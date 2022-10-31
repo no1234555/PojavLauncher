@@ -391,33 +391,7 @@ public class MinecraftDownloaderTask extends AsyncTask<String, String, Throwable
     @Override
     public void onPostExecute(Throwable p1)
     {
-        mActivity.mPlayButton.setText("Play");
-        mActivity.mPlayButton.setEnabled(true);
-        mActivity.mLaunchProgress.setMax(100);
-        mActivity.mLaunchProgress.setProgress(0);
-        mActivity.statusIsLaunching(false);
-        if(p1 != null && !(p1 instanceof SilentException)) {
-            p1.printStackTrace();
-            Tools.showError(mActivity, p1);
-        }
-        if(!launchWithError) {
-            //mActivity.mCrashView.setLastCrash("");
-
-            try {
-                PowerManager pm = (PowerManager) mActivity.getSystemService(Context.POWER_SERVICE);
-                while(!pm.isInteractive()) {
-
-                }
-                Intent mainIntent = new Intent(mActivity, MainActivity.class /* MainActivity.class */);
-                // mainIntent.addFlags(Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT);
-                mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                mActivity.startActivity(mainIntent);
-            }
-            catch (Throwable e) {
-                Tools.showError(mActivity, e);
-            }
-        }
-
+        mActivity.canStart = true;
         mActivity.mTask = null;
     }
 
