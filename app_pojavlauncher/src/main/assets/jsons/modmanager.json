@@ -23,23 +23,11 @@
         "platform": "modrinth"
       },
       {
-        "slug": "lithium",
-        "platform": "modrinth"
-      },
-      {
-        "slug": "ferrite-core",
-        "platform": "modrinth"
-      },
-      {
         "slug": "starlight",
         "platform": "modrinth"
       },
       {
         "slug": "exordium",
-        "platform": "modrinth"
-      },
-      {
-        "slug": "entityculling",
         "platform": "modrinth"
       },
       {
@@ -69,14 +57,6 @@
         "platform": "modrinth"
       },
       {
-        "slug": "lithium",
-        "platform": "modrinth"
-      },
-      {
-        "slug": "ferrite-core",
-        "platform": "modrinth"
-      },
-      {
         "slug": "lazydfu",
         "platform": "modrinth"
       },
@@ -86,10 +66,6 @@
       },
       {
         "slug": "exordium",
-        "platform": "modrinth"
-      },
-      {
-        "slug": "entityculling",
         "platform": "modrinth"
       },
       {
