@@ -21,6 +21,8 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.zip.*;
 
+import com.qcxr.activitywrapper.AppContainer;
+
 import net.kdt.pojavlaunch.modmanager.ModManager;
 import net.kdt.pojavlaunch.modmanager.State;
 import net.kdt.pojavlaunch.prefs.*;
@@ -278,7 +280,7 @@ public final class Tools {
         javaArgList.addAll(Arrays.asList(launchArgs));
         ///ctx.appendlnToLog("full args: "+javaArgList.toString());
         Log.d("GAME", "Full args: " + javaArgList);
-        JREUtils.launchJavaVM(activity, javaArgList);
+        JREUtils.launchJavaVM(AppContainer.getInstance().context, javaArgList);
     }
 
     public static void getCacioJavaArgs(List<String> javaArgList, boolean isHeadless) {
