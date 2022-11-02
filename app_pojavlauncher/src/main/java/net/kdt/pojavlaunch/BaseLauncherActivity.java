@@ -122,7 +122,7 @@ public abstract class BaseLauncherActivity extends BaseActivity {
             } else if (isScreenOn) {
                 mTask.execute(mProfile.selectedVersion);
             } else {
-                System.exit(0);
+
             }
         }
     }
