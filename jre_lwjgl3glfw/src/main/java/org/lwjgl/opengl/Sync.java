@@ -58,8 +58,8 @@ class Sync {
 	/**
 	 * for calculating the averages the previous sleep/yield times are stored
 	 */
-	private static RunningAvg sleepDurations = new RunningAvg(10);
-	private static RunningAvg yieldDurations = new RunningAvg(10);
+	private static final RunningAvg sleepDurations = new RunningAvg(10);
+	private static final RunningAvg yieldDurations = new RunningAvg(10);
 
 	/**
 	 * An accurate sync method that will attempt to run at a constant frame

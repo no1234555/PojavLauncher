@@ -120,7 +120,7 @@ public class PojavLoginActivity extends BaseActivity {
             LayoutInflater.from(PojavLoginActivity.this).inflate(R.layout.start_screen,startScr);
             PojavLoginActivity.this.setContentView(startScr);
 
-            progress = (ProgressBar) findViewById(R.id.startscreenProgress);
+            progress = findViewById(R.id.startscreenProgress);
             if(isStarting) progress.setVisibility(View.VISIBLE);
         }
 
@@ -425,7 +425,7 @@ public class PojavLoginActivity extends BaseActivity {
     public static boolean copyAssetFolder(Context context, String srcName, String dstName) {
         try {
             boolean result;
-            String fileList[] = context.getAssets().list(srcName);
+            String[] fileList = context.getAssets().list(srcName);
             if (fileList == null) return false;
 
             if (fileList.length == 0) {

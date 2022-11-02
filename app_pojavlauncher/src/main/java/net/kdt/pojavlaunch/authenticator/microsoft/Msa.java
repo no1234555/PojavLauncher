@@ -8,6 +8,7 @@ package net.kdt.pojavlaunch.authenticator.microsoft;
 import android.util.*;
 import java.io.*;
 import java.net.*;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import net.kdt.pojavlaunch.*;
 import org.json.*;
@@ -21,7 +22,7 @@ public class Msa {
     private static final String mcStoreUrl = "https://api.minecraftservices.com/entitlements/mcstore";
     private static final String mcProfileUrl = "https://api.minecraftservices.com/minecraft/profile";
 
-    private MicrosoftAuthTask task;
+    private final MicrosoftAuthTask task;
 
     public boolean isRefresh;
     public String msRefreshToken;
@@ -59,14 +60,14 @@ public class Msa {
         HttpURLConnection conn = (HttpURLConnection)url.openConnection();
         conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
         conn.setRequestProperty("charset", "utf-8");
-        conn.setRequestProperty("Content-Length", Integer.toString(req.getBytes("UTF-8").length));
+        conn.setRequestProperty("Content-Length", Integer.toString(req.getBytes(StandardCharsets.UTF_8).length));
         conn.setRequestMethod("POST");
         conn.setUseCaches(false);
         conn.setDoInput(true);
         conn.setDoOutput(true);
         conn.connect();
         try(OutputStream wr = conn.getOutputStream()) {
-            wr.write(req.getBytes("UTF-8"));
+            wr.write(req.getBytes(StandardCharsets.UTF_8));
         }
         if(conn.getResponseCode() >= 200 && conn.getResponseCode() < 300) {
             JSONObject jo = new JSONObject(Tools.read(conn.getInputStream()));
@@ -107,14 +108,14 @@ public class Msa {
         conn.setRequestProperty("Content-Type", "application/json");
         conn.setRequestProperty("Accept", "application/json");
         conn.setRequestProperty("charset", "utf-8");
-        conn.setRequestProperty("Content-Length", Integer.toString(req.getBytes("UTF-8").length));
+        conn.setRequestProperty("Content-Length", Integer.toString(req.getBytes(StandardCharsets.UTF_8).length));
         conn.setRequestMethod("POST");
         conn.setUseCaches(false);
         conn.setDoInput(true);
         conn.setDoOutput(true);
         conn.connect();
         try(OutputStream wr = conn.getOutputStream()) {
-            wr.write(req.getBytes("UTF-8"));
+            wr.write(req.getBytes(StandardCharsets.UTF_8));
         }
         if(conn.getResponseCode() >= 200 && conn.getResponseCode() < 300) {
             JSONObject jo = new JSONObject(Tools.read(conn.getInputStream()));
@@ -150,14 +151,14 @@ public class Msa {
         conn.setRequestProperty("Content-Type", "application/json");
         conn.setRequestProperty("Accept", "application/json");
         conn.setRequestProperty("charset", "utf-8");
-        conn.setRequestProperty("Content-Length", Integer.toString(req.getBytes("UTF-8").length));
+        conn.setRequestProperty("Content-Length", Integer.toString(req.getBytes(StandardCharsets.UTF_8).length));
         conn.setRequestMethod("POST");
         conn.setUseCaches(false);
         conn.setDoInput(true);
         conn.setDoOutput(true);
         conn.connect();
         try(OutputStream wr = conn.getOutputStream()) {
-            wr.write(req.getBytes("UTF-8"));
+            wr.write(req.getBytes(StandardCharsets.UTF_8));
         }
 
         if(conn.getResponseCode() >= 200 && conn.getResponseCode() < 300) {
@@ -183,14 +184,14 @@ public class Msa {
         conn.setRequestProperty("Content-Type", "application/json");
         conn.setRequestProperty("Accept", "application/json");
         conn.setRequestProperty("charset", "utf-8");
-        conn.setRequestProperty("Content-Length", Integer.toString(req.getBytes("UTF-8").length));
+        conn.setRequestProperty("Content-Length", Integer.toString(req.getBytes(StandardCharsets.UTF_8).length));
         conn.setRequestMethod("POST");
         conn.setUseCaches(false);
         conn.setDoInput(true);
         conn.setDoOutput(true);
         conn.connect();
         try(OutputStream wr = conn.getOutputStream()) {
-            wr.write(req.getBytes("UTF-8"));
+            wr.write(req.getBytes(StandardCharsets.UTF_8));
         }
 
         if(conn.getResponseCode() >= 200 && conn.getResponseCode() < 300) {

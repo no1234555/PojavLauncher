@@ -6,26 +6,41 @@ import static net.kdt.pojavlaunch.modmanager.ModManager.updateCoreMods;
 import static net.kdt.pojavlaunch.modmanager.ModManager.updateMods;
 
 import android.annotation.SuppressLint;
-import android.app.*;
-import android.content.*;
-import android.os.*;
-import android.util.*;
+import android.app.AlertDialog;
+import android.content.Intent;
+import android.os.AsyncTask;
+import android.util.Log;
+import android.util.Pair;
 
-import java.io.*;
-import java.util.*;
-import java.util.concurrent.*;
-
-import net.kdt.pojavlaunch.*;
+import net.kdt.pojavlaunch.BaseLauncherActivity;
+import net.kdt.pojavlaunch.JAssetInfo;
+import net.kdt.pojavlaunch.JAssets;
+import net.kdt.pojavlaunch.JMinecraftVersionList;
+import net.kdt.pojavlaunch.MainActivity;
+import net.kdt.pojavlaunch.R;
+import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.modmanager.ModData;
 import net.kdt.pojavlaunch.modmanager.ModManager;
 import net.kdt.pojavlaunch.multirt.MultiRTUtils;
 import net.kdt.pojavlaunch.multirt.Runtime;
-import net.kdt.pojavlaunch.prefs.*;
-import net.kdt.pojavlaunch.utils.*;
-import net.kdt.pojavlaunch.value.*;
+import net.kdt.pojavlaunch.prefs.LauncherPreferences;
+import net.kdt.pojavlaunch.utils.DownloadUtils;
+import net.kdt.pojavlaunch.value.DependentLibrary;
+import net.kdt.pojavlaunch.value.MinecraftClientInfo;
+import net.kdt.pojavlaunch.value.MinecraftLibraryArtifact;
+import net.kdt.pojavlaunch.value.PerVersionConfig;
 
-import org.apache.commons.io.*;
+import org.apache.commons.io.IOUtils;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -262,6 +277,7 @@ public class MinecraftDownloaderTask extends AsyncTask<String, String, Throwable
             }
             publishProgress("1", mActivity.getString(R.string.mcl_launch_download_assets));
             setMax(assets.objects.size());
+
             zeroProgress();
             try {
                 downloadAssets(assets, verInfo.assets, assets.mapToResources ? new File(Tools.OBSOLETE_RESOURCES_PATH) : new File(Tools.ASSETS_PATH));
@@ -319,7 +335,7 @@ public class MinecraftDownloaderTask extends AsyncTask<String, String, Throwable
                         }
                 );
                 if(libItem.downloads.artifact.sha1 != null) {
-                    isFileGood = LauncherPreferences.PREF_CHECK_LIBRARY_SHA ? Tools.compareSHA1(outLib,libItem.downloads.artifact.sha1) : true;
+                    isFileGood = !LauncherPreferences.PREF_CHECK_LIBRARY_SHA || Tools.compareSHA1(outLib, libItem.downloads.artifact.sha1);
                     if(!isFileGood) publishProgress("0", mActivity.getString(R.string.dl_library_sha_fail,libItem.name));
                     else publishProgress("0", mActivity.getString(R.string.dl_library_sha_pass,libItem.name));
                 }else{

@@ -272,10 +272,10 @@ public class Keyboard {
 	private static ByteBuffer readBuffer;
 
 	/** current event */
-	private static KeyEvent current_event = new KeyEvent();
+	private static final KeyEvent current_event = new KeyEvent();
 
 	/** scratch event */
-	private static KeyEvent tmp_event = new KeyEvent();
+	private static final KeyEvent tmp_event = new KeyEvent();
 
 	/** One time initialization */
 	private static boolean initialized;
@@ -325,7 +325,7 @@ public class Keyboard {
 	public static void create() throws LWJGLException {
 			if (!Display.isCreated()) throw new IllegalStateException("Display must be created.");
 
-			create((InputImplementation) GLFWInputImplementation.singleton);
+			create(GLFWInputImplementation.singleton);
 	}
 
 	private static void reset() {

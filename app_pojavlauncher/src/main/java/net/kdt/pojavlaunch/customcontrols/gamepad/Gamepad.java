@@ -77,7 +77,7 @@ public class Gamepad {
     private long mLastFrameTime;
 
     /* Listen for change in gui scale */
-    private MCOptionUtils.MCOptionListener mGuiScaleListener = () -> notifyGUISizeChange(getMcScale());
+    private final MCOptionUtils.MCOptionListener mGuiScaleListener = () -> notifyGUISizeChange(getMcScale());
 
     public Gamepad(View contextView, InputDevice inputDevice){
         mScreenChoreographer = Choreographer.getInstance();

@@ -1,6 +1,6 @@
 package net.kdt.pojavlaunch;
 
-import java.io.*;;
+import java.io.*;
 
 /**
  * This account data format is deprecated.
@@ -11,7 +11,7 @@ import java.io.*;;
 @Deprecated
 public class MCProfile
 {
-    private static String[] emptyBuilder = new String[]{
+    private static final String[] emptyBuilder = new String[]{
         "1.9", //Version
         "ProfileIDEmpty",
         "AccessToken",

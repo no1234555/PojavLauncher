@@ -10,7 +10,7 @@ import net.kdt.pojavlaunch.*;
 import net.kdt.pojavlaunch.value.*;
 
 public class InvalidateTokenTask extends AsyncTask<String, Void, Throwable> {
-    private YggdrasilAuthenticator authenticator = new YggdrasilAuthenticator();
+    private final YggdrasilAuthenticator authenticator = new YggdrasilAuthenticator();
     //private Gson gson = new Gson();
     private MinecraftAccount profilePath;
 

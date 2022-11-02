@@ -10,7 +10,7 @@ import java.io.IOException;
 
 public class Fabric {
 
-    private static APIUtils.APIHandler handler = new APIUtils.APIHandler("https://meta.fabricmc.net/v2");
+    private static final APIUtils.APIHandler handler = new APIUtils.APIHandler("https://meta.fabricmc.net/v2");
     private static String fabricLoaderVersion; //Store so we don't need to ask the api every time
 
     public static class Version {

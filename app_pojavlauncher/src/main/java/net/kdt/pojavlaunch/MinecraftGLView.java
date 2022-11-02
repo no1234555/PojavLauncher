@@ -56,7 +56,7 @@ public class MinecraftGLView extends TextureView {
     private final TapDetector mDoubleTapDetector = new TapDetector(2, TapDetector.DETECTION_METHOD_DOWN);
     /* MC GUI scale, listened by MCOptionUtils */
     private int mGuiScale = getMcScale();
-    private MCOptionUtils.MCOptionListener mGuiScaleListener = () -> mGuiScale = getMcScale();
+    private final MCOptionUtils.MCOptionListener mGuiScaleListener = () -> mGuiScale = getMcScale();
     /* Surface ready listener, used by the activity to launch minecraft */
     SurfaceReadyListener mSurfaceReadyListener = null;
 
@@ -344,7 +344,7 @@ public class MinecraftGLView extends TextureView {
                 CallbackBridge.DEBUG_STRING.setLength(0);
                 return true;
             case MotionEvent.ACTION_SCROLL:
-                CallbackBridge.sendScroll((double) event.getAxisValue(MotionEvent.AXIS_VSCROLL), (double) event.getAxisValue(MotionEvent.AXIS_HSCROLL));
+                CallbackBridge.sendScroll(event.getAxisValue(MotionEvent.AXIS_VSCROLL), event.getAxisValue(MotionEvent.AXIS_HSCROLL));
                 return true;
             case MotionEvent.ACTION_BUTTON_PRESS:
                 return sendMouseButtonUnconverted(event.getActionButton(),true);

@@ -391,13 +391,11 @@ public class ControlButton extends androidx.appcompat.widget.AppCompatButton imp
         float MIN_DISTANCE = Tools.dpToPx(8);
 
         if(button == this) return false;
-        if(com.google.android.material.math.MathUtils.dist(
-                button.getX() + button.getWidth()/2f,
-                button.getY() + button.getHeight()/2f,
-                getX() + getWidth()/2f,
-                getY() + getHeight()/2f) > Math.max(button.getWidth()/2f + getWidth()/2f, button.getHeight()/2f + getHeight()/2f) + MIN_DISTANCE) return false;
-
-        return true;
+        return !(com.google.android.material.math.MathUtils.dist(
+                button.getX() + button.getWidth() / 2f,
+                button.getY() + button.getHeight() / 2f,
+                getX() + getWidth() / 2f,
+                getY() + getHeight() / 2f) > Math.max(button.getWidth() / 2f + getWidth() / 2f, button.getHeight() / 2f + getHeight() / 2f) + MIN_DISTANCE);
     }
 
     /**

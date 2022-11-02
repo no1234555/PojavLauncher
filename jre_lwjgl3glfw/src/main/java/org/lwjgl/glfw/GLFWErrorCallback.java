@@ -99,7 +99,7 @@ public abstract class GLFWErrorCallback extends Callback implements GLFWErrorCal
      */
     public static GLFWErrorCallback createPrint(PrintStream stream) {
         return new GLFWErrorCallback() {
-            private Map<Integer, String> ERROR_CODES = APIUtil.apiClassTokens((field, value) -> 0x10000 < value && value < 0x20000, null, GLFW.class);
+            private final Map<Integer, String> ERROR_CODES = APIUtil.apiClassTokens((field, value) -> 0x10000 < value && value < 0x20000, null, GLFW.class);
 
             @Override
             public void invoke(int error, long description) {

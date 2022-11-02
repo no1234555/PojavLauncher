@@ -13,7 +13,7 @@ public class AWTInputBridge {
     
     public static void sendKey(char keychar, int keycode) {
         // TODO: Android -> AWT keycode mapping
-        nativeSendData(EVENT_TYPE_KEY, (int) keychar, keycode, 0, 0);
+        nativeSendData(EVENT_TYPE_KEY, keychar, keycode, 0, 0);
     }
     
     public static void sendMousePress(int awtButtons, boolean isDown) {

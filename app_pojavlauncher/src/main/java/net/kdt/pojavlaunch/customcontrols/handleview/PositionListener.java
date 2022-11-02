@@ -26,16 +26,16 @@ public class PositionListener implements ViewTreeObserver.OnPreDrawListener {
 	// 3 ActionPopup [replace, suggestion, easyedit] (suggestionsPopup first hides the others)
 	// 1 CursorAnchorInfoNotifier
 	private final int MAXIMUM_NUMBER_OF_LISTENERS = 7;
-	private ViewPositionListener[] mPositionListeners =
+	private final ViewPositionListener[] mPositionListeners =
 	new ViewPositionListener[MAXIMUM_NUMBER_OF_LISTENERS];
-	private boolean mCanMove[] = new boolean[MAXIMUM_NUMBER_OF_LISTENERS];
+	private final boolean[] mCanMove = new boolean[MAXIMUM_NUMBER_OF_LISTENERS];
 	private boolean mPositionHasChanged = true;
 	// Absolute position of the TextView with respect to its parent window
 	private int mPositionX, mPositionY;
 	private int mNumberOfListeners;
 	private boolean mScrollHasChanged;
 	final int[] mTempCoords = new int[2];
-	private View mView;
+	private final View mView;
 	
 	public PositionListener(View view) {
 		mView = view;

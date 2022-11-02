@@ -283,16 +283,13 @@ public class CacheUtilCommons {
         if (addr.length < INADDR16SZ) {
             return false;
         }
-        if ((addr[0] == 0x00) && (addr[1] == 0x00) &&
+        return (addr[0] == 0x00) && (addr[1] == 0x00) &&
                 (addr[2] == 0x00) && (addr[3] == 0x00) &&
                 (addr[4] == 0x00) && (addr[5] == 0x00) &&
                 (addr[6] == 0x00) && (addr[7] == 0x00) &&
                 (addr[8] == 0x00) && (addr[9] == 0x00) &&
-                (addr[10] == (byte)0xff) &&
-                (addr[11] == (byte)0xff))  {
-            return true;
-        }
-        return false;
+                (addr[10] == (byte) 0xff) &&
+                (addr[11] == (byte) 0xff);
     }
     public static boolean isJavaVersionAtMost8() {
         return JAVA_SPECIFICATION_VERSION_AS_ENUM.atMost(JavaVersion.JAVA_1_8);

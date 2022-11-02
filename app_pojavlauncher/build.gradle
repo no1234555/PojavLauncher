@@ -33,7 +33,7 @@ def getVersionName =  {
         return ("LOCAL-" + "${getDate()}")
     }
 
-    return TAG.toString().trim().replace("-g","-") + "-" + BRANCH.toString().trim();
+    return TAG.toString().trim().replace("-g","-") + "-" + BRANCH.toString().trim()
 }
 
 

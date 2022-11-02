@@ -273,7 +273,7 @@ public class BaseMainActivity extends BaseActivity {
     private void openCustomControls() {
         if(ingameControlsEditorListener == null) return;
 
-        ((MainActivity)this).mControlLayout.setModifiable(true);
+        MainActivity.mControlLayout.setModifiable(true);
         navDrawer.getMenu().clear();
         navDrawer.inflateMenu(R.menu.menu_customctrl);
         navDrawer.setNavigationItemSelectedListener(ingameControlsEditorListener);

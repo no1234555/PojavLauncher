@@ -271,13 +271,10 @@ public final class Rectangle implements ReadableRectangle, WritableRectangle, Se
 		h += y;
 		H += Y;
 		if (H <= Y) {
-			if (h >= y || H > h)
-				return false;
+			return h < y && H <= h;
 		} else {
-			if (h >= y && H > h)
-				return false;
+			return h < y || H <= h;
 		}
-		return true;
 	}
 
 	/**

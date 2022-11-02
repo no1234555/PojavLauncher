@@ -168,7 +168,7 @@ public final class Display {
 				for (int i = 0; i < accessors.length; i ++) {
 					int idx = param[i].indexOf('=');
 					if (idx > 0) {
-						accessors[i] = new FieldAccessor(param[i].substring(0, idx), 0, Integer.parseInt(param[i].substring(idx + 1, param[i].length())), true);
+						accessors[i] = new FieldAccessor(param[i].substring(0, idx), 0, Integer.parseInt(param[i].substring(idx + 1)), true);
 					} else if (param[i].charAt(0) == '-') {
 						accessors[i] = new FieldAccessor(param[i].substring(1), -1, 0, false);
 					} else {

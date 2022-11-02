@@ -11,7 +11,7 @@ import java.nio.IntBuffer;
 public class GLFWInputImplementation implements InputImplementation {
     public static final GLFWInputImplementation singleton = new GLFWInputImplementation();
     private final ByteBuffer event_buffer = ByteBuffer.allocate(Mouse.EVENT_SIZE);
-    private EventQueue event_queue = new EventQueue(Mouse.EVENT_SIZE);
+    private final EventQueue event_queue = new EventQueue(Mouse.EVENT_SIZE);
     private final EventQueue keyboardEventQueue = new EventQueue(Keyboard.EVENT_SIZE);
     private final ByteBuffer keyboardEvent = ByteBuffer.allocate(Keyboard.EVENT_SIZE);
     public final byte[] key_down_buffer = new byte[Keyboard.KEYBOARD_SIZE];

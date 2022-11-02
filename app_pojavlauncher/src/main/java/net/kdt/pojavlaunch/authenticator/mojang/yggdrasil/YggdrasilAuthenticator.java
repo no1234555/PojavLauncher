@@ -10,10 +10,10 @@ import org.apache.commons.io.*;
 
 public class YggdrasilAuthenticator {
     private static final String API_URL = "https://authserver.mojang.com/";
-    private String clientName = "Minecraft";
-    private int clientVersion = 1;
+    private final String clientName = "Minecraft";
+    private final int clientVersion = 1;
 
-    private NetworkResponse makeRequest(String endpoint, Object inputObject, Class<?> responseClass) throws IOException, Throwable {
+    private NetworkResponse makeRequest(String endpoint, Object inputObject, Class<?> responseClass) throws Throwable {
         Throwable th;
         InputStream is = null;
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -30,7 +30,7 @@ public class YggdrasilAuthenticator {
                 conn.connect();
                 os = null;
                 os = conn.getOutputStream();
-                os.write(requestJson.getBytes(Charset.forName("UTF-8")));
+                os.write(requestJson.getBytes(StandardCharsets.UTF_8));
                 if (os != null) {
                     os.close();
                 }
@@ -51,7 +51,7 @@ public class YggdrasilAuthenticator {
                     }
                 }
                 
-                String outString = new String(bos.toByteArray(), Charset.forName("UTF-8"));
+                String outString = new String(bos.toByteArray(), StandardCharsets.UTF_8);
                 if (statusCode == 200 || statusCode == 204){
 					Log.i("Result", "Task " + endpoint + " successful");
 					

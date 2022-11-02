@@ -56,7 +56,7 @@ public class MinecraftLEGLView extends SurfaceView {
     private final TapDetector doubleTapDetector  = new TapDetector(2, TapDetector.DETECTION_METHOD_DOWN);
     /* MC GUI scale, listened by MCOptionUtils */
     private int GUIScale = getMcScale();
-    private MCOptionUtils.MCOptionListener GUIScaleListener = () -> GUIScale = getMcScale();
+    private final MCOptionUtils.MCOptionListener GUIScaleListener = () -> GUIScale = getMcScale();
     /* Surface ready listener, used by the activity to launch minecraft */
     SurfaceReadyListener surfaceReadyListener = null;
 
@@ -410,7 +410,7 @@ public class MinecraftLEGLView extends SurfaceView {
                 CallbackBridge.DEBUG_STRING.setLength(0);
                 return true;
             case MotionEvent.ACTION_SCROLL:
-                CallbackBridge.sendScroll((double) event.getAxisValue(MotionEvent.AXIS_VSCROLL), (double) event.getAxisValue(MotionEvent.AXIS_HSCROLL));
+                CallbackBridge.sendScroll(event.getAxisValue(MotionEvent.AXIS_VSCROLL), event.getAxisValue(MotionEvent.AXIS_HSCROLL));
                 return true;
             case MotionEvent.ACTION_BUTTON_PRESS:
                 return sendMouseButtonUnconverted(event.getActionButton(),true);

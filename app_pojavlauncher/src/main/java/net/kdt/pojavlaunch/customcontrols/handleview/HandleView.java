@@ -41,9 +41,9 @@ public abstract class HandleView extends View implements ViewPositionListener, V
     protected int mHotspotX;
     protected int mHorizontalGravity;
     // Offsets the hotspot point up, so that cursor is not hidden by the finger when moving up
-    private float mTouchOffsetY;
+    private final float mTouchOffsetY;
     // Where the touch position should be on the handle to ensure a maximum cursor visibility
-    private float mIdealVerticalOffset;
+    private final float mIdealVerticalOffset;
     // Parent's (TextView) previous position in window
     private int mLastParentX, mLastParentY;
     // Transient action popup window for Paste and Replace actions
@@ -55,7 +55,7 @@ public abstract class HandleView extends View implements ViewPositionListener, V
     // Used to delay the appearance of the action popup window
     private Runnable mActionPopupShower;
     // Minimum touch target size for handles
-    private int mMinSize;
+    private final int mMinSize;
     protected ControlButton mView;
     
     // MOD: Addition. Save old size of parent

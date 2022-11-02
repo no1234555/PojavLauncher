@@ -98,7 +98,7 @@ public class ActionPopupWindow extends PinnedPopupWindow implements OnClickListe
 		if (view == mEditTextView) {
 
 			if(mEditedButton instanceof ControlSubButton){
-				new EditControlSubButtonPopup((ControlSubButton) mEditedButton);
+				new EditControlSubButtonPopup(mEditedButton);
 				return;
 			}
 
@@ -108,7 +108,7 @@ public class ActionPopupWindow extends PinnedPopupWindow implements OnClickListe
 			}
 
 			if(mEditedButton instanceof ControlButton){
-				new EditControlButtonPopup((ControlButton) mEditedButton);
+				new EditControlButtonPopup(mEditedButton);
 				return;
 			}
 
@@ -132,7 +132,7 @@ public class ActionPopupWindow extends PinnedPopupWindow implements OnClickListe
 				}
 
 				if(mEditedButton instanceof ControlButton){
-					layout.removeControlButton((ControlButton) mEditedButton);
+					layout.removeControlButton(mEditedButton);
 				}
 
 				layout.removeControlButton(mHandleView.mView);

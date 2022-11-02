@@ -4,6 +4,7 @@ import android.graphics.BitmapFactory;
 import android.util.Base64;
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import net.kdt.pojavlaunch.Tools;
 import net.kdt.pojavlaunch.utils.DownloadUtils;
@@ -13,7 +14,7 @@ public class AccountSkin {
         Profile p = Tools.GLOBAL_GSON.fromJson(DownloadUtils.downloadString("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid), Profile.class);
         for (Property property : p.properties) {
             if (property.name.equals("textures")) {
-                return getSkinFromProperty(Tools.GLOBAL_GSON.fromJson(new String(Base64.decode(property.value, Base64.DEFAULT), "UTF-8"), SkinProperty.class));
+                return getSkinFromProperty(Tools.GLOBAL_GSON.fromJson(new String(Base64.decode(property.value, Base64.DEFAULT), StandardCharsets.UTF_8), SkinProperty.class));
             }
         }
         

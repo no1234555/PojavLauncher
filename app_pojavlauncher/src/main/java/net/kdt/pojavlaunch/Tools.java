@@ -479,7 +479,7 @@ public final class Tools {
         return libStr.toString();
     }
 
-    private static boolean isClientFirst = false;
+    private static final boolean isClientFirst = false;
     public static String generateLaunchClassPath(JMinecraftVersionList.Version info,String actualname) {
         StringBuilder libStr = new StringBuilder(); //versnDir + "/" + version + "/" + version + ".jar:";
 
@@ -568,7 +568,7 @@ public final class Tools {
         currentDisplayMetrics = getDisplayMetrics(ctx);
 
         CallbackBridge.physicalWidth = currentDisplayMetrics.widthPixels;
-        CallbackBridge.physicalHeight = (int) (currentDisplayMetrics.heightPixels);
+        CallbackBridge.physicalHeight = currentDisplayMetrics.heightPixels;
     }
 
     public static float dpToPx(float dp) {
@@ -614,10 +614,10 @@ public final class Tools {
 
         Runnable runnable = () -> {
             final String errMsg = showMore ? Log.getStackTraceString(e): e.getMessage();
-            AlertDialog.Builder builder = new AlertDialog.Builder((Context) ctx)
+            AlertDialog.Builder builder = new AlertDialog.Builder(ctx)
                     .setTitle(titleId)
                     .setMessage(errMsg)
-                    .setPositiveButton(android.R.string.ok, (DialogInterface.OnClickListener) (p1, p2) -> {
+                    .setPositiveButton(android.R.string.ok, (p1, p2) -> {
                         if(exitIfOk) {
                             if (ctx instanceof BaseMainActivity) {
                                 BaseMainActivity.fullyExit();
@@ -626,8 +626,8 @@ public final class Tools {
                             }
                         }
                     })
-                    .setNegativeButton(showMore ? R.string.error_show_less : R.string.error_show_more, (DialogInterface.OnClickListener) (p1, p2) -> showError(ctx, titleId, e, exitIfOk, !showMore))
-                    .setNeutralButton(android.R.string.copy, (DialogInterface.OnClickListener) (p1, p2) -> {
+                    .setNegativeButton(showMore ? R.string.error_show_less : R.string.error_show_more, (p1, p2) -> showError(ctx, titleId, e, exitIfOk, !showMore))
+                    .setNeutralButton(android.R.string.copy, (p1, p2) -> {
                         ClipboardManager mgr = (ClipboardManager) ctx.getSystemService(Context.CLIPBOARD_SERVICE);
                         mgr.setPrimaryClip(ClipData.newPlainText("error", Log.getStackTraceString(e)));
                         if(exitIfOk) {
@@ -818,7 +818,7 @@ public final class Tools {
     }
 
     public static String convertStream(InputStream inputStream) throws IOException {
-        return convertStream(inputStream, Charset.forName("UTF-8"));
+        return convertStream(inputStream, StandardCharsets.UTF_8);
     }
 
     public static String convertStream(InputStream inputStream, Charset charset) throws IOException {

@@ -146,9 +146,7 @@ public class ImportControlActivity extends Activity {
         fileName = trimFileName(fileName);
 
         if(fileName.isEmpty()) return false;
-        if (FileUtils.exists(Tools.CTRLMAP_PATH + "/" + fileName + ".json")) return false;
-
-        return true;
+        return !FileUtils.exists(Tools.CTRLMAP_PATH + "/" + fileName + ".json");
     }
 
     /**

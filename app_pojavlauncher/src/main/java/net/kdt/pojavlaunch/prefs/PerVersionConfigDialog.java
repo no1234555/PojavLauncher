@@ -78,7 +78,7 @@ public class PerVersionConfigDialog{
         if(mRendererSpinner.getSelectedItemPosition() == mRendererNames.size()) versionConfig.renderer = null;
         else versionConfig.renderer = mRendererNames.get(mRendererSpinner.getSelectedItemPosition());
 
-        String runtime=((Runtime) mJvmSpinner.getSelectedItem()).name;;
+        String runtime=((Runtime) mJvmSpinner.getSelectedItem()).name;
         if(!runtime.equals("<Default>"))versionConfig.selectedRuntime=runtime;
         else versionConfig.selectedRuntime = null;
 

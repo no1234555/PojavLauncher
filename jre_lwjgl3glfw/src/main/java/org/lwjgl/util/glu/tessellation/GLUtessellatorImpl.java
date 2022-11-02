@@ -151,7 +151,7 @@ public class GLUtessellatorImpl implements GLUtessellator {
 
     private static final double GLU_TESS_DEFAULT_TOLERANCE = 0.0;
 //    private static final int GLU_TESS_MESH = 100112;	/* void (*)(GLUmesh *mesh)	    */
-    private static GLUtessellatorCallback NULL_CB = new GLUtessellatorCallbackAdapter();
+    private static final GLUtessellatorCallback NULL_CB = new GLUtessellatorCallbackAdapter();
 
 //    #define MAX_FAST_ALLOC	(MAX(sizeof(EdgePair), \
 //                 MAX(sizeof(GLUvertex),sizeof(GLUface))))

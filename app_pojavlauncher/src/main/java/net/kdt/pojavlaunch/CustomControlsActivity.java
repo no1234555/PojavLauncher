@@ -38,9 +38,9 @@ public class CustomControlsActivity extends BaseActivity {
         
 		setContentView(R.layout.activity_custom_controls);
 
-		mControlLayout = (ControlLayout) findViewById(R.id.customctrl_controllayout);
-		mDrawerLayout = (DrawerLayout) findViewById(R.id.customctrl_drawerlayout);
-		mDrawerNavigationView = (NavigationView) findViewById(R.id.customctrl_navigation_view);
+		mControlLayout = findViewById(R.id.customctrl_controllayout);
+		mDrawerLayout = findViewById(R.id.customctrl_drawerlayout);
+		mDrawerNavigationView = findViewById(R.id.customctrl_navigation_view);
 
 		mDrawerNavigationView.setNavigationItemSelectedListener(
 				menuItem -> {

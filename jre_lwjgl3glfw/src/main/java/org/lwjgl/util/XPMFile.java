@@ -56,7 +56,7 @@ import java.util.StringTokenizer;
 public class XPMFile {
 
 	/** Array of bytes (RGBA) */
-	private byte bytes[];
+	private byte[] bytes;
 
 	private static final int WIDTH = 0;
 

@@ -21,7 +21,7 @@ import java.util.List;
 
 public class RefreshVersionListTask extends AsyncTask<Void, Void, ArrayList<String>>
 {
-    private BaseLauncherActivity mActivity;
+    private final BaseLauncherActivity mActivity;
     public RefreshVersionListTask(BaseLauncherActivity activity) {
         mActivity = activity;
     }
