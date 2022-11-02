@@ -337,7 +337,6 @@ public class PojavLoginActivity extends BaseActivity {
             Tools.copyAssetFile(this, "launcher_profiles.json", Tools.DIR_GAME_NEW, false);
             Tools.copyAssetFile(this,"resolv.conf",Tools.DIR_DATA, true);
             Tools.copyAssetFile(this,"arc_dns_injector.jar",Tools.DIR_DATA, true);
-            Tools.copyAssetFile(this,"servers.dat",DIR_GAME_NEW, false);
 
             Tools.copyAssetFile(this, "artifacts/1.18.2/mcxr-core-0.2.2+1.18.2.jar", DIR_GAME_NEW + "/mods/1.18.2", true);
             Tools.copyAssetFile(this, "artifacts/1.18.2/mcxr-play-0.2.2+1.18.2.jar", DIR_GAME_NEW + "/mods/1.18.2", true);
