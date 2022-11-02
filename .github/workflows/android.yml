@@ -167,17 +167,6 @@ jobs:
           branch: YVR
           name: mcxr-play
 
-      - name: Collect TitleWorlds-1.18.2
-        uses: dawidd6/action-download-artifact@v2
-        with:
-          github_token: ${{secrets.GITHUB_TOKEN}}
-          workflow: build.yml
-          path: app_pojavlauncher/src/main/assets/artifacts/1.18.2
-          workflow_conclusion: success
-          repo: QuestCraftPlusPlus/TitleWorlds
-          branch: master
-          name: title-worlds
-
       - name: Collect lazydfu-1.19.2
         uses: dawidd6/action-download-artifact@v2
         with:
@@ -230,7 +219,7 @@ jobs:
           path: app_pojavlauncher/src/main/assets/artifacts/1.19.2
           workflow_conclusion: success
           repo: QuestCraftPlusPlus/TitleWorlds
-          branch: 1.19
+          branch: master
           name: title-worlds
 
       - name: Build APK with Gradle
