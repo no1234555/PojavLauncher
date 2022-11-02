@@ -172,7 +172,7 @@ jobs:
         with:
           github_token: ${{secrets.GITHUB_TOKEN}}
           workflow: build.yml
-          path: app_pojavlauncher/src/main/assets/artifacts/1.19.2
+          path: app_pojavlauncher/src/main/assets/artifacts/1.18.2
           workflow_conclusion: success
           repo: QuestCraftPlusPlus/TitleWorlds
           branch: 1.18.2
