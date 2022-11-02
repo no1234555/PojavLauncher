@@ -14,84 +14,8 @@
   ],
   "core_mods": {
     "1.18.2": [
-      {
-        "slug": "fabric-api",
-        "platform": "modrinth"
-      },
-      {
-        "slug": "lazydfu",
-        "platform": "modrinth"
-      },
-      {
-        "slug": "starlight",
-        "platform": "modrinth"
-      },
-      {
-        "slug": "exordium",
-        "platform": "modrinth"
-      },
-      {
-        "slug": "moreculling",
-        "platform": "modrinth"
-      },
-      {
-        "slug": "smoothboot",
-        "platform": "modrinth"
-      },
-      {
-        "slug": "mcxr-core-yvr",
-        "platform": "github"
-      },
-      {
-        "slug": "mcxr-play-yvr",
-        "platform": "github"
-      },
-      {
-        "slug": "title-worlds",
-        "platform": "github"
-      }
     ],
     "1.19.2": [
-      {
-        "slug": "fabric-api",
-        "platform": "modrinth"
-      },
-      {
-        "slug": "lazydfu",
-        "platform": "modrinth"
-      },
-      {
-        "slug": "starlight",
-        "platform": "modrinth"
-      },
-      {
-        "slug": "exordium",
-        "platform": "modrinth"
-      },
-      {
-        "slug": "moreculling",
-        "platform": "modrinth"
-      },
-      {
-        "slug": "smoothboot",
-        "platform": "modrinth"
-      },
-      {
-        "slug": "mcxr-core-yvr",
-        "platform": "github"
-      },
-      {
-        "slug": "mcxr-play-yvr",
-        "platform": "github"
-      },
-      {
-        "slug": "voicechat-fabric",
-        "platform": "github"
-      },
-      {
-        "slug": "title-worlds",
-        "platform": "github"
-      }
     ]
   }
 }

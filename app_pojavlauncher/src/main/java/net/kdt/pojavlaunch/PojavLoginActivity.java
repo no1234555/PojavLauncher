@@ -319,7 +319,8 @@ public class PojavLoginActivity extends BaseActivity {
         if (!PojavMigrator.migrateGameDir()) {
             mkdirs(Tools.DIR_GAME_NEW);
             mkdirs(DIR_GAME_NEW + "/resourcepacks");
-
+            mkdirs(DIR_GAME_NEW + "/mods/1.19.2");
+            mkdirs(DIR_GAME_NEW + "/mods/1.18.2");
             mkdirs(Tools.DIR_HOME_VERSION);
             mkdirs(Tools.DIR_HOME_LIBRARY);
         }
@@ -336,7 +337,19 @@ public class PojavLoginActivity extends BaseActivity {
             Tools.copyAssetFile(this, "launcher_profiles.json", Tools.DIR_GAME_NEW, false);
             Tools.copyAssetFile(this,"resolv.conf",Tools.DIR_DATA, true);
             Tools.copyAssetFile(this,"arc_dns_injector.jar",Tools.DIR_DATA, true);
-            
+            Tools.copyAssetFile(this,"servers.dat",DIR_GAME_NEW, false);
+
+            Tools.copyAssetFile(this, "artifacts/1.18.2/mcxr-core-0.2.2+1.18.2.jar", DIR_GAME_NEW + "/mods/1.18.2", true);
+            Tools.copyAssetFile(this, "artifacts/1.18.2/mcxr-play-0.2.2+1.18.2.jar", DIR_GAME_NEW + "/mods/1.18.2", true);
+            Tools.copyAssetFile(this, "artifacts/1.18.2/titleworlds-0.1.0+1.18.2.jar", DIR_GAME_NEW + "/mods/1.18.2", true);
+            Tools.copyAssetFile(this, "artifacts/1.18.2/lazydfu-0.1.3-SNAPSHOT.jar", DIR_GAME_NEW + "/mods/1.18.2", true);
+            Tools.copyAssetFile(this, "artifacts/1.18.2/fabric-api-0.59.1+1.18.2.jar", DIR_GAME_NEW + "/mods/1.18.2", true);
+
+            Tools.copyAssetFile(this, "artifacts/1.19.2/mcxr-core-0.2.2+1.19.2.jar", DIR_GAME_NEW + "/mods/1.19.2", true);
+            Tools.copyAssetFile(this, "artifacts/1.19.2/mcxr-play-0.2.2+1.19.2.jar", DIR_GAME_NEW + "/mods/1.19.2", true);
+            Tools.copyAssetFile(this, "artifacts/1.19.2/titleworlds-0.1.0+1.19.2.jar", DIR_GAME_NEW + "/mods/1.19.2", true);
+            Tools.copyAssetFile(this, "artifacts/1.19.2/lazydfu-0.1.3-SNAPSHOT.jar", DIR_GAME_NEW + "/mods/1.19.2", true);
+            Tools.copyAssetFile(this, "artifacts/1.19.2/fabric-api-0.64.0+1.19.2.jar", DIR_GAME_NEW + "/mods/1.19.2", true);
             // Install Mod Manager Jsons
             Tools.copyAssetFile(this, "jsons/modrinth-compat.json", ModManager.getWorkDir(), false);
             Tools.copyAssetFile(this, "jsons/curseforge-compat.json", ModManager.getWorkDir(), false);

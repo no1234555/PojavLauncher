@@ -123,6 +123,116 @@ jobs:
         run: |
           rm -rf app_pojavlauncher/main/src/assets/artifacts/*
 
+      - name: Collect lazydfu
+          uses: dawidd6/action-download-artifact@v2
+          with:
+            github_token: ${{secrets.GITHUB_TOKEN}}
+            workflow: build.yml
+            path: app_pojavlauncher/src/main/assets/artifacts/1.18.2
+            workflow_conclusion: success
+            repo: QuestCraftPlusPlus/lazydfu
+            branch: master
+            name: lazydfu
+
+      - name: Collect fabric-api-1.18.2
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          github_token: ${{secrets.GITHUB_TOKEN}}
+          workflow: build.yml
+          path: app_pojavlauncher/src/main/assets/artifacts/1.18.2
+          workflow_conclusion: success
+          repo: QuestCraftPlusPlus/fabric
+          branch: 1.18.2
+          name: fabric-api
+
+      - name: Collect MCXR (mcxr-core-1.18.2)
+          uses: dawidd6/action-download-artifact@v2
+          with:
+            github_token: ${{secrets.GITHUB_TOKEN}}
+            workflow: build.yml
+            path: app_pojavlauncher/src/main/assets/artifacts/1.18.2
+            workflow_conclusion: success
+            repo: QuestCraftPlusPlus/MCXR
+            branch: YVR
+            name: mcxr-core
+
+      - name: Collect MCXR (mcxr-play-1.18.2)
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          github_token: ${{secrets.GITHUB_TOKEN}}
+          workflow: build.yml
+          path: app_pojavlauncher/src/main/assets/artifacts/1.18.2
+          workflow_conclusion: success
+          repo: QuestCraftPlusPlus/MCXR
+          branch: YVR
+          name: mcxr-play
+
+      - name: Collect TitleWorlds-1.18.2
+          uses: dawidd6/action-download-artifact@v2
+          with:
+            github_token: ${{secrets.GITHUB_TOKEN}}
+            workflow: build.yml
+            path: app_pojavlauncher/src/main/assets/artifacts/1.18.2
+            workflow_conclusion: success
+            repo: QuestCraftPlusPlus/TitleWorlds
+            branch: master
+            name: title-worlds
+
+      - name: Collect lazydfu-1.19.2
+          uses: dawidd6/action-download-artifact@v2
+          with:
+            github_token: ${{secrets.GITHUB_TOKEN}}
+            workflow: build.yml
+            path: app_pojavlauncher/src/main/assets/artifacts/1.18.2
+            workflow_conclusion: success
+            repo: QuestCraftPlusPlus/lazydfu
+            branch: master
+            name: lazydfu
+
+      - name: Collect fabric-api-1.19.2
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          github_token: ${{secrets.GITHUB_TOKEN}}
+          workflow: build.yml
+          path: app_pojavlauncher/src/main/assets/artifacts/1.19.2
+          workflow_conclusion: success
+          repo: QuestCraftPlusPlus/fabric
+          branch: 1.19.2
+          name: fabric-api
+
+      - name: Collect MCXR (mcxr-core-1.19.2)
+          uses: dawidd6/action-download-artifact@v2
+          with:
+            github_token: ${{secrets.GITHUB_TOKEN}}
+            workflow: build.yml
+            path: app_pojavlauncher/src/main/assets/artifacts/1.19.2
+            workflow_conclusion: success
+            repo: QuestCraftPlusPlus/MCXR
+            branch: YVR-1.19.2
+            name: mcxr-core
+
+      - name: Collect MCXR (mcxr-play-1.19.2)
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          github_token: ${{secrets.GITHUB_TOKEN}}
+          workflow: build.yml
+          path: app_pojavlauncher/src/main/assets/artifacts/1.19.2
+          workflow_conclusion: success
+          repo: QuestCraftPlusPlus/MCXR
+          branch: YVR-1.19.2
+          name: mcxr-play
+
+      - name: Collect TitleWorlds-1.19.2
+          uses: dawidd6/action-download-artifact@v2
+          with:
+            github_token: ${{secrets.GITHUB_TOKEN}}
+            workflow: build.yml
+            path: app_pojavlauncher/src/main/assets/artifacts/1.19.2
+            workflow_conclusion: success
+            repo: QuestCraftPlusPlus/TitleWorlds
+            branch: 1.19
+            name: title-worlds
+
       - name: Build APK with Gradle
         run: |
           chmod +x scripts/languagelist_updater.sh
