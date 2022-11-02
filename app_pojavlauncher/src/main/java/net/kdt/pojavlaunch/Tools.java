@@ -265,7 +265,7 @@ public final class Tools {
         }
 
         //Fabric
-        javaArgList.add("-Dfabric.addMods=" + DIR_GAME_NEW + "/mods/" + versionInfo.id);
+        javaArgList.add("-Dfabric.addMods=" + DIR_GAME_NEW + "/mods/" + versionInfo.id + ":" + ModManager.getWorkDir() + "/instances/" + versionName);
 
         //Quilt
         //javaArgList.add("-Dloader.addMods=" + ModManager.getWorkDir() + "/core/" + versionInfo.id + ":" + ModManager.getWorkDir() + "/instances/Default");
