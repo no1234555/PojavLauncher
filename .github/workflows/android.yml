@@ -146,15 +146,15 @@ jobs:
           name: fabric-api
 
       - name: Collect MCXR (mcxr-core-1.18.2)
-          uses: dawidd6/action-download-artifact@v2
-          with:
-            github_token: ${{secrets.GITHUB_TOKEN}}
-            workflow: build.yml
-            path: app_pojavlauncher/src/main/assets/artifacts/1.18.2
-            workflow_conclusion: success
-            repo: QuestCraftPlusPlus/MCXR
-            branch: YVR
-            name: mcxr-core
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          github_token: ${{secrets.GITHUB_TOKEN}}
+          workflow: build.yml
+          path: app_pojavlauncher/src/main/assets/artifacts/1.18.2
+          workflow_conclusion: success
+          repo: QuestCraftPlusPlus/MCXR
+          branch: YVR
+          name: mcxr-core
 
       - name: Collect MCXR (mcxr-play-1.18.2)
         uses: dawidd6/action-download-artifact@v2
