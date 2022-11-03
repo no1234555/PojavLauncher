@@ -37,7 +37,7 @@ public abstract class BaseLauncherActivity extends BaseActivity {
 	public Spinner mVersionSelector;
 	public MultiRTConfigDialog mRuntimeConfigDialog;
 	public TextView mLaunchTextStatus;
-    
+
     public JMinecraftVersionList mVersionList = new JMinecraftVersionList();
 	public MinecraftDownloaderTask mTask;
 	public MinecraftAccount mProfile;
@@ -45,7 +45,7 @@ public abstract class BaseLauncherActivity extends BaseActivity {
     
 	public boolean mIsAssetsProcessing = false;
     protected boolean canBack = false;
-    
+
     public abstract void statusIsLaunching(boolean isLaunching);
 
 
@@ -98,6 +98,7 @@ public abstract class BaseLauncherActivity extends BaseActivity {
     public void launchGame(View v) {
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         boolean isScreenOn = pm.isInteractive();
+        Intent login = new Intent(this, PojavLoginActivity.class);
 
         if (!canBack && mIsAssetsProcessing) {
             mIsAssetsProcessing = false;
@@ -105,7 +106,7 @@ public abstract class BaseLauncherActivity extends BaseActivity {
         } else if (canBack) {
             v.setEnabled(false);
             mTask = new MinecraftDownloaderTask(this);
-            mPlayButton.setText("Downloading...");
+            mPlayButton.setText("下載...");
             // TODO: better check!!!
             if (mProfile.accessToken.equals("0")) {
                 File verJsonFile = new File(Tools.DIR_HOME_VERSION,
@@ -122,11 +123,11 @@ public abstract class BaseLauncherActivity extends BaseActivity {
             } else if (isScreenOn) {
                 mTask.execute(mProfile.selectedVersion);
             } else {
-
+                startActivity(login);
             }
         }
     }
-    
+
     @Override
     public void onBackPressed() {
         if (canBack) {
