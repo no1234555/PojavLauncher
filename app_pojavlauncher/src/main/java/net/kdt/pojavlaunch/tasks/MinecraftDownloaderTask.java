@@ -7,8 +7,10 @@ import static net.kdt.pojavlaunch.modmanager.ModManager.updateMods;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.PowerManager;
 import android.util.Log;
 import android.util.Pair;
 
@@ -402,6 +404,10 @@ public class MinecraftDownloaderTask extends AsyncTask<String, String, Throwable
             //mActivity.mCrashView.setLastCrash("");
 
             try {
+                PowerManager pm = (PowerManager) mActivity.getSystemService(Context.POWER_SERVICE);
+                while(!pm.isInteractive()) {
+
+                }
                 Intent mainIntent = new Intent(mActivity, MainActivity.class /* MainActivity.class */);
                 // mainIntent.addFlags(Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT);
                 mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
