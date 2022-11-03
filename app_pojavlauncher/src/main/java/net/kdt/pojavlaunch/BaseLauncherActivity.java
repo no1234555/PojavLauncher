@@ -106,7 +106,7 @@ public abstract class BaseLauncherActivity extends BaseActivity {
         } else if (canBack) {
             v.setEnabled(false);
             mTask = new MinecraftDownloaderTask(this);
-            mPlayButton.setText("下載...");
+            mPlayButton.setText("下载中...");
             // TODO: better check!!!
             if (mProfile.accessToken.equals("0")) {
                 File verJsonFile = new File(Tools.DIR_HOME_VERSION,
