@@ -112,6 +112,7 @@ public abstract class BaseLauncherActivity extends BaseActivity {
                 File verJsonFile = new File(Tools.DIR_HOME_VERSION,
                         mProfile.selectedVersion + "/" + mProfile.selectedVersion + ".json");
                 if (verJsonFile.exists()) {
+                    mPlayButton.setText("开始游戏");
                     mTask.onPostExecute(null);
                 } else {
                     new AlertDialog.Builder(this)
