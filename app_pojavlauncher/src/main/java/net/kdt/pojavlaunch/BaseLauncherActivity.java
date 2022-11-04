@@ -113,7 +113,6 @@ public abstract class BaseLauncherActivity extends BaseActivity {
                         mProfile.selectedVersion + "/" + mProfile.selectedVersion + ".json");
                 if (verJsonFile.exists()) {
                     mPlayButton.setText("开始游戏");
-                    mTask.onPostExecute(null);
                 } else {
                     new AlertDialog.Builder(this)
                             .setTitle(R.string.global_error)
