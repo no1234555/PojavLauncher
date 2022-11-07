@@ -97,10 +97,6 @@ public abstract class BaseLauncherActivity extends BaseActivity {
     }
 
     public void launchGame(View v) {
-        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-        boolean isScreenOn = pm.isInteractive();
-        Intent login = new Intent(this, PojavLoginActivity.class);
-
         if (!canBack && mIsAssetsProcessing) {
             mIsAssetsProcessing = false;
             statusIsLaunching(false);
@@ -123,10 +119,6 @@ public abstract class BaseLauncherActivity extends BaseActivity {
                             .setPositiveButton(android.R.string.ok, null)
                             .show();
                 }
-            } else if (isScreenOn) {
-                mPlayButton.setText("开始游戏");
-            } else {
-                startActivity(login);
             }
         }
         if(canStart) {
