@@ -6,6 +6,7 @@ import static net.kdt.pojavlaunch.Tools.getFileName;
 import android.app.*;
 import android.content.*;
 import android.net.Uri;
+import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Environment;
 import android.os.PowerManager;
@@ -46,6 +47,7 @@ public abstract class BaseLauncherActivity extends BaseActivity {
 	public boolean mIsAssetsProcessing = false;
     protected boolean canBack = false;
     public boolean canStart = false;
+    public WifiManager.WifiLock lock;
 
     public abstract void statusIsLaunching(boolean isLaunching);
 
@@ -102,6 +104,8 @@ public abstract class BaseLauncherActivity extends BaseActivity {
             statusIsLaunching(false);
         } else if (canBack) {
             v.setEnabled(false);
+            lock = ((WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE)).createWifiLock(WifiManager.WIFI_MODE_FULL_HIGH_PERF, "pojav");
+            lock.acquire();
             mTask = new MinecraftDownloaderTask(this);
             mTask.execute(mProfile.selectedVersion);
             mPlayButton.setText("下载中...");

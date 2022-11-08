@@ -391,6 +391,7 @@ public class MinecraftDownloaderTask extends AsyncTask<String, String, Throwable
     @Override
     public void onPostExecute(Throwable p1)
     {
+        mActivity.lock.release();
         mActivity.mPlayButton.setEnabled(true);
         mActivity.mPlayButton.setText("开始游戏");
         mActivity.canStart = true;
