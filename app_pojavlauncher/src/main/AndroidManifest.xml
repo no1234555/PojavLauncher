@@ -32,9 +32,8 @@
         <meta-data 
             android:name="android.max_aspect"
             android:value="ratio_float"/>
-        <meta-data android:name="com.yvr.application.mode" android:value="vr_only"/>
         <meta-data android:name="com.oculus.intent.category.VR" android:value="vr_only"/>
-        <meta-data android:name="com.oculus.supportedDevices" android:value="quest|quest2"/>
+        <meta-data android:name="com.oculus.supportedDevices" android:value="quest|quest2|cambria"/>
         <activity
             android:exported="true"
             android:launchMode="singleTop"
@@ -96,13 +95,12 @@
             android:screenOrientation="sensorLandscape"
             android:name=".authenticator.microsoft.ui.MicrosoftLoginGUIActivity"/>
 
-        <activity
-            android:launchMode="standard"
-            android:multiprocess="true"
-            android:screenOrientation="sensorLandscape"
-            android:name=".MainActivity"
+        <activity android:name=".MainActivity"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
+            android:configChanges="density|keyboard|keyboardHidden|navigation|orientation|screenLayout|screenSize|uiMode"
+            android:launchMode="singleTask"
             android:resizeableActivity="false"
-            android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|screenLayout|keyboard|navigation"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.RUN"/>
