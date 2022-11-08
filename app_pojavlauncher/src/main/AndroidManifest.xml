@@ -102,6 +102,7 @@
             android:launchMode="singleTask"
             android:resizeableActivity="false"
             android:exported="true">
+            <meta-data android:name="com.oculus.vr.focusaware" android:value="true" />
             <intent-filter>
                 <action android:name="android.intent.action.RUN"/>
                 <category android:name="com.oculus.intent.category.VR"/>
