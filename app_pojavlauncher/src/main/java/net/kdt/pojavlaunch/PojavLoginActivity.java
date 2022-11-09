@@ -346,7 +346,7 @@ public class PojavLoginActivity extends BaseActivity {
 
             Tools.copyAssetFile(this, "artifacts/1.19.2/mcxr-core-0.2.2+1.19.2.jar", DIR_GAME_NEW + "/mods/1.19.2", true);
             Tools.copyAssetFile(this, "artifacts/1.19.2/mcxr-play-0.2.2+1.19.2.jar", DIR_GAME_NEW + "/mods/1.19.2", true);
-            Tools.copyAssetFile(this, "artifacts/1.19.2/titleworlds-0.1.1+1.19.1.jar", DIR_GAME_NEW + "/mods/1.19.2", true);
+            Tools.copyAssetFile(this, "artifacts/1.19.2/titleworlds-0.1.1+1.19.2.jar", DIR_GAME_NEW + "/mods/1.19.2", true);
             Tools.copyAssetFile(this, "artifacts/1.19.2/lazydfu-0.1.3-SNAPSHOT.jar", DIR_GAME_NEW + "/mods/1.19.2", true);
             Tools.copyAssetFile(this, "artifacts/1.19.2/fabric-api-0.64.0+1.19.2.jar", DIR_GAME_NEW + "/mods/1.19.2", true);
             // Install Mod Manager Jsons
