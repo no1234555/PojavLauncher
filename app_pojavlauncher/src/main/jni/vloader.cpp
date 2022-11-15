@@ -2,8 +2,9 @@
 // Created by Judge on 12/23/2021.
 //
 #include <thread>
+#include <fstream>
+#include <sstream>
 #include <string>
-#include <errno.h>
 #include <fcntl.h>
 #include <unistd.h>
 #include <OpenOVR/openxr_platform.h>
@@ -86,28 +87,12 @@ Java_net_kdt_pojavlaunch_MCXRLoader_setEGLGlobal(JNIEnv* env, jclass clazz, jlon
 }
 
 static std::string load_file(const char *path) {
-    // Just read the file from the filesystem, we changed the working directory earlier so
-    // Vivecraft can extract it's manifest files.
-
-    printf("Path: %s", path);
-    int fd = open(path, O_RDONLY);
-    if (!fd) {
-        LOGE("Failed to load manifest file %s: %d %s", path, errno, strerror(errno));
+    std::ifstream in(path, std::ios::in | std::ios::binary);
+    if (in)
+    {
+        std::ostringstream contents;
+        contents << in.rdbuf();
+        in.close();
+        return(contents.str());
     }
-
-    int length = lseek(fd, 0, SEEK_END);
-    lseek(fd, 0, SEEK_SET);
-
-    std::string data;
-    data.resize(length);
-    if (!read(fd, (void *) data.data(), data.size())) {
-        LOGE("Failed to load manifest file %s failed to read: %d %s", path, errno, strerror(errno));
-    }
-
-    if (close(fd)) {
-        LOGE("Failed to load manifest file %s failed to close: %d %s", path, errno,
-             strerror(errno));
-    }
-
-    return std::move(data);
 }

@@ -26,7 +26,7 @@ include $(PREBUILT_STATIC_LIBRARY)
 include $(CLEAR_VARS)
 LOCAL_MODULE := ocovr
 LOCAL_STATIC_LIBRARIES := drvopenxr occore drvopenxr
-LOCAL_SRC_FILES := ./OpenOVR/libOCOVR.a
+LOCAL_SRC_FILES := ./OpenOVR/OCOVR.a
 include $(PREBUILT_STATIC_LIBRARY)
 
 include $(CLEAR_VARS)
