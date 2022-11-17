@@ -69,6 +69,7 @@ public class CallbackBridge {
     public static native long getEGLDisplayPtr();
     public static native long getEGLContextPtr();
     public static native long getEGLConfigPtr();
+    public static native long getEGLDevicePtr();
 
     public static void sendData(int type, String data) {
         nativeSendData(false, type, data);

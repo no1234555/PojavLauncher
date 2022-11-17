@@ -855,11 +855,16 @@ int pojavInit() {
             return 0;
         }
 
-        eglBindAPI_p(EGL_OPENGL_ES_API);
+        eglBindAPI_p(EGL_OPENGL_API);
 
         if (!potatoBridge.androidWindow) {
+            static const EGLint attribs[] = {
+                    EGL_WIDTH, 1920,
+                    EGL_HEIGHT, 1080,
+                    EGL_NONE
+            };
             potatoBridge.eglSurface = eglCreatePbufferSurface_p(potatoBridge.eglDisplay, config,
-                                                              NULL);
+                                                              attribs);
             if (!potatoBridge.eglSurface) {
                 printf("EGLBridge: Error eglCreatePbufferSurface failed: %d\n", eglGetError_p());
                 return 0;
@@ -1100,7 +1105,7 @@ void* pojavCreateContext(void* contextSrc) {
     if (config_renderer == RENDERER_GL4ES) {
         const EGLint ctx_attribs[] = {
                 EGL_CONTEXT_MAJOR_VERSION, 3,
-                EGL_CONTEXT_MINOR_VERSION, 2,
+                EGL_CONTEXT_MINOR_VERSION, 1,
                 EGL_NONE
         };
         EGLContext* ctx = eglCreateContext_p(potatoBridge.eglDisplay, config, (void*)contextSrc, ctx_attribs);

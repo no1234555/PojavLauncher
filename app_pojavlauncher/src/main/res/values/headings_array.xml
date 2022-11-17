@@ -2,10 +2,12 @@
 <resources>
     <string-array name="renderer">
         <item name="2">@string/mcl_setting_renderer_gles2_4</item>
+        <item name="6">@string/mcl_setting_renderer_angle_vulkan</item>
     </string-array>
 
     <string-array name="renderer_values">
         <item>opengles2</item>
+        <item>opengles3_desktopgl_angle_vulkan</item>
     </string-array>
 
     <string-array name="hack_gles_shrink">

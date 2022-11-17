@@ -8,7 +8,7 @@ import net.kdt.pojavlaunch.utils.JREUtils;
 public class LauncherPreferences
 {
     public static SharedPreferences DEFAULT_PREF;
-    public static String PREF_RENDERER = "opengles2";
+    public static String PREF_RENDERER = "opengles3_desktopgl_angle_vulkan";
 
 	public static boolean PREF_VERTYPE_RELEASE = true;
 	public static boolean PREF_VERTYPE_SNAPSHOT = false;
@@ -45,7 +45,7 @@ public class LauncherPreferences
         //Required for the data folder.
         Tools.initContextConstants(ctx);
 
-        PREF_RENDERER = DEFAULT_PREF.getString("renderer", "opengles2");
+        PREF_RENDERER = DEFAULT_PREF.getString("renderer", "opengles3_desktopgl_angle_vulkan");
 
 		PREF_BUTTONSIZE = DEFAULT_PREF.getInt("buttonscale", 100);
 		PREF_MOUSESCALE = DEFAULT_PREF.getInt("mousescale", 100);

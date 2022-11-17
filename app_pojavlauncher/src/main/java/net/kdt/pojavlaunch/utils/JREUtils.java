@@ -112,48 +112,48 @@ public class JREUtils {
     }
 
     public static void redirectAndPrintJRELog() {
-        //  Log.v("jrelog","Log starts here");
-        //  JREUtils.logToLogger(Logger.getInstance());
-        //  new Thread(new Runnable(){
-        //      int failTime = 0;
-        //      ProcessBuilder logcatPb;
-        //      @Override
-        //      public void run() {
-        //          try {
-        //              if (logcatPb == null) {
-        //                  logcatPb = new ProcessBuilder().command("logcat", /* "-G", "1mb", */ "-v", "brief", "-s", "jrelog:I", "LIBGL:I").redirectErrorStream(true);
-        //              }
-        //
-        //              Log.i("jrelog-logcat","Clearing logcat");
-        //              new ProcessBuilder().command("logcat", "-c").redirectErrorStream(true).start();
-        //              Log.i("jrelog-logcat","Starting logcat");
-        //              java.lang.Process p = logcatPb.start();
-//
-        //              byte[] buf = new byte[1024];
-        //              int len;
-        //              while ((len = p.getInputStream().read(buf)) != -1) {
-        //                  String currStr = new String(buf, 0, len);
-        //                  Logger.getInstance().appendToLog(currStr);
-        //              }
-        //
-        //              if (p.waitFor() != 0) {
-        //                  Log.e("jrelog-logcat", "Logcat exited with code " + p.exitValue());
-        //                  failTime++;
-        //                  Log.i("jrelog-logcat", (failTime <= 10 ? "Restarting logcat" : "Too many restart fails") + " (attempt " + failTime + "/10");
-        //                  if (failTime <= 10) {
-        //                      run();
-        //                  } else {
-        //                      Logger.getInstance().appendToLog("ERROR: Unable to get more log.");
-        //                  }
-        //                  return;
-        //              }
-        //          } catch (Throwable e) {
-        //              Log.e("jrelog-logcat", "Exception on logging thread", e);
-        //              Logger.getInstance().appendToLog("Exception on logging thread:\n" + Log.getStackTraceString(e));
-        //          }
-        //      }
-        //  }).start();
-        //  Log.i("jrelog-logcat","Logcat thread started");
+          Log.v("jrelog","Log starts here");
+          JREUtils.logToLogger(Logger.getInstance());
+          new Thread(new Runnable(){
+              int failTime = 0;
+              ProcessBuilder logcatPb;
+              @Override
+              public void run() {
+                  try {
+                      if (logcatPb == null) {
+                          logcatPb = new ProcessBuilder().command("logcat", /* "-G", "1mb", */ "-v", "brief", "-s", "jrelog:I", "LIBGL:I").redirectErrorStream(true);
+                      }
+
+                      Log.i("jrelog-logcat","Clearing logcat");
+                      new ProcessBuilder().command("logcat", "-c").redirectErrorStream(true).start();
+                      Log.i("jrelog-logcat","Starting logcat");
+                      java.lang.Process p = logcatPb.start();
+
+                      byte[] buf = new byte[1024];
+                      int len;
+                      while ((len = p.getInputStream().read(buf)) != -1) {
+                          String currStr = new String(buf, 0, len);
+                          Logger.getInstance().appendToLog(currStr);
+                      }
+
+                      if (p.waitFor() != 0) {
+                          Log.e("jrelog-logcat", "Logcat exited with code " + p.exitValue());
+                          failTime++;
+                          Log.i("jrelog-logcat", (failTime <= 10 ? "Restarting logcat" : "Too many restart fails") + " (attempt " + failTime + "/10");
+                          if (failTime <= 10) {
+                              run();
+                          } else {
+                              Logger.getInstance().appendToLog("ERROR: Unable to get more log.");
+                          }
+                          return;
+                      }
+                  } catch (Throwable e) {
+                      Log.e("jrelog-logcat", "Exception on logging thread", e);
+                      Logger.getInstance().appendToLog("Exception on logging thread:\n" + Log.getStackTraceString(e));
+                  }
+              }
+          }).start();
+          Log.i("jrelog-logcat","Logcat thread started");
     }
     
     public static void relocateLibPath(final Context ctx) throws IOException {
@@ -228,7 +228,9 @@ public class JREUtils {
         envMap.put("REGAL_GL_VERSION", "4.5");
         if(LOCAL_RENDERER != null) {
             envMap.put("POJAV_RENDERER", LOCAL_RENDERER);
+            envMap.put("LIBGL_ES", Character.toString(LOCAL_RENDERER.charAt(8)));
         }
+        if(LOCAL_RENDERER.equals("opengles3_desktopgl_angle_vulkan")) envMap.put("POJAVEXEC_EGL","libEGL_angle.so"); // use ANGLE egl
         envMap.put("AWTSTUB_WIDTH", Integer.toString(CallbackBridge.windowWidth > 0 ? CallbackBridge.windowWidth : CallbackBridge.physicalWidth));
         envMap.put("AWTSTUB_HEIGHT", Integer.toString(CallbackBridge.windowHeight > 0 ? CallbackBridge.windowHeight : CallbackBridge.physicalHeight));
         envMap.put("LIBGL_GLES", "/system/lib64/libGLESv3.so");
@@ -439,6 +441,7 @@ public class JREUtils {
             case "opengles3_virgl":
             case "vulkan_zink": renderLibrary = "libOSMesa_8.so"; break;
             case "opengles3_vgpu" : renderLibrary = "libvgpu.so"; break;
+            case "opengles3_desktopgl_angle_vulkan": renderLibrary = "libtinywrapper.so"; break;
             default:
                 Log.w("RENDER_LIBRARY", "No renderer selected, defaulting to opengles2");
                 renderLibrary = "libgl4es_114.so";
