@@ -2094,6 +2094,8 @@ typedef void (APIENTRYP PFNGLEGLIMAGETARGETTEXTURE2DOESPROC) (GLenum target, GLe
 typedef void (APIENTRYP PFNGLEGLIMAGETARGETRENDERBUFFERSTORAGEOESPROC) (GLenum target, GLeglImageOES image);
 #endif
 
+typedef void *GLeglImageOES;
+void glEGLImageTargetTexture2DOES (GLenum target, GLeglImageOES image);
 
 #ifdef __cplusplus
 }

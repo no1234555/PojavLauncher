@@ -42,8 +42,8 @@ LOCAL_C_INCLUDES := $(LOCAL_PATH)/tinywrapper
 include $(BUILD_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)
-LOCAL_LDLIBS := -llog -landroid -lGLESv3 -lvulkan
-LOCAL_CFLAGS := -DXR_USE_PLATFORM_ANDROID -DXR_USE_GRAPHICS_API_OPENGL_ES
+LOCAL_LDLIBS := -llog -landroid -lEGL -lGLESv3 -lvulkan -ldl
+LOCAL_CFLAGS := -DXR_USE_PLATFORM_ANDROID -DXR_USE_GRAPHICS_API_OPENGL_ES -DGL_GLEXT_PROTOTYPES
 LOCAL_SHARED_LIBRARIES := openxr_loader
 LOCAL_WHOLE_STATIC_LIBRARIES := ocovr
 LOCAL_MODULE := openvr_api
@@ -68,7 +68,7 @@ include $(BUILD_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)
 # Link GLESv2 for test
-LOCAL_LDLIBS := -ldl -llog -landroid
+LOCAL_LDLIBS := -ldl -llog -landroid -lEGL -lGLESv3
 # -lGLESv2
 LOCAL_MODULE := pojavexec
 # LOCAL_CFLAGS += -DDEBUG

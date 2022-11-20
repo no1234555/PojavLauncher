@@ -7,14 +7,23 @@
 #include <string>
 #include <fcntl.h>
 #include <unistd.h>
+#include <EGL/egl.h>
 #include <OpenOVR/openxr_platform.h>
 #include <jni.h>
+#include <dlfcn.h>
+#include "GL/gl.h"
+#include <GLES3/gl32.h>
 #include "log.h"
 
 static JavaVM* jvm;
 XrInstanceCreateInfoAndroidKHR* OpenComposite_Android_Create_Info;
 XrGraphicsBindingOpenGLESAndroidKHR* OpenComposite_Android_GLES_Binding_Info;
 
+void* handle;
+char *native_dir;
+
+EGLBoolean (*eglExportVkImageANGLE_p) (EGLDisplay dpy, EGLImage image, void* vk_image, void* vk_image_create_info);
+EGLDisplay (*eglGetCurrentDisplay_p) ();
 std::string (*OpenComposite_Android_Load_Input_File)(const char *path);
 
 static std::string load_file(const char *path);
@@ -84,6 +93,24 @@ Java_net_kdt_pojavlaunch_MCXRLoader_setEGLGlobal(JNIEnv* env, jclass clazz, jlon
             (void*)cfg,
             (void*)ctx
     };
+}
+
+extern "C"
+JNIEXPORT jlong JNICALL
+Java_org_vivecraft_provider_VLoader_convertImgToEGLBuffer(JNIEnv* env, jclass clazz, jint image) {
+    return reinterpret_cast<jlong>((EGLClientBuffer) (size_t) image);
+}
+
+extern "C"
+JNIEXPORT jint JNICALL
+Java_org_vivecraft_provider_VLoader_getNativeImage(JNIEnv* env, jclass clazz, jlong eglImage, jint width, jint height) {
+    GLuint image;
+    glGenTextures(1, &image);
+    glBindTexture(GL_TEXTURE_2D, image);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glEGLImageTargetTexture2DOES(GL_TEXTURE_2D, reinterpret_cast<GLeglImageOES>(eglImage));
+    return image;
 }
 
 static std::string load_file(const char *path) {
