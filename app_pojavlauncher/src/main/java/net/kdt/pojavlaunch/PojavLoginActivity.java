@@ -337,6 +337,8 @@ public class PojavLoginActivity extends BaseActivity {
             Tools.copyAssetFile(this,"resolv.conf",Tools.DIR_DATA, true);
             Tools.copyAssetFile(this,"arc_dns_injector.jar",Tools.DIR_DATA, true);
             Tools.copyAssetFile(this,"servers.dat",DIR_GAME_NEW, false);
+            Tools.copyAssetFile(this,"sodium-extra.properties",DIR_GAME_NEW + "/config", false);
+            Tools.copyAssetFile(this,"sodium-mixins.properties",DIR_GAME_NEW + "/config", false);
             Tools.copyAssetFile(this,"vivecraft-config.properties",DIR_GAME_NEW + "/config", false);
             
             // Install Mod Manager Jsons
