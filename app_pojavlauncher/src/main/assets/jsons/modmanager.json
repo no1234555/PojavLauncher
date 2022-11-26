@@ -33,6 +33,10 @@
         "platform": "modrinth"
       },
       {
+        "slug": "sodium",
+        "platform": "modrinth"
+      },
+      {
         "slug": "vivecraft",
         "platform": "github"
       }
@@ -59,9 +63,12 @@
         "platform": "modrinth"
       },
       {
+        "slug": "sodium",
+        "platform": "modrinth"
+      },
+      {
         "slug": "vivecraft",
         "platform": "github"
-
       }
     ]
   }
