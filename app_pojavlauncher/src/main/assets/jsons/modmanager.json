@@ -2,7 +2,7 @@
   "compatible_versions": {
     "releases": [
       "1.18.2",
-      "1.19.2"
+      "1.19.3"
     ],
     "snapshots": [
     ]
@@ -53,11 +53,12 @@
         "slug": "EntityCulling",
         "platform": "modrinth"
       },
+      {
         "slug": "Starlight-(Fabric)",
         "platform": "modrinth"
       }
     ],
-    "1.19.2": [
+    "1.19.3": [
       {
         "slug": "fabric-api",
         "platform": "modrinth"
@@ -98,6 +99,7 @@
         "slug": "EntityCulling",
         "platform": "modrinth"
       },
+      {
         "slug": "Starlight-(Fabric)",
         "platform": "modrinth"
       }
