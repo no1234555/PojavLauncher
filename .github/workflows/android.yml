@@ -114,8 +114,9 @@ jobs:
           github_token: ${{secrets.GITHUB_TOKEN}}
           workflow: build.yml
           path: app_pojavlauncher/src/main/assets/components/jre
+          workflow_conclusion: success
           repo: QuestCraftPlusPlus/android-openjdk-build-multiarch
-          run_id: 3020222170
+          branch: buildjre17
           name: jre17-pojav
 
       - name: Clean Artifacts Folder
